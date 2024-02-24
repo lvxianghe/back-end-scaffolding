@@ -1,5 +1,5 @@
 # back-end-scaffolding
-Java后端脚手架
+后端脚手架
 
 # 架构设计
 
