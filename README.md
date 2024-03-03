@@ -5,12 +5,12 @@
 
 整体架构设计介绍，文档：xxx
 
-父工程（server-parent）
-主工程（server-main）：28920
-注册中心（server-eureka）：28921
-网关（server-api）：28922
-搜索服务（server-es）：28923
-消息服务（server-mq）：28924
+ - 父工程（server-parent）
+ - 主工程（server-main）：28920
+ - 注册中心（server-eureka）：28921
+ - 网关（server-api）：28922
+ - 搜索服务（server-es）：28923
+ - 消息服务（server-mq）：28924
 
 # 使用说明
 
