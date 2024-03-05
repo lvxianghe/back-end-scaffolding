@@ -1,7 +1,8 @@
 package org.xiaoxingbomei;
 
 import lombok.extern.log4j.Log4j2;
-import org.apache.commons.lang.StringUtils;
+
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
@@ -18,6 +19,7 @@ public class Server_Main
 {
     public static void main(String[] args) throws UnknownHostException
     {
+        // SpringApplication.run(Server_Main.class, args);
         long start = System.currentTimeMillis();
         ConfigurableApplicationContext application = SpringApplication.run(Server_Main.class, args);
         Environment env = application.getEnvironment();
@@ -36,4 +38,6 @@ public class Server_Main
                 "\n----------------------------------------------------------\n");
         log.info("服务启动成功!>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> 耗时：{} s", (System.currentTimeMillis() - start) / 1000);
     }
+
 }
+
