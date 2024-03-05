@@ -1,5 +1,6 @@
 package org.xiaoxingbomei;
 
+import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -12,11 +13,12 @@ import java.net.UnknownHostException;
 
 @SpringBootApplication
 @EnableEurekaClient
-// @Log4j2
+@Log4j2
 public class Server_Main
 {
     public static void main(String[] args) throws UnknownHostException
     {
+        long start = System.currentTimeMillis();
         ConfigurableApplicationContext application = SpringApplication.run(Server_Main.class, args);
         Environment env = application.getEnvironment();
         String ip = InetAddress.getLocalHost().getHostAddress();
@@ -26,12 +28,12 @@ public class Server_Main
         if (StringUtils.isEmpty(path) || "/".equals(path)) {
             path = "";
         }
-//        log.info("\n----------------------------------------------------------\n\t{}{}{}{}{}",
-//                applicationName + " is running, Access URLs:",
-//                "\n\tLocal    访问网址: \thttp://localhost:" + port + path,
-//                "\n\tExternal 访问网址: \thttp://" + ip + ":" + port + path,
-//                "\n\tSwagger  访问网址: \thttp://" + ip + ":" + port + path + "/swagger-ui.html",
-//                "\n----------------------------------------------------------\n");
-//        log.info("dap-qlty服务启动成功!>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> 耗时：{} s", (System.currentTimeMillis() - start) / 1000);
+        log.info("\n----------------------------------------------------------\n\t{}{}{}{}{}",
+                applicationName + " is running, Access URLs:",
+                "\n\tLocal    访问网址: \thttp://localhost:" + port + path,
+                "\n\tExternal 访问网址: \thttp://" + ip + ":" + port + path,
+                "\n\tSwagger  访问网址: \thttp://" + ip + ":" + port + path + "/swagger-ui.html",
+                "\n----------------------------------------------------------\n");
+        log.info("服务启动成功!>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> 耗时：{} s", (System.currentTimeMillis() - start) / 1000);
     }
 }
