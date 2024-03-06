@@ -8,6 +8,7 @@
 //import org.springframework.web.bind.annotation.ExceptionHandler;
 //import org.springframework.web.bind.annotation.RestControllerAdvice;
 //import org.xiaoxingbomei.Enum.GlobalCodeEnum;
+//import org.xiaoxingbomei.entity.GlobalEntity;
 //
 //@RestControllerAdvice
 //public class GlobalExceptionHandler
@@ -74,13 +75,13 @@
 //
 //
 //    // 拦截：Feigh
-//    @ExceptionHandler(FeignException.class)
-//    public GlobalEntity handlerException(FeignException e)
-//    {
-//        e.printStackTrace();
-//        return GlobalEntity.error(GlobalCodeEnum.ERROR.getCode(),e.getMessage(),"feign的问题，请稍后再试","",null);
-//
-//    }
+////    @ExceptionHandler(FeignException.class)
+////    public GlobalEntity handlerException(FeignException e)
+////    {
+////        e.printStackTrace();
+////        return GlobalEntity.error(GlobalCodeEnum.ERROR.getCode(),e.getMessage(),"feign的问题，请稍后再试","",null);
+////
+////    }
 //
 //
 //    // http缺少入参
