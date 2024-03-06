@@ -19,7 +19,7 @@ public class Server_Main
 {
     public static void main(String[] args) throws UnknownHostException
     {
-        // SpringApplication.run(Server_Main.class, args);
+
         long start = System.currentTimeMillis();
         ConfigurableApplicationContext application = SpringApplication.run(Server_Main.class, args);
         Environment env = application.getEnvironment();
@@ -27,7 +27,8 @@ public class Server_Main
         String applicationName = env.getProperty("spring.application.name");
         String port = env.getProperty("server.port");
         String path = env.getProperty("server.servlet.context-path");
-        if (StringUtils.isEmpty(path) || "/".equals(path)) {
+        if (StringUtils.isEmpty(path) || "/".equals(path))
+        {
             path = "";
         }
         log.info("\n----------------------------------------------------------\n\t{}{}{}{}{}",
