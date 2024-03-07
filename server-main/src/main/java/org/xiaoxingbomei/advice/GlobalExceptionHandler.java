@@ -92,7 +92,7 @@
 //    }
 //
 //
-//    // 拦截：其它所有异常
+//    // 拦截：Exception
 //    @ExceptionHandler(Exception.class)
 //    public GlobalEntity handlerException(Exception e) {
 //        e.printStackTrace();
@@ -100,7 +100,22 @@
 //    }
 //
 //
-//    // 拦截：顶级
+//    // Mysql:DataAccessException Spring 的数据访问异常，可能由数据库操作引起，如 SQL 语法错误、数据库连接问题等
+//
+//    // Mysql:MyBatisSystemException MyBatis 的系统异常，可能由 MyBatis 的配置错误或使用问题引起
+//
+//    // Mysql:PersistenceException MyBatis 的持久化异常，可能由数据库操作异常引起，如插入、更新、删除操作失败
+//
+//    // Mysql:SQLException 数据库操作异常，可能由数据库连接问题、事务处理问题等引起
+//
+//    // Mysql:TransactionSystemException Spring 的事务系统异常，可能由于事务管理配置错误或使用问题引起
+//
+//    // Mysql:BeanInstantiationException Spring 的 Bean 实例化异常，可能由于无法实例化 Mapper 接口引起
+//
+//    // Spring:NestedIOException Spring 的 IO 异常，可能由于读取 Mapper XML 文件失败引起
+//
+//
+//    // 拦截：Throwable
 //    @ExceptionHandler(Throwable.class)
 //    public GlobalEntity handlerException(Throwable e) {
 //        e.printStackTrace();
