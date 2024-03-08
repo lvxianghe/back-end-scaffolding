@@ -1,13 +1,18 @@
 package org.xiaoxingbomei.entity;
 
+import lombok.Getter;
+import lombok.Setter;
+
 /**
  * http通用返回体
  */
+@Getter
+@Setter
 public class GlobalEntity
 {
 
     String data;            // 响应主体
-    int code;               // 响应码
+    String code;               // 响应码
     String message;         // 技术message
     String userMessage;     // 用户message
     String businessMessage; // 业务message
@@ -16,7 +21,7 @@ public class GlobalEntity
     public GlobalEntity() {}
 
     // 有参构造
-    public GlobalEntity(String data, int code, String message, String userMessage, String businessMessage)
+    public GlobalEntity(String data, String code, String message, String userMessage, String businessMessage)
     {
         this.data = data;
         this.code = code;
@@ -26,8 +31,17 @@ public class GlobalEntity
     }
 
     // success
+    public static GlobalEntity success(String data, String code, String message, String userMessage, String businessMessage)
+    {
+        GlobalEntity globalEntity = new GlobalEntity(data, code, message, userMessage, businessMessage);
+        return globalEntity;
+    }
 
     // error
-
+    public static GlobalEntity error(String data, String code, String message, String userMessage, String businessMessage)
+    {
+        GlobalEntity globalEntity = new GlobalEntity(data, code, message, userMessage, businessMessage);
+        return globalEntity;
+    }
 
 }
