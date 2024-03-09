@@ -1,3 +1,4 @@
+# spring 配置
 server:
   port: 28920
   servlet:
@@ -6,7 +7,7 @@ spring:
   application:
     name: server-main
 
-#eureka配置
+# eureka配置
 eureka:
   #设置注册方式为ip注册，设置注册地址
   instance:
@@ -18,21 +19,22 @@ eureka:
     serviceUrl:
       defaultZone: http://localhost:28921/eureka/
 
-#
-#app:
-#  id: dsp
-#
-##apollo配置
-#apollo:
-#  cluster: mdbserver-dev
-#  meta: http://10.4.32.166:8085,http://10.4.32.167:8085
-#  autoUpdateInjectedSpringProperties: true
-#  bootstrap:
-#    enabled: true
-#    namespaces: application,configuration
-#    eagerLoad:
-#      enabled: false
-#
+
+
+
+#apollo配置
+app:
+  id: ysx
+apollo:
+  cluster: mdbserver-dev
+  meta: http://10.4.32.166:8085,http://10.4.32.167:8085
+  autoUpdateInjectedSpringProperties: true
+  bootstrap:
+    enabled: true
+    namespaces: application,configuration
+    eagerLoad:
+      enabled: false
+
 ##log配置
 #logging:
 #  level:

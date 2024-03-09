@@ -154,7 +154,7 @@ public class GlobalExceptionHandler
     public GlobalEntity exceptionHandler(ResourceAccessException e)
     {
         e.printStackTrace();
-        return GlobalEntity.error(GlobalCodeEnum.ERROR.getCode(), e.getMessage(), ",当前功能不可用，请稍后再试", "", null);
+        return GlobalEntity.error(GlobalCodeEnum.ERROR.getCode(), e.getMessage(), "ResourceAccessException,当前功能不可用，请稍后再试", "", null);
     }
 
     // 拦截：http缺少入参
@@ -162,8 +162,11 @@ public class GlobalExceptionHandler
     public GlobalEntity exceptionHandler(HttpMessageNotReadableException e)
     {
         e.printStackTrace();
-        return GlobalEntity.error(GlobalCodeEnum.ERROR.getCode(), e.getMessage(), ",当前功能不可用，请稍后再试", "", null);
+        return GlobalEntity.error(GlobalCodeEnum.ERROR.getCode(), e.getMessage(), "HttpMessageNotReadableException,当前功能不可用，请稍后再试", "", null);
     }
+
+
+    //
 
 
 
@@ -178,6 +181,7 @@ public class GlobalExceptionHandler
         e.printStackTrace();
         return GlobalEntity.error(GlobalCodeEnum.ERROR.getCode(), e.getMessage(), ",当前功能不可用，请稍后再试", "", null);
     }
+
 
 
 

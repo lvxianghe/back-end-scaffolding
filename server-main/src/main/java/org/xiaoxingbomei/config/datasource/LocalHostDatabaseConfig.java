@@ -16,39 +16,39 @@ import javax.sql.DataSource;
  * 本地数据库连接配置
  * @Author lvxianghe
  */
-//@Configuration
-//@MapperScan(basePackages = "org.xiaoxingbomei.dao", sqlSessionTemplateRef = "localhostSqlSessionTemplate")
-//public class LocalHostDatabaseConfig
-//{
-//    @Bean
-//    @ConfigurationProperties(prefix = "spring.datasource.localhost")
-//    public DataSource localhostDataSource()
-//    {
-//        return DataSourceBuilder.create().build();
-//    }
-//
-//
-//    @Bean
-//    @DependsOn("localhostDataSource")
-//    public SqlSessionFactory localhostSqlSessionFactory() throws Exception
-//    {
-//        SqlSessionFactoryBean factoryBean = new SqlSessionFactoryBean();
-//        factoryBean.setDataSource(localhostDataSource());
-//        // 返回类型为Map时输出null
-//        org.apache.ibatis.session.Configuration configuration = new org.apache.ibatis.session.Configuration();
-//        configuration.setCallSettersOnNulls(true);
-//        factoryBean.setConfiguration(configuration);
-//        return factoryBean.getObject();
-//    }
-//
-//
-//    @Bean
-//    @DependsOn("localhostSqlSessionFactory")
-//    public SqlSessionTemplate localhostSqlSessionTemplate() throws Exception
-//    {
-//        SqlSessionTemplate template = new SqlSessionTemplate(localhostSqlSessionFactory());
-//        return template;
-//    }
-//
-//
-//}
+@Configuration
+@MapperScan(basePackages = "org.xiaoxingbomei.dao", sqlSessionTemplateRef = "localhostSqlSessionTemplate")
+public class LocalHostDatabaseConfig
+{
+    @Bean
+    @ConfigurationProperties(prefix = "spring.datasource.localhost")
+    public DataSource localhostDataSource()
+    {
+        return DataSourceBuilder.create().build();
+    }
+
+
+    @Bean
+    @DependsOn("localhostDataSource")
+    public SqlSessionFactory localhostSqlSessionFactory() throws Exception
+    {
+        SqlSessionFactoryBean factoryBean = new SqlSessionFactoryBean();
+        factoryBean.setDataSource(localhostDataSource());
+        // 返回类型为Map时输出null
+        org.apache.ibatis.session.Configuration configuration = new org.apache.ibatis.session.Configuration();
+        configuration.setCallSettersOnNulls(true);
+        factoryBean.setConfiguration(configuration);
+        return factoryBean.getObject();
+    }
+
+
+    @Bean
+    @DependsOn("localhostSqlSessionFactory")
+    public SqlSessionTemplate localhostSqlSessionTemplate() throws Exception
+    {
+        SqlSessionTemplate template = new SqlSessionTemplate(localhostSqlSessionFactory());
+        return template;
+    }
+
+
+}
