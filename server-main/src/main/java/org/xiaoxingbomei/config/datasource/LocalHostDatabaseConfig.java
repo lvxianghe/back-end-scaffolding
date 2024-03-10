@@ -34,7 +34,7 @@ public class LocalHostDatabaseConfig
     {
         SqlSessionFactoryBean factoryBean = new SqlSessionFactoryBean();
         factoryBean.setDataSource(localhostDataSource());
-        // 返回类型为Map时输出null
+
         org.apache.ibatis.session.Configuration configuration = new org.apache.ibatis.session.Configuration();
         configuration.setCallSettersOnNulls(true);
         factoryBean.setConfiguration(configuration);

@@ -26,8 +26,8 @@ eureka:
 app:
   id: ysx
 apollo:
-  cluster: mdbserver-dev
-  meta: http://10.4.32.166:8085,http://10.4.32.167:8085
+  cluster: back_end_scaffolding
+  meta: http://localhost:8070
   autoUpdateInjectedSpringProperties: true
   bootstrap:
     enabled: true
