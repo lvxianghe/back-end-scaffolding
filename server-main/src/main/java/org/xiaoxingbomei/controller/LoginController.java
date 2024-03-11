@@ -6,6 +6,7 @@
 //import org.springframework.web.bind.annotation.RestController;
 //import org.xiaoxingbomei.annotation.ControllerLog;
 //import org.xiaoxingbomei.constant.ApiConstant;
+//import org.xiaoxingbomei.entity.GlobalEntity;
 //
 //@RestController
 //public class LoginController
