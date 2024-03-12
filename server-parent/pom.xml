@@ -26,6 +26,7 @@
         <module>../server-eureka</module>
         <module>../server-mq</module>
         <module>../server-es</module>
+        <module>../server-sql</module>
     </modules>
 
     <!--引入 Spring boot 依赖管理-->
