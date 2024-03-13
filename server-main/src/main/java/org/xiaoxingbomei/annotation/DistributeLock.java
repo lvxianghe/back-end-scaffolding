@@ -3,6 +3,10 @@ package org.xiaoxingbomei.annotation;
 import java.lang.annotation.*;
 import java.util.concurrent.TimeUnit;
 
+
+/**
+ * 分布式锁注解
+ */
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
