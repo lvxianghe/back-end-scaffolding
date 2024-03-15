@@ -31,13 +31,13 @@ public class Server_Main
         {
             path = "";
         }
-//        log.info("\n----------------------------------------------------------\n\t{}{}{}{}{}",
-//                applicationName + " is running, Access URLs:",
-//                "\n\tLocal    访问网址: \thttp://localhost:" + port + path,
-//                "\n\tExternal 访问网址: \thttp://" + ip + ":" + port + path,
-//                "\n\tSwagger  访问网址: \thttp://" + ip + ":" + port + path + "/swagger-ui.html",
-//                "\n----------------------------------------------------------\n");
-//        log.info("服务启动成功!>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> 耗时：{} s", (System.currentTimeMillis() - start) / 1000);
+        log.info("\n----------------------------------------------------------\n\t{}{}{}{}{}",
+                applicationName + " is running, Access URLs:",
+                "\n\tLocal    访问网址: \thttp://localhost:" + port + path,
+                "\n\tExternal 访问网址: \thttp://" + ip + ":" + port + path,
+                "\n\tSwagger  访问网址: \thttp://" + ip + ":" + port + path + "/swagger-ui.html",
+                "\n----------------------------------------------------------\n");
+        log.info("服务启动成功!>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> 耗时：{} s", (System.currentTimeMillis() - start) / 1000);
     }
 
 }
