@@ -31,6 +31,7 @@ public class Server_Main
         {
             path = "";
         }
+        // 打印系统信息
         log.info("\n----------------------------------------------------------\n\t{}{}{}{}{}",
                 applicationName + " is running, Access URLs:",
                 "\n\tLocal    访问网址: \thttp://localhost:" + port + path,
