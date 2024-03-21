@@ -5,7 +5,7 @@ import java.util.concurrent.TimeUnit;
 
 
 /**
- * 分布式锁注解
+ * 分布式
  */
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
