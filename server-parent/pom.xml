@@ -167,6 +167,13 @@
             <version>7.17.8</version>
         </dependency>
 
+        <!-- redis -->
+        <dependency>
+            <groupId>redis.clients</groupId>
+            <artifactId>jedis</artifactId>
+            <version>4.2.0</version>
+        </dependency>
+
     </dependencies>
 
 
