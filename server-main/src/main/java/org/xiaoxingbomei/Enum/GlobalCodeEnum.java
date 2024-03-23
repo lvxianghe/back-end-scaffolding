@@ -17,8 +17,8 @@ public enum GlobalCodeEnum
     AUTH_ERROR("2002","认证失败"),
 
 
-    // xxx-3
-
+    // 用户-3
+    USER_ACCESS_EXCEED("3001","访问次数超限"),
 
     // xxx-4
 

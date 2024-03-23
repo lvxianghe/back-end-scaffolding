@@ -1,11 +1,16 @@
 package org.xiaoxingbomei.exception;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.xiaoxingbomei.Enum.GlobalCodeEnum;
 
 /**
- * 权限异常
+ * 业务异常
+ * @Author lvxianghe
  */
-public class AuthException
+@Getter
+@Setter
+public class BusinessException extends RuntimeException
 {
     private static final long seriaVersionUID = 1L;
 
@@ -17,7 +22,7 @@ public class AuthException
 
 
 
-    public AuthException(GlobalCodeEnum errorCode)
+    public BusinessException(GlobalCodeEnum errorCode)
     {
         super();
         this.errorCode = errorCode;
@@ -25,10 +30,16 @@ public class AuthException
     }
 
 
-    public AuthException(GlobalCodeEnum errorCode, String errorMessage)
+    public BusinessException(GlobalCodeEnum errorCode, String errorMessage)
     {
         super();
         this.errorCode = errorCode;
         this.errorMessage = errorMessage;
     }
+
+
+
+
+
+
 }
