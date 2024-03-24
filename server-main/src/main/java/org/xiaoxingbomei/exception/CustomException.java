@@ -2,7 +2,6 @@ package org.xiaoxingbomei.exception;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.xiaoxingbomei.Enum.GlobalCodeEnum;
 
 @Getter
 @Setter
