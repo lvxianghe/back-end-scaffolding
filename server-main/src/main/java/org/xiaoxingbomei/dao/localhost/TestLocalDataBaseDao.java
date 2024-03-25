@@ -1,4 +1,4 @@
-package org.xiaoxingbomei.dao;
+package org.xiaoxingbomei.dao.localhost;
 
 import java.util.List;
 import java.util.Map;

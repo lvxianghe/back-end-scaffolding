@@ -1,5 +1,6 @@
 package org.xiaoxingbomei;
 
+import com.ctrip.framework.apollo.spring.annotation.EnableApolloConfig;
 import lombok.extern.log4j.Log4j2;
 
 import org.apache.commons.lang3.StringUtils;
@@ -13,6 +14,7 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 
 @SpringBootApplication
+@EnableApolloConfig
 @EnableEurekaClient
 @Log4j2
 public class Server_Main
