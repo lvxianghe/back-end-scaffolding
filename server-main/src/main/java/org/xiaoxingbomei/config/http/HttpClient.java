@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.client.RestTemplate;
 import org.xiaoxingbomei.Enum.HttpMethodEmun;
 import org.xiaoxingbomei.service.Client;
+import org.xiaoxingbomei.utils.Spring_Utils;
 
 @Slf4j
 public class HttpClient implements Client {
@@ -17,7 +18,7 @@ public class HttpClient implements Client {
 
     @Override
     public Object send(Object... arms) {
-        RestTemplate restTemplate = SpringUtils.getBean("restTemplate1");
+        RestTemplate restTemplate = Spring_Utils.getBean("restTemplate1");
         switch (httpMethodEmun) {
             case GET:
                 break;
