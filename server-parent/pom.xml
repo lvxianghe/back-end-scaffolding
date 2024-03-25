@@ -179,6 +179,21 @@
 <!--            <artifactId>spring-boot-starter-data-redis</artifactId>-->
 <!--        </dependency>-->
 
+        <dependency>
+            <groupId>redis.clients</groupId>
+            <artifactId>jedis</artifactId>
+            <version>3.7.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-redis</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.lettuce.core</groupId>
+            <artifactId>lettuce-core</artifactId>
+            <version>6.2.5</version>
+        </dependency>
+
         <!--spring doc-->
         <dependency>
             <groupId>org.springdoc</groupId>

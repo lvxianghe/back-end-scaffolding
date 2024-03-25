@@ -11,6 +11,9 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.client.ResourceAccessException;
 import org.xiaoxingbomei.Enum.GlobalCodeEnum;
 import org.xiaoxingbomei.entity.GlobalEntity;
+import org.xiaoxingbomei.exception.UserException;
+
+import java.lang.reflect.UndeclaredThrowableException;
 
 /**
  * 全局异常处理
@@ -228,6 +231,41 @@ public class GlobalExceptionHandler
         e.printStackTrace();
         return GlobalEntity.error(GlobalCodeEnum.ERROR.getCode(), e.getMessage(), ",当前功能不可用，请稍后再试", "", null);
     }
+
+
+    // 用户异常
+    @ExceptionHandler(value = UserException.class)
+    public GlobalEntity handlerException(UserException e)
+    {
+        e.printStackTrace();
+        return GlobalEntity.error(e.getErrorCode().getCode(),e.getErrorMsg(),"UserException,用户功能受限，请稍后重试~","",null);
+    }
+
+
+    // aop/反射异常
+    @ExceptionHandler(value = UndeclaredThrowableException.class)
+    public GlobalEntity handlerException(UndeclaredThrowableException e)
+    {
+        Throwable undeclaredThrowable = e.getUndeclaredThrowable();
+
+
+        // 如果是用户异常
+        if(undeclaredThrowable instanceof UserException)
+        {
+            UserException userException = (UserException)undeclaredThrowable;
+            // return GlobalEntity.error(userException.getErrorCode().getCode(),userException.getErrorMsg(),"UserException,用户功能受限，请稍后重试~","",null);
+            return GlobalEntity.error(userException.getErrorCode().getCode(),userException.getErrorMsg(),"用户功能受限，请稍后重试~","",null);
+        }
+
+
+        // 如果是其他异常
+
+
+        //
+        e.printStackTrace();
+        return GlobalEntity.error(GlobalCodeEnum.ERROR.getCode(),e.getMessage(),"UndeclaredThrowableException,用户功能受限，请稍后重试~","",null);
+    }
+
 
     // 拦截：其它所有异常
     @ExceptionHandler(Exception.class)
