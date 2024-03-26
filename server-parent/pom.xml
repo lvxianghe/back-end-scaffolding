@@ -49,17 +49,14 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot</artifactId>
-            <version>2.0.3.RELEASE</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-autoconfigure</artifactId>
-            <version>2.0.3.RELEASE</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
-            <version>2.0.3.RELEASE</version>
         </dependency>
 
         <dependency>
@@ -79,6 +76,12 @@
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-netflix-eureka-server</artifactId>
+        </dependency>
+
+        <!-- feign -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-openfeign</artifactId>
         </dependency>
 
         <!-- 引入SA-token依赖 -->
@@ -107,12 +110,7 @@
             <version>3.5.6</version>
         </dependency>
 
-        <!-- redis -->
-<!--        <dependency>-->
-<!--            <groupId>org.springframework.data</groupId>-->
-<!--            <artifactId>spring-data-redis</artifactId>-->
-<!--            <version>2.4.3</version>-->
-<!--        </dependency>-->
+
 
         <!-- log4j -->
         <dependency>
@@ -167,17 +165,6 @@
             <version>7.17.8</version>
         </dependency>
 
-        <!-- redis -->
-<!--        <dependency>-->
-<!--            <groupId>redis.clients</groupId>-->
-<!--            <artifactId>jedis</artifactId>-->
-<!--            <version>4.2.0</version>-->
-<!--        </dependency>-->
-
-<!--        <dependency>-->
-<!--            <groupId>org.springframework.boot</groupId>-->
-<!--            <artifactId>spring-boot-starter-data-redis</artifactId>-->
-<!--        </dependency>-->
 
         <dependency>
             <groupId>redis.clients</groupId>
@@ -188,11 +175,11 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-redis</artifactId>
         </dependency>
-        <dependency>
-            <groupId>io.lettuce.core</groupId>
-            <artifactId>lettuce-core</artifactId>
-            <version>6.2.5</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>io.lettuce.core</groupId>-->
+<!--            <artifactId>lettuce-core</artifactId>-->
+<!--            <version>6.2.5</version>-->
+<!--        </dependency>-->
 
         <!--spring doc-->
         <dependency>
@@ -211,7 +198,20 @@
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
-            <version>8.0.27</version>
+            <version>8.0.30</version>
+            <scope>runtime</scope>
+        </dependency>
+        <!-- oss -->
+        <dependency>
+            <groupId>com.aliyun.oss</groupId>
+            <artifactId>aliyun-sdk-oss</artifactId>
+            <version>3.5.0</version>
+        </dependency>
+        <!-- db2 -->
+        <dependency>
+            <groupId>com.ibm.db2</groupId>
+            <artifactId>jcc</artifactId>
+            <version>11.5.0.0</version>
         </dependency>
 
     </dependencies>
