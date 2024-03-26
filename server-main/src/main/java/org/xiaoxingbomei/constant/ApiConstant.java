@@ -11,6 +11,34 @@ public class ApiConstant
         public static final String getSystemInfo        = "system/getSystemInfo";       // 获取系统信息
     }
 
+    /**
+     * 用户
+     */
+    public class User
+    {
+        public static final String getUserInfo          = "user/getUserInfo";           //
+        public static final String getUserCacheInfo     = "user/getUserCacheInfo";      //
+        public static final String removeUserCacheInfo  = "user/removeUserCacheInfo";   //
+    }
+
+    /**
+     * 机构
+     */
+    public class org
+    {
+        public static final String getOrgInfo           = "org/getOrgInfo";             //
+        public static final String getSupOrgInfo        = "org/getSupOrgInfo";          //
+        public static final String getSubOrgInfo        = "org/getSubOrgInfo";          //
+    }
+
+    /**
+     * 角色
+     */
+    public class Role
+    {
+        public static final String getRoleInfo          = "role/getRoleInfo";           //
+    }
+
 
     /**
      * 权限
@@ -39,14 +67,25 @@ public class ApiConstant
     /**
      * 业务：
      */
+    public class BusinessOfXxx1
+    {
+
+    }
+    /**
+     * 业务：
+     */
+    public class BusinessOfXxx2
+    {
+
+    }
 
     /**
      * 业务：
      */
+    public class BusinessOfXxx3
+    {
 
-    /**
-     * 业务：
-     */
+    }
 
 
 

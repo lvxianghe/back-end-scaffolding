@@ -23,7 +23,6 @@ public class SystemAuthDto
     private String auth;        // 权限
     private String token;       // 令牌
 
-
     // 初始化
     public static SystemAuthDto initSystemAuthDto(String paramString)
     {
@@ -35,11 +34,10 @@ public class SystemAuthDto
         return dto;
     }
 
-
-    // 通用检查入参
+    // 通用入参校验
     public static void checkCommonParams(String paramString)
     {
-        if(org.apache.commons.lang3.StringUtils.isEmpty(paramString))
+        if(StringUtils.isEmpty(paramString))
         {
             throw new BusinessException(GlobalCodeEnum.ERROR,"缺少必要参数");
         }
