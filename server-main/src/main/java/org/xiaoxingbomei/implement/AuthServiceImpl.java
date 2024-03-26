@@ -17,7 +17,6 @@ import java.util.List;
 public class AuthServiceImpl implements AuthService
 {
 
-
     /**
      * doLogin
      * @Author lvxianghe

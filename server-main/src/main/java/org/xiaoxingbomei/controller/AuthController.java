@@ -1,9 +1,9 @@
 package org.xiaoxingbomei.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 import org.xiaoxingbomei.Enum.GlobalCodeEnum;
 import org.xiaoxingbomei.annotation.ControllerLog;
 import org.xiaoxingbomei.constant.ApiConstant;
@@ -11,14 +11,14 @@ import org.xiaoxingbomei.dto.SystemAuthDto;
 import org.xiaoxingbomei.entity.GlobalEntity;
 import org.xiaoxingbomei.service.AuthService;
 
-@RestController
-public class LoginController
+/**
+ * 集成sa-token，权限controller
+ */
+@Controller
+public class AuthController
 {
-
-
     @Autowired
     public AuthService authService;
-
 
     // doLogin
     @ControllerLog
@@ -27,9 +27,7 @@ public class LoginController
     {
         GlobalEntity ret = null;
 
-
         ret = authService.doLogin(paramString);
-
 
         return ret;
     }
@@ -42,9 +40,7 @@ public class LoginController
     {
         GlobalEntity ret = null;
 
-
         ret = authService.isLogin(paramString);
-
 
         return ret;
     }
@@ -57,9 +53,7 @@ public class LoginController
     {
         GlobalEntity ret = null;
 
-
         ret = authService.checkLogin(paramString);
-
 
         return ret;
     }
@@ -282,8 +276,4 @@ public class LoginController
 
         return ret;
     }
-
-
-
-
 }

@@ -1,4 +1,12 @@
 package org.xiaoxingbomei.controller;
 
-public class UserController {
+import org.springframework.stereotype.Controller;
+
+/**
+ * 用户级别controller
+ */
+@Controller
+public class UserController
+{
+
 }

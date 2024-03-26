@@ -13,15 +13,15 @@ import org.xiaoxingbomei.exception.BusinessException;
 @ToString
 public class SystemAuthDto
 {
-    private String userId;      //
-    private String userName;    //
-    private String orgId;       //
-    private String orgName;     //
-    private String supOrgId;    //
-    private String supOrgName;  //
-    private String roleId;      //
-    private String auth;        //
-    private String token;       //
+    private String userId;      // 用户id
+    private String userName;    // 用户名
+    private String orgId;       // 机构id
+    private String orgName;     // 机构名
+    private String supOrgId;    // 上级机构id
+    private String supOrgName;  // 上级机构名
+    private String roleId;      // 角色id
+    private String auth;        // 权限
+    private String token;       // 令牌
 
 
     // 初始化

@@ -1,4 +1,12 @@
 package org.xiaoxingbomei.controller;
 
-public class BusinessController {
+import org.springframework.stereotype.Controller;
+
+/**
+ * 业务级别controller
+ */
+@Controller
+public class BusinessController
+{
+
 }
