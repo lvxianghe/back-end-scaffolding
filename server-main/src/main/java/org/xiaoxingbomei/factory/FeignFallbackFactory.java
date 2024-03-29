@@ -9,8 +9,8 @@ import java.lang.reflect.Proxy;
  * feign失败回调
  */
 @Log4j2
-public class FeignFallbackFactory<T> implements FallbackFactory<T> {
-
+public class FeignFallbackFactory<T> implements FallbackFactory<T>
+{
 
     @Override
     public T create(Throwable cause) {
