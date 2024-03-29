@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.xiaoxingbomei.Enum.GlobalCodeEnum;
 import org.xiaoxingbomei.annotation.ControllerLog;
+import org.xiaoxingbomei.annotation.RequestLimiting;
 import org.xiaoxingbomei.constant.ApiConstant;
 import org.xiaoxingbomei.dto.SystemAuthDto;
 import org.xiaoxingbomei.entity.GlobalEntity;
@@ -21,6 +22,7 @@ public class AuthController
     public AuthService authService;
 
     // doLogin
+    @RequestLimiting
     @ControllerLog
     @RequestMapping(value = ApiConstant.Auth.doLogin)
     public GlobalEntity doLogin(@RequestBody String paramString)
