@@ -3,9 +3,11 @@ package org.xiaoxingbomei.exception;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
-public class CustomException extends Throwable
+public class CustomException extends ParamException
 {
     private static final long seriaVersionUID = 1L;
 
@@ -15,12 +17,10 @@ public class CustomException extends Throwable
 
     private String errorMessage;
 
-    public CustomException(String errorCode,String errorMessage)
-    {
-        super();
+
+    public CustomException(List<String> fieldList, List<String> msgList, String errorCode, String errorMessage) {
+        super(fieldList, msgList);
         this.errorCode = errorCode;
         this.errorMessage = errorMessage;
     }
-
-
 }
