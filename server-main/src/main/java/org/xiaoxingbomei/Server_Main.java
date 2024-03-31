@@ -16,7 +16,7 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 
 @SpringBootApplication
-//@EnableApolloConfig
+@EnableApolloConfig
 @EnableEurekaClient
 @ServletComponentScan
 @EnableAspectJAutoProxy

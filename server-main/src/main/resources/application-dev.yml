@@ -39,7 +39,7 @@ app:
 apollo:
   cluster: lhx
 #  meta: http://localhost:8070
-  meta: localhost:8080
+  meta: http://localhost:8080
   autoUpdateInjectedSpringProperties: true
   bootstrap:
     enabled: true
