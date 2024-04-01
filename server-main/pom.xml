@@ -8,6 +8,7 @@
     <artifactId>server-main</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
+
     <dependencies>
 
 
@@ -19,6 +20,7 @@
         <groupId>org.xiaoxingbomei</groupId>
         <artifactId>server-parent</artifactId>
         <version>1.0-SNAPSHOT</version>
+        <relativePath>../server-parent/pom.xml</relativePath>
     </parent>
 
 

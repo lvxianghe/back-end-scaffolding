@@ -13,6 +13,7 @@
         <groupId>org.xiaoxingbomei</groupId>
         <artifactId>server-parent</artifactId>
         <version>1.0-SNAPSHOT</version>
+        <relativePath>../server-parent/pom.xml</relativePath>
     </parent>
 
 </project>
