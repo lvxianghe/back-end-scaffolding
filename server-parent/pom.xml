@@ -10,13 +10,19 @@
     <version>1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
+    <!--引入 Spring boot 依赖管理-->
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.3.4.RELEASE</version>
+        <relativePath/> <!-- lookup parent from repository -->
+    </parent>
     <!--  -->
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>1.8</java.version>
-<!--        <spring-cloud.version>Edgware.SR5</spring-cloud.version>-->
         <spring-cloud.version>Finchley.SR1</spring-cloud.version>
     </properties>
 
@@ -30,13 +36,7 @@
         <module>../server-sql</module>
     </modules>
 
-    <!--引入 Spring boot 依赖管理-->
-    <parent>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.1.5.RELEASE</version>
-        <relativePath />
-    </parent>
+
 
     <!--
       依赖目录
@@ -47,45 +47,24 @@
     -->
     <dependencies>
 
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
-            <version>2.0.3.RELEASE</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter</artifactId>
-            <version>2.0.3.RELEASE</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
-            <version>2.0.3.RELEASE</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-aop</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.springframework.batch</groupId>
-            <artifactId>spring-batch-core</artifactId>
-        </dependency>
 
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot</artifactId>
-        </dependency>
-<!--        <dependency>-->
-<!--            <groupId>org.springframework.boot</groupId>-->
-<!--            <artifactId>spring-boot-autoconfigure</artifactId>-->
-<!--        </dependency>-->
-
-
-<!--        <dependency>-->
-<!--            <groupId>org.springframework</groupId>-->
-<!--            <artifactId>spring-context</artifactId>-->
-<!--            <version>2.0.3.RELEASE</version>-->
-<!--        </dependency>-->
 
         <dependency>
             <groupId>junit</groupId>
@@ -94,16 +73,11 @@
             <scope>test</scope>
         </dependency>
 
-        <dependency>
-            <groupId>org.aspectj</groupId>
-            <artifactId>aspectjweaver</artifactId>
-            <version>1.9.6</version>
-        </dependency>
 
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-netflix-core</artifactId>
-            <version>1.4.6.RELEASE</version>
+            <version></version>
         </dependency>
 
         <!--引入 Eureka 客户端 依赖-->
@@ -176,65 +150,65 @@
 
 
         <!-- springframework -->
-<!--        <dependency>-->
-<!--            <groupId>org.springframework</groupId>-->
-<!--            <artifactId>spring-tx</artifactId>-->
-<!--            <version>5.3.3</version>-->
-<!--        </dependency>-->
+                <dependency>
+                    <groupId>org.springframework</groupId>
+                    <artifactId>spring-tx</artifactId>
+                    <version>5.3.3</version>
+                </dependency>
         <!-- swagger 文档 -->
-        <dependency>
-            <groupId>io.swagger.core.v3</groupId>
-            <artifactId>swagger-core</artifactId>
-            <version>2.2.12</version>
-        </dependency>
+                <dependency>
+                    <groupId>io.swagger.core.v3</groupId>
+                    <artifactId>swagger-core</artifactId>
+                    <version>2.2.12</version>
+                </dependency>
         <!-- 邮件 -->
-        <dependency>
-            <groupId>jakarta.mail</groupId>
-            <artifactId>jakarta.mail-api</artifactId>
-            <version>2.1.0</version>
-        </dependency>
-        <!-- guava -->
-        <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-            <version>32.0.1-jre</version>
-        </dependency>
-        <!-- elasticsearch 客户端 -->
-        <dependency>
-            <groupId>org.elasticsearch.client</groupId>
-            <artifactId>elasticsearch-rest-high-level-client</artifactId>
-            <version>7.17.8</version>
-        </dependency>
+                <dependency>
+                    <groupId>jakarta.mail</groupId>
+                    <artifactId>jakarta.mail-api</artifactId>
+                    <version>2.1.0</version>
+                </dependency>
+                <!-- guava -->
+                <dependency>
+                    <groupId>com.google.guava</groupId>
+                    <artifactId>guava</artifactId>
+                    <version>32.0.1-jre</version>
+                </dependency>
+                <!-- elasticsearch 客户端 -->
+                <dependency>
+                    <groupId>org.elasticsearch.client</groupId>
+                    <artifactId>elasticsearch-rest-high-level-client</artifactId>
+                    <version>7.17.8</version>
+                </dependency>
 
 
-        <dependency>
-            <groupId>redis.clients</groupId>
-            <artifactId>jedis</artifactId>
-            <version>3.7.0</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-redis</artifactId>
-        </dependency>
-<!--        <dependency>-->
-<!--            <groupId>io.lettuce.core</groupId>-->
-<!--            <artifactId>lettuce-core</artifactId>-->
-<!--            <version>6.2.5</version>-->
-<!--        </dependency>-->
+                <dependency>
+                    <groupId>redis.clients</groupId>
+                    <artifactId>jedis</artifactId>
+                    <version>3.7.0</version>
+                </dependency>
+                <dependency>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-data-redis</artifactId>
+                </dependency>
+<!--                <dependency>-->
+<!--                    <groupId>io.lettuce.core</groupId>-->
+<!--                    <artifactId>lettuce-core</artifactId>-->
+<!--                    <version>6.2.5</version>-->
+<!--                </dependency>-->
 
         <!--spring doc-->
-        <dependency>
-            <groupId>org.springdoc</groupId>
-            <artifactId>springdoc-openapi-ui</artifactId>
-            <version>1.6.11</version>
-        </dependency>
+                <dependency>
+                    <groupId>org.springdoc</groupId>
+                    <artifactId>springdoc-openapi-ui</artifactId>
+                    <version>1.6.11</version>
+                </dependency>
 
         <!--apollo-->
-<!--        <dependency>-->
-<!--            <groupId>com.ctrip.framework.apollo</groupId>-->
-<!--            <artifactId>apollo-client</artifactId>-->
-<!--            <version>1.7.0</version>-->
-<!--        </dependency>-->
+                <dependency>
+                    <groupId>com.ctrip.framework.apollo</groupId>
+                    <artifactId>apollo-client</artifactId>
+                    <version>1.7.0</version>
+                </dependency>
         <!-- mysql8.0 -->
         <dependency>
             <groupId>mysql</groupId>
@@ -292,22 +266,26 @@
                 </configuration>
             </plugin>
         </plugins>
-        <!-- 用于配置项目中的资源文件 -->
+
         <resources>
             <resource>
                 <directory>src/main/java</directory>
                 <includes>
+                    <include>**/*.properties</include>
                     <include>**/*.xml</include>
                 </includes>
-                <filtering>true</filtering>
+                <filtering>false</filtering>
             </resource>
             <resource>
                 <directory>src/main/resources</directory>
                 <includes>
-                    <include>**/*</include>
+                    <include>**/*.properties</include>
+                    <include>**/*.xml</include>
                 </includes>
+                <filtering>false</filtering>
             </resource>
         </resources>
+
     </build>
 
 </project>
