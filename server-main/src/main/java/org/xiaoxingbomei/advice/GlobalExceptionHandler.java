@@ -3,6 +3,7 @@ package org.xiaoxingbomei.advice;
 import cn.dev33.satoken.exception.*;
 import cn.dev33.satoken.util.SaResult;
 
+import lombok.EqualsAndHashCode;
 import org.slf4j.*;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -19,6 +20,7 @@ import java.lang.reflect.UndeclaredThrowableException;
  * 全局异常处理
  */
 @RestControllerAdvice
+@EqualsAndHashCode
 public class GlobalExceptionHandler
 {
 

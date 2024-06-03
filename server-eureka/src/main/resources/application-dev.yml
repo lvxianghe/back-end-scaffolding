@@ -3,13 +3,13 @@ server:
 
 eureka:
   client:
-    #serviceUrl:
-      #defaultZone: http://localhost:28921
-      #registerWithEureka: true
-      #fetchRegistry: false
-  instance:
-    # preferIpAddress: true
-    # instance-id: http://localhost:28921
-    # hostname: eureka1
+    serviceUrl:
+      defaultZone: http://localhost:28921
+      registerWithEureka: true
+      fetchRegistry: false
+#  instance:
+#     preferIpAddress: true
+#     instance-id: http://localhost:28921
+#     hostname: eureka1
 
 

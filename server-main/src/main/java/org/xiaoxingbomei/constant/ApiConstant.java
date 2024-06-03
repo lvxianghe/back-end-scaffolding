@@ -24,7 +24,7 @@ public class ApiConstant
     /**
      * 机构
      */
-    public class org
+    public class Org
     {
         public static final String getOrgInfo           = "org/getOrgInfo";             //
         public static final String getSupOrgInfo        = "org/getSupOrgInfo";          //

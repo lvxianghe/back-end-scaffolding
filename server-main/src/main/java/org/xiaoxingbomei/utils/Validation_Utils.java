@@ -3,9 +3,6 @@ package org.xiaoxingbomei.utils;
 /*import xyz.hlh.cryptotest.exception.CustomException;*/
 /*import xyz.hlh.cryptotest.exception.ParamException;*/
 
-import org.apache.tomcat.util.threads.TaskThread;
-import org.xiaoxingbomei.exception.CustomException;
-import org.xiaoxingbomei.exception.CustomException;
 import org.xiaoxingbomei.exception.ParamException;
 
 import javax.validation.ConstraintViolation;

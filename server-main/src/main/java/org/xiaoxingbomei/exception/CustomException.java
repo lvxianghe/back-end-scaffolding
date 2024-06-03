@@ -7,20 +7,24 @@ import java.util.List;
 
 @Getter
 @Setter
-public class CustomException extends ParamException
+public class CustomException extends RuntimeException
 {
     private static final long seriaVersionUID = 1L;
 
-
+    // 错误代码
     private String errorCode;
 
-
+    // 错误描述
     private String errorMessage;
 
+    public CustomException(String errorMessage){
+        super(errorMessage);
+    }
 
-    public CustomException(List<String> fieldList, List<String> msgList, String errorCode, String errorMessage) {
-        super(fieldList, msgList);
+    public CustomException(String errorCode, String errorMessage){
+        super(errorCode);
         this.errorCode = errorCode;
         this.errorMessage = errorMessage;
     }
+
 }

@@ -6,19 +6,19 @@ server:
 spring:
   application:
     name: server-main
-  redis:
-    host: 127.0.0.1
-    port: 6379
-    password: 123456
-    ssl: false
-    database: 0
-    timeout: 6000
-    lettuce:
-      pool:
-        max-active: 16
-        max-idle: 60
-        min-idle: 60
-        max-wait: 6000
+#  redis:
+#    host: 127.0.0.1
+#    port: 6379
+#    password: 123456
+#    ssl: false
+#    database: 0
+#    timeout: 6000
+#    lettuce:
+#      pool:
+#        max-active: 16
+#        max-idle: 60
+#        min-idle: 60
+#        max-wait: 6000
 
 # eureka配置
 eureka:
@@ -34,18 +34,18 @@ eureka:
 
 
 #apollo配置
-app:
-  id: ysx
-apollo:
-  cluster: lhx
-#  meta: http://localhost:8070
-  meta: http://localhost:8080
-  autoUpdateInjectedSpringProperties: true
-  bootstrap:
-    enabled: true
-    namespaces: application,configuration
-    eagerLoad:
-      enabled: false
+#app:
+#  id: ysx
+#apollo:
+#  cluster: app-dev
+##  meta: http://localhost:8070
+#  meta: http://localhost:8080
+#  autoUpdateInjectedSpringProperties: true
+#  bootstrap:
+#    enabled: true
+#    namespaces: application,configuration
+#    eagerLoad:
+#      enabled: false
 
 ##log配置
 #logging:

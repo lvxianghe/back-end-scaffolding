@@ -5,7 +5,7 @@ import org.apache.commons.lang3.ObjectUtils;
 /**
  * 安全用户信息辅助类
  *
- * @author wl
+ * @author
  * @since 2022-03-03 21:22
  */
 public final class SecurityUserHelper {
@@ -27,12 +27,12 @@ public final class SecurityUserHelper {
      *
      * @param securityUser 用户信息
      */
-    public static void set(SecurityUser securityUser) {
-        if (ObjectUtils.isEmpty(securityUser)) {
-            throw new IllegalArgumentException("HeaderSecurityUser is null");
-        }
-        securityUserHolder.set(securityUser);
-    }
+//    public static void set(SecurityUser securityUser) {
+//        if (ObjectUtils.isEmpty(securityUser)) {
+//            throw new IllegalArgumentException("HeaderSecurityUser is null");
+//        }
+//        securityUserHolder.set(securityUser);
+//    }
 
     /**
      * 获取线程安全的用户信息
