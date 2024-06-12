@@ -1,10 +1,14 @@
 package org.xiaoxingbomei.aspect;
 
 
+import com.alibaba.fastjson.JSON;
 import lombok.extern.log4j.Log4j2;
 import org.aspectj.lang.JoinPoint;
+import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.*;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StopWatch;
+import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import javax.servlet.http.HttpServletRequest;
@@ -49,7 +53,7 @@ public class ControllerLogAspectByPath
     public void ControllerLogAspectByPath() {}
 
     /**
-     * 在切入点开始处切入内容
+     * before
      */
     @Before("ControllerLogAspectByPath()")
     public void doBefore(JoinPoint joinPoint) throws Throwable
@@ -60,24 +64,55 @@ public class ControllerLogAspectByPath
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         HttpServletRequest request = attributes.getRequest();
 
-        // 记录下请求内容
-        log.info("URL : " + request.getRequestURL().toString());
-        log.info("HTTP_METHOD : " + request.getMethod());
-        log.info("IP : " + request.getRemoteAddr());
-        log.info("CLASS_METHOD : " + joinPoint.getSignature().getDeclaringTypeName() + "." + joinPoint.getSignature().getName());
-        log.info("ARGS : " + Arrays.toString(joinPoint.getArgs()));
+        // 记录下请求内容before request
+        log.info("【controller aspect log】【before request】-【arguments】 : " + Arrays.toString(joinPoint.getArgs()));
+        log.info("【controller aspect log】【before request】-【url】 : " + request.getRequestURL().toString());
+        log.info("【controller aspect log】【before request】-【class path】 : " + joinPoint.getSignature().getDeclaringTypeName() + "." + joinPoint.getSignature().getName());
+        log.info("【controller aspect log】【before request】-【http method】 : " + request.getMethod());
+        log.info("【controller aspect log】【before request】-【IP】 : " + request.getRemoteAddr());
 
     }
 
+    //
+    @Around("ControllerLogAspectByPath()")
+    public Object doMethodInfo(ProceedingJoinPoint point) throws Throwable
+    {
+
+        HttpServletRequest request = (HttpServletRequest) RequestContextHolder.getRequestAttributes().resolveReference(RequestAttributes.REFERENCE_REQUEST);
+        String servletPath = request == null ? "" : request.getServletPath();
+        Object[] args = point.getArgs();
+        if (args != null && args.length > 0)
+        {
+            log.info("【本系统】【入参打印】访问路径:[{}]\n,入参:[{}]", servletPath, JSON.toJSON(args[0]));
+        } else
+        {
+            log.info("【本系统】【入参打印】访问路径:[{}]", servletPath);
+        }
+
+        Object result;
+        StopWatch stopWatch = new StopWatch();
+
+        stopWatch.start();
+
+        result = point.proceed();
+        stopWatch.stop();
+
+        log.info("【本系统】【出参打印】访问路径为:[{}]\n接口耗时:[{}]\n出参为:[{}]\n", servletPath, stopWatch.getTotalTimeSeconds()+" seconds",JSON.toJSONString(result));
+
+        return result;
+    }
+
     /**
-     * 在切入点return内容之后切入内容（输出返回参数及处理时间）
+     * after returning（输出返回参数及处理时间）
      */
     @AfterReturning(returning = "ret", pointcut = "ControllerLogAspectByPath()")
     public void doAfterReturning(Object ret) throws Throwable
     {
         // 处理完请求，返回内容
-        log.info("RESPONSE : " + ret);
-        log.info("SPEND TIME : " + (System.currentTimeMillis() - startTime.get()));
+        log.info("【controller aspect log】【response】-【response】 : " + ret);
+        log.info("【controller aspect log】【response】-【spend time】 : " + (System.currentTimeMillis() - startTime.get())+ "ms") ;
+
+
     }
 
 

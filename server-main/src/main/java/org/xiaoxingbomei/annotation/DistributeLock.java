@@ -10,7 +10,8 @@ import java.util.concurrent.TimeUnit;
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
-public @interface DistributeLock {
+public @interface DistributeLock
+{
     //key 为分布式锁的 key 值
     String key();
 

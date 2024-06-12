@@ -12,6 +12,8 @@ import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.core.env.Environment;
+import org.xiaoxingbomei.constant.ApiConstant;
+import org.xiaoxingbomei.vo.User;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -46,7 +48,10 @@ public class Server_Main
                 "\n\tSwagger  访问网址: \thttp://" + ip + ":" + port + path + "/swagger-ui.html",
                 "\n----------------------------------------------------------\n");
         log.info("服务启动成功!>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> 耗时：{} s", (System.currentTimeMillis() - start) / 1000);
+
+
     }
+
 
 }
 

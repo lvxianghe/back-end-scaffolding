@@ -269,11 +269,14 @@ public class GlobalExceptionHandler
     }
 
 
+
+
+
     // 拦截：其它所有异常
     @ExceptionHandler(Exception.class)
     public GlobalEntity handlerException(Exception e) {
         e.printStackTrace();
-        return GlobalEntity.error(GlobalCodeEnum.ERROR.getCode(), e.getMessage(), ",当前功能不可用，请稍后再试", "", null);
+        return GlobalEntity.error(GlobalCodeEnum.ERROR.getCode(), e.getMessage(), "Exception,当前功能不可用，请稍后再试", "", null);
     }
 
 
@@ -281,7 +284,7 @@ public class GlobalExceptionHandler
     @ExceptionHandler(Throwable.class)
     public GlobalEntity handlerException(Throwable e) {
         e.printStackTrace();
-        return GlobalEntity.error(GlobalCodeEnum.ERROR.getCode(), e.getMessage(), ",当前功能不可用，请稍后再试", "", null);
+        return GlobalEntity.error(GlobalCodeEnum.ERROR.getCode(), e.getMessage(), "Throwable,当前功能不可用，请稍后再试", "", null);
     }
 
 

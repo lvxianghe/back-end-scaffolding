@@ -1,5 +1,7 @@
 package org.xiaoxingbomei.service;
 
+import org.xiaoxingbomei.annotation.ServiceSwitch;
+import org.xiaoxingbomei.constant.Constant;
 import org.xiaoxingbomei.dto.SystemAuthDto;
 import org.xiaoxingbomei.entity.GlobalEntity;
 
@@ -10,7 +12,9 @@ import org.xiaoxingbomei.entity.GlobalEntity;
 public interface AuthService
 {
 
+
     public GlobalEntity doLogin(String paramString);
+
     public GlobalEntity isLogin(String paramString);
     public GlobalEntity checkLogin(String paramString);
     public GlobalEntity tokenInfo(String paramString);
