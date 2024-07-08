@@ -1,9 +1,6 @@
 package org.xiaoxingbomei.annotation;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import java.lang.annotation.*;
 
 /**
  * 通用开关注解
@@ -14,6 +11,7 @@ import java.lang.annotation.Target;
  *
  * 定义了一个key对应不同功效的开关,定义了一个val作为开关是否打开的标识，以及一个message作为消息提示
  */
+@Documented
 @Target({ElementType.METHOD})        // 作用在方法上
 @Retention(RetentionPolicy.RUNTIME)  // 运行时起作用
 public @interface ServiceSwitch

@@ -12,27 +12,22 @@ import org.xiaoxingbomei.Enum.GlobalCodeEnum;
 @Setter
 public class BusinessException extends RuntimeException
 {
+    //
     private static final long seriaVersionUID = 1L;
 
-
-    private GlobalCodeEnum errorCode;
-
-
+    //
+    private String errorCode;
     private String errorMessage;
 
-
-
-    public BusinessException(GlobalCodeEnum errorCode)
+    //
+    public BusinessException(String errorMessage)
     {
-        super();
-        this.errorCode = errorCode;
-        this.errorMessage = errorCode.getMessage();
+        this.errorMessage = errorMessage;
     }
 
-
-    public BusinessException(GlobalCodeEnum errorCode, String errorMessage)
+    //
+    public BusinessException(String errorCode, String errorMessage)
     {
-        super();
         this.errorCode = errorCode;
         this.errorMessage = errorMessage;
     }

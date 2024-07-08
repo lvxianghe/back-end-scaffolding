@@ -1,13 +1,14 @@
 package org.xiaoxingbomei.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.xiaoxingbomei.Enum.GlobalCodeEnum;
-import org.xiaoxingbomei.annotation.ControllerLog;
 import org.xiaoxingbomei.annotation.RequestLimiting;
+import org.xiaoxingbomei.annotation.ServiceSwitch;
 import org.xiaoxingbomei.constant.ApiConstant;
+import org.xiaoxingbomei.constant.Constant;
 import org.xiaoxingbomei.dto.SystemAuthDto;
 import org.xiaoxingbomei.entity.GlobalEntity;
 import org.xiaoxingbomei.service.AuthService;
@@ -15,16 +16,18 @@ import org.xiaoxingbomei.service.AuthService;
 /**
  * 集成sa-token，权限controller
  */
-@Controller
+@RestController
+@Tag(name="权限controller",description = "集成sa-token，权限controller")
 public class AuthController
 {
     @Autowired
     public AuthService authService;
 
     // doLogin
+    @Operation(summary = "登录",description = "集成sa-token，登录")
     @RequestLimiting
-    @ControllerLog
-    @RequestMapping(value = ApiConstant.Auth.doLogin)
+    @ServiceSwitch(switchKey = Constant.SwitchConfigCode.XX_SWITCH)
+    @RequestMapping(value = ApiConstant.Auth.doLogin, method = RequestMethod.POST)
     public GlobalEntity doLogin(@RequestBody String paramString)
     {
         GlobalEntity ret = null;
@@ -34,10 +37,8 @@ public class AuthController
         return ret;
     }
 
-
     // isLogin
-    @ControllerLog
-    @RequestMapping(value = ApiConstant.Auth.isLogin)
+    @RequestMapping(value = ApiConstant.Auth.isLogin, method = RequestMethod.POST)
     public GlobalEntity isLogin(@RequestBody String paramString)
     {
         GlobalEntity ret = null;
@@ -49,8 +50,7 @@ public class AuthController
 
 
     // checkLogin
-    @ControllerLog
-    @RequestMapping(value = ApiConstant.Auth.checkLogin)
+    @RequestMapping(value = ApiConstant.Auth.checkLogin, method = RequestMethod.POST)
     public GlobalEntity checkLogin(@RequestBody String paramString)
     {
         GlobalEntity ret = null;
@@ -62,8 +62,7 @@ public class AuthController
 
 
     // tokenInfo
-    @ControllerLog
-    @RequestMapping(value = ApiConstant.Auth.tokenInfo)
+    @RequestMapping(value = ApiConstant.Auth.tokenInfo, method = RequestMethod.POST)
     public GlobalEntity tokenInfo(@RequestBody String paramString)
     {
         GlobalEntity ret = null;
@@ -75,8 +74,7 @@ public class AuthController
         return ret;
     }
     // logOut
-    @ControllerLog
-    @RequestMapping(value = ApiConstant.Auth.logOut)
+    @RequestMapping(value = ApiConstant.Auth.logOut, method = RequestMethod.POST)
     public GlobalEntity logOut(@RequestBody String paramString)
     {
         GlobalEntity ret = null;
@@ -90,8 +88,7 @@ public class AuthController
 
 
     // getPermissionList
-    @ControllerLog
-    @RequestMapping(value = ApiConstant.Auth.getPermissionList)
+    @RequestMapping(value = ApiConstant.Auth.getPermissionList, method = RequestMethod.POST)
     public GlobalEntity getPermissionList(@RequestBody String paramString)
     {
         GlobalEntity ret = null;
@@ -109,10 +106,8 @@ public class AuthController
         return ret;
     }
 
-
     // hasPermissionList
-    @ControllerLog
-    @RequestMapping(value = ApiConstant.Auth.hasPermissionList)
+    @RequestMapping(value = ApiConstant.Auth.hasPermissionList, method = RequestMethod.POST)
     public GlobalEntity hasPermissionList(@RequestBody String paramString)
     {
         GlobalEntity ret = null;
@@ -129,9 +124,9 @@ public class AuthController
 
         return ret;
     }
+
     // checkPermissionList
-    @ControllerLog
-    @RequestMapping(value = ApiConstant.Auth.checkPermissionList)
+    @RequestMapping(value = ApiConstant.Auth.checkPermissionList, method = RequestMethod.POST)
     public GlobalEntity checkPermissionList(@RequestBody String paramString)
     {
         GlobalEntity ret = null;
@@ -149,8 +144,7 @@ public class AuthController
     }
 
     // checkPermissionAnd
-    @ControllerLog
-    @RequestMapping(value = ApiConstant.Auth.checkPermissionAnd)
+    @RequestMapping(value = ApiConstant.Auth.checkPermissionAnd, method = RequestMethod.POST)
     public GlobalEntity checkPermissionAnd(@RequestBody String paramString)
     {
         GlobalEntity ret = null;
@@ -168,8 +162,7 @@ public class AuthController
     }
 
     // CheckPermissionOr
-    @ControllerLog
-    @RequestMapping(value = ApiConstant.Auth.CheckPermissionOr)
+    @RequestMapping(value = ApiConstant.Auth.CheckPermissionOr, method = RequestMethod.POST)
     public GlobalEntity CheckPermissionOr(@RequestBody String paramString)
     {
         GlobalEntity ret = null;
@@ -185,9 +178,9 @@ public class AuthController
 
         return ret;
     }
+
     // getRoleList
-    @ControllerLog
-    @RequestMapping(value = ApiConstant.Auth.getRoleList)
+    @RequestMapping(value = ApiConstant.Auth.getRoleList, method = RequestMethod.POST)
     public GlobalEntity getRoleList(@RequestBody String paramString)
     {
         GlobalEntity ret = null;
@@ -205,8 +198,7 @@ public class AuthController
     }
 
     // hasRole
-    @ControllerLog
-    @RequestMapping(value = ApiConstant.Auth.hasRole)
+    @RequestMapping(value = ApiConstant.Auth.hasRole, method = RequestMethod.POST)
     public GlobalEntity hasRole(@RequestBody String paramString)
     {
         GlobalEntity ret = null;
@@ -224,8 +216,7 @@ public class AuthController
     }
 
     // checkRole
-    @ControllerLog
-    @RequestMapping(value = ApiConstant.Auth.checkRole)
+    @RequestMapping(value = ApiConstant.Auth.checkRole, method = RequestMethod.POST)
     public GlobalEntity checkRole(@RequestBody String paramString)
     {
         GlobalEntity ret = null;
@@ -241,9 +232,9 @@ public class AuthController
 
         return ret;
     }
+
     // checkRoleAnd
-    @ControllerLog
-    @RequestMapping(value = ApiConstant.Auth.checkRoleAnd)
+    @RequestMapping(value = ApiConstant.Auth.checkRoleAnd, method = RequestMethod.POST)
     public GlobalEntity checkRoleAnd(@RequestBody String paramString)
     {
         GlobalEntity ret = null;
@@ -261,8 +252,7 @@ public class AuthController
     }
 
     // checkRoleOr
-    @ControllerLog
-    @RequestMapping(value = ApiConstant.Auth.checkRoleOr)
+    @RequestMapping(value = ApiConstant.Auth.checkRoleOr, method = RequestMethod.POST)
     public GlobalEntity checkRoleOr(@RequestBody String paramString)
     {
         GlobalEntity ret = null;

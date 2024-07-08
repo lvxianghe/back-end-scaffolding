@@ -56,6 +56,7 @@ eureka:
 #pagehelper:
 #  auto-runtime-dialect: true
 
+# sa-token配置
 sa-token:
   # token 名称（同时也是 cookie 名称）
   token-name: satoken
@@ -71,3 +72,32 @@ sa-token:
   token-style: uuid
   # 是否输出操作日志
   is-log: true
+
+# swagger配置
+springdoc:
+  api-docs:
+    #是否开启文档功能
+    enabled: true
+    #swagger后端请求地址
+    path: /api-docs
+  swagger-ui:
+    #自定义swagger前端请求路径，输入http：127.0.0.1:8080/demo 会自动重定向到swagger页面
+    path: /demo
+  #包扫描路径 ,多个用逗号
+  packages-to-scan: org.xiaoxingbomei
+  #这里定义了两个分组，可定义多个，也可以不定义
+  group-configs:
+    #分组名
+      #分组名
+    - group: 全部服务
+        #按路径匹配
+      pathsToMatch: /**
+
+    - group: auth
+      #按路径匹配
+      pathsToMatch: /auth/**
+
+
+
+      #按包路径匹配
+      # packagesToScan: com.demo.controller.user

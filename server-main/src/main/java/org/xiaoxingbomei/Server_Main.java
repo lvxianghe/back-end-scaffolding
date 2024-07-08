@@ -12,6 +12,7 @@ import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.core.env.Environment;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.xiaoxingbomei.constant.ApiConstant;
 import org.xiaoxingbomei.vo.User;
 
@@ -22,6 +23,7 @@ import java.net.UnknownHostException;
 @EnableEurekaClient
 @ServletComponentScan
 @EnableAspectJAutoProxy
+@EnableScheduling
 @Log4j2
 public class Server_Main
 {
@@ -45,7 +47,7 @@ public class Server_Main
                 applicationName + " is running, Access URLs:",
                 "\n\tLocal    访问网址: \thttp://localhost:" + port + path,
                 "\n\tExternal 访问网址: \thttp://" + ip + ":" + port + path,
-                "\n\tSwagger  访问网址: \thttp://" + ip + ":" + port + path + "/swagger-ui.html",
+                "\n\tSwagger  访问网址: \thttp://" + ip + ":" + port + path + "/swagger-ui/index.html",
                 "\n----------------------------------------------------------\n");
         log.info("服务启动成功!>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> 耗时：{} s", (System.currentTimeMillis() - start) / 1000);
 

@@ -39,7 +39,7 @@ public class SystemAuthDto
     {
         if(StringUtils.isEmpty(paramString))
         {
-            throw new BusinessException(GlobalCodeEnum.ERROR,"缺少必要参数");
+            throw new BusinessException(GlobalCodeEnum.ERROR.getCode(),"缺少必要参数");
         }
     }
 

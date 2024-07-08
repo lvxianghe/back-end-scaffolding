@@ -18,7 +18,7 @@ public class GlobalEntity<T> implements Serializable
 
     public static final String ERROR = "-1";
 
-    private T data;            // 响应主体
+    private T data;                 // 响应主体
     private String code;            // 响应码
     private String message;         // 技术message
     private String userMessage;     // 用户message

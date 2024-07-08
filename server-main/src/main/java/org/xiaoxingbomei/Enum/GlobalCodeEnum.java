@@ -39,9 +39,10 @@ public enum GlobalCodeEnum
 
     ;
 
+
+
     String code;
     String message;
-
 
     GlobalCodeEnum(){}
 
@@ -57,8 +58,6 @@ public enum GlobalCodeEnum
     {
         return code;
     }
-
-
     public String getMessage()
     {
         return message;
@@ -69,8 +68,6 @@ public enum GlobalCodeEnum
     {
         this.code = code;
     }
-
-
     public void setMessage(String message)
     {
         this.message = message;

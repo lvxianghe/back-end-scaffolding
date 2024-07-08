@@ -17,7 +17,8 @@ public class CustomException extends RuntimeException
     // 错误描述
     private String errorMessage;
 
-    public CustomException(String errorMessage){
+    public CustomException(String errorMessage)
+    {
         super(errorMessage);
     }
 

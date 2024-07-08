@@ -1,9 +1,62 @@
 package org.xiaoxingbomei.job.task;
 
+import lombok.extern.log4j.Log4j2;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
+
+import java.util.concurrent.atomic.AtomicBoolean;
+
 /**
  * 缓存 task
+ * 1、定时检查redis连接状态
+ * 2、
  */
+@Log4j2
+@Component
 public class CacheTask
 {
+    @Autowired
+    private RedisTemplate redisTemplate;
+
+    // redis连接状态
+    private final AtomicBoolean isRedisConnected = new AtomicBoolean(false);
+
+    // 查询缓存，检查redis连接状态
+    public boolean isRedisConnected()
+    {
+        return isRedisConnected.get();
+    }
+
+    // 1、定时检查redis连接状态
+    @Scheduled(fixedDelay = 20000)
+    public void checkRedisConnection()
+    {
+        try
+        {
+            // 简单的get操作来测试redis的连接
+            redisTemplate.opsForValue().get("test_redis_connect");
+
+            // 修改redis连接状态
+            isRedisConnected.set(true);
+
+            // log.info("redis client connected successfully");
+        // }catch (RedisConnectionException | PoolException e)
+        }catch (Exception e)
+        {
+            // 打印堆栈
+            e.printStackTrace();
+
+            // 修改redis连接状态
+            isRedisConnected.set(false);
+
+            log.warn("redis client connect failed");
+        }
+    }
+
+    // 可以在这里添加更多与缓存相关的定时任务
+
+    // 可以在这里添加更多与缓存相关的定时任务
 
 }

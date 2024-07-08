@@ -11,25 +11,23 @@ import org.xiaoxingbomei.Enum.GlobalCodeEnum;
 @Setter
 public class UserException extends RuntimeException
 {
+    //
     private static final long serialVersionUID = 1L;
 
+    //
+    private String errorCode;
+    private String errorMessage;
 
-    private GlobalCodeEnum errorCode;
-
-
-    private String errorMsg;
-
-
-    public UserException(GlobalCodeEnum errorCode) {
-        super();
-        this.errorCode = errorCode;
-        this.errorMsg = errorCode.getMessage();
+    //
+    public UserException(String message)
+    {
+        this.errorMessage = message;
     }
 
-
-    public UserException(GlobalCodeEnum errorCode, String errorMsg) {
-        super();
+    //
+    public UserException(String errorCode, String errorMessage)
+    {
         this.errorCode = errorCode;
-        this.errorMsg = errorMsg;
+        this.errorMessage = errorMessage;
     }
 }

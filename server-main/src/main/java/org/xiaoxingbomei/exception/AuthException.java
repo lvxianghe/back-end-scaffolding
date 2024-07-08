@@ -5,27 +5,23 @@ import org.xiaoxingbomei.Enum.GlobalCodeEnum;
 /**
  * 权限异常
  */
-public class AuthException
+public class AuthException extends RuntimeException
 {
+    //
     private static final long seriaVersionUID = 1L;
 
-
-    private GlobalCodeEnum errorCode;
-
-
+    //
+    private String errorCode;
     private String errorMessage;
 
-
-
-    public AuthException(GlobalCodeEnum errorCode)
+    //
+    public AuthException(String message)
     {
-        super();
-        this.errorCode = errorCode;
-        this.errorMessage = errorCode.getMessage();
+        super(message);
     }
 
-
-    public AuthException(GlobalCodeEnum errorCode, String errorMessage)
+    //
+    public AuthException(String errorCode, String errorMessage)
     {
         super();
         this.errorCode = errorCode;
