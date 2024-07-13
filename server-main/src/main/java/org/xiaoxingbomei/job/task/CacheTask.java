@@ -1,10 +1,12 @@
 package org.xiaoxingbomei.job.task;
 
 import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import org.xiaoxingbomei.utils.Exception_Utils;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -13,7 +15,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * 1、定时检查redis连接状态
  * 2、
  */
-@Log4j2
+@Slf4j
 @Component
 public class CacheTask
 {
@@ -46,12 +48,13 @@ public class CacheTask
         }catch (Exception e)
         {
             // 打印堆栈
-            e.printStackTrace();
+            // Exception_Utils.recursiveReversePrintStackCauseCommon(e);
+            Exception_Utils.recursiveReversePrintStackCauseCommon(e);
 
             // 修改redis连接状态
             isRedisConnected.set(false);
 
-            log.warn("redis client connect failed");
+            log.error("redis client connect failed");
         }
     }
 

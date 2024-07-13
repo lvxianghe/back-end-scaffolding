@@ -6,7 +6,6 @@ import org.xiaoxingbomei.entity.GlobalEntity;
 
 /**
  * 权限 Service
- * @Author lvxianghe
  */
 public interface AuthService
 {

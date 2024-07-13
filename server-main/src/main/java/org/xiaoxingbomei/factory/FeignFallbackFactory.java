@@ -8,7 +8,7 @@
 ///**
 // * feign失败回调
 // */
-//@Log4j2
+//@Slf4j
 //public class FeignFallbackFactory<T> implements FallbackFactory<T>
 //{
 //

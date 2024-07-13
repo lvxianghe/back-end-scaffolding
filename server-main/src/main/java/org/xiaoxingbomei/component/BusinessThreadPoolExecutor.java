@@ -22,9 +22,7 @@ public final class BusinessThreadPoolExecutor
 
     private static final int MAX_BLOCKING_DE_QUE_SIZE = 1000000;
 
-    private  BusinessThreadPoolExecutor()
-    {
-    }
+    private  BusinessThreadPoolExecutor() {}
 
     /**
      * ThreadPoolExecutorSingleTon
@@ -38,7 +36,8 @@ public final class BusinessThreadPoolExecutor
          * IllegalArgumentException - 如果 corePoolSize 或 keepAliveTime 小于零，或者 maximumPoolSize 小于或等于零，或者 corePoolSize 大于 maximumPoolSize。
          * NullPointerException - 如果 workQueue 为 null
          */
-        ThreadPoolExecutorSingleTon() {
+        ThreadPoolExecutorSingleTon()
+        {
             instance = new ThreadPoolExecutor(CORE_POOL_SIZE, MAX_POOL_SIZE, KEEP_ALIVE_TIME, TimeUnit.SECONDS,
                     new LinkedBlockingDeque<>(MAX_BLOCKING_DE_QUE_SIZE), new  BusinessPolicy());
         }
@@ -55,6 +54,7 @@ public final class BusinessThreadPoolExecutor
         return ThreadPoolExecutorSingleTon.INSTANCE.getInstance();
     }
 }
+
 /**
  * 拒绝策略
  */
@@ -72,10 +72,13 @@ class  BusinessPolicy implements RejectedExecutionHandler
      * 处理拒绝执行
      */
     @Override
-    public void rejectedExecution(Runnable r, ThreadPoolExecutor e) {
-        try {
+    public void rejectedExecution(Runnable r, ThreadPoolExecutor e)
+    {
+        try
+        {
             e.getQueue().put(r);
-        } catch (InterruptedException e1) {
+        } catch (InterruptedException e1)
+        {
             LOGGER.error("处理拒绝执行", e1);
             Thread.currentThread().interrupt();
         }

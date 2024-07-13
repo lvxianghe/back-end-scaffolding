@@ -19,7 +19,6 @@ public class AuthServiceImpl implements AuthService
 
     /**
      * doLogin
-     * @Author lvxianghe
      */
     @Override
     public GlobalEntity doLogin(String paramString)
@@ -40,7 +39,6 @@ public class AuthServiceImpl implements AuthService
 
     /**
      * isLogin
-     * @Author lvxianghe
      */
     @Override
     public GlobalEntity isLogin(String paramString)
@@ -60,7 +58,6 @@ public class AuthServiceImpl implements AuthService
     }
     /**
      * tokenInfo
-     * @Author lvxianghe
      */
     @Override
     public GlobalEntity tokenInfo(String paramString)
@@ -73,7 +70,6 @@ public class AuthServiceImpl implements AuthService
 
     /**
      * logOut
-     * @Author lvxianghe
      */
     @Override
     public GlobalEntity logOut(String paramString)
@@ -84,7 +80,6 @@ public class AuthServiceImpl implements AuthService
 
     /**
      *
-     * @Author lvxianghe
      */
     @Override
     public GlobalEntity getPermissionList(SystemAuthDto dto)

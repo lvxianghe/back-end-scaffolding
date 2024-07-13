@@ -27,11 +27,12 @@
         <log4j2.version>2.20.0</log4j2.version>
         <junit.version>4.12</junit.version>
         <lombok.version>1.18.2</lombok.version>
-<!--        <mysql-connector-java.version>8.0.23</mysql-connector-java.version>-->
-        <mysql-connector-java.version>5.1.36</mysql-connector-java.version>
+        <mysql-connector-java.version>8.0.23</mysql-connector-java.version>
+        <!-- <mysql-connector-java.version>5.1.36</mysql-connector-java.version>-->
         <db2.version>11.5.0.0</db2.version>
         <mybatis-spring-boot-starter.version>2.1.3</mybatis-spring-boot-starter.version>
         <apollo-client.version>1.7.0</apollo-client.version>
+        <apollo-spring-boot-starter.version>1.6.7</apollo-spring-boot-starter.version>
         <elasticsearch-rest-high-level-client.version>7.17.8</elasticsearch-rest-high-level-client.version>
         <druid.version>1.1.24</druid.version>
         <aliyun-sdk-oss.version>3.5.0</aliyun-sdk-oss.version>
@@ -64,6 +65,7 @@
 
     <!-- 依赖管理 -->
     <dependencyManagement>
+
         <dependencies>
             <!-- spring cloud;引入 Spring Cloud 依赖管理，有了它，在引用 Eureka Server 的时候就不用去声明版本号 -->
             <dependency>
@@ -113,7 +115,24 @@
                 <artifactId>spring-cloud-starter-alibaba-sentinel</artifactId>
                 <version>${cloud-alibaba.version}</version>
             </dependency>
+
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-logging</artifactId>
+                <exclusions>
+                    <exclusion>
+                        <groupId>ch.qos.logback</groupId>
+                        <artifactId>logback-classic</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.apache.logging.log4j</groupId>
+                        <artifactId>log4j-to-slf4j</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+
         </dependencies>
+
     </dependencyManagement>
 
 
@@ -202,6 +221,30 @@
             <version>${apollo-client.version}</version>
         </dependency>
 
+<!--        <dependency>-->
+<!--            <groupId>com.ctrip.framework.apollo</groupId>-->
+<!--            <artifactId>apollo-spring-boot-starter</artifactId>-->
+<!--            <version>${apollo-spring-boot-starter.version}</version>-->
+<!--        </dependency>-->
+
+        <!-- nacos -->
+<!--        <dependency>-->
+<!--            <groupId>com.alibaba.cloud</groupId>-->
+<!--            <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>-->
+<!--            <version>${cloud-alibaba.version}</version>-->
+<!--            <exclusions>-->
+<!--                <exclusion>-->
+<!--                    <groupId>com.alibaba.nacos</groupId>-->
+<!--                    <artifactId>nacos-client</artifactId>-->
+<!--                </exclusion>-->
+<!--            </exclusions>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>com.alibaba.cloud</groupId>-->
+<!--            <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>-->
+<!--        </dependency>-->
+
+
         <!-- mybatis-starter：mybatis + mybatis-spring + hikari（default） -->
         <dependency>
             <groupId>org.mybatis.spring.boot</groupId>
@@ -210,15 +253,28 @@
         </dependency>
 
         <!-- elasticsearch 客户端 -->
-<!--        <dependency>-->
-<!--            <groupId>org.elasticsearch.client</groupId>-->
-<!--            <artifactId>elasticsearch-rest-high-level-client</artifactId>-->
-<!--            <version>${elasticsearch-rest-high-level-client.version}</version>-->
-<!--        </dependency>-->
+
 
 
 
         <!--========== 工具 ========= -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-slf4j-impl</artifactId>
+        </dependency>
+
         <dependency>
             <groupId>cn.hutool</groupId>
             <artifactId>hutool-all</artifactId>
@@ -240,12 +296,6 @@
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>${junit.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <version>${lombok.version}</version>
         </dependency>
 
         <!-- OSS -->
@@ -379,8 +429,40 @@
                 </executions>
             </plugin>
 
+            <!-- dependency:tree -->
+            <!-- <plugin>-->
+            <!--     <groupId>org.apache.maven.plugins</groupId>-->
+            <!--     <artifactId>maven-dependency-plugin</artifactId>-->
+            <!--     <version>3.1.2</version>-->
+            <!--     <executions>-->
+            <!--         <execution>-->
+            <!--             <goals>-->
+            <!--                 <goal>tree</goal>-->
+            <!--             </goals>-->
+            <!--         </execution>-->
+            <!--     </executions>-->
+            <!-- </plugin>-->
+
+
 
         </plugins>
+
+        <resources>
+            <resource>
+                <directory>src/main/java</directory>
+                <includes>
+                    <include>**/*.xml</include>
+                </includes>
+                <filtering>true</filtering>
+            </resource>
+            <resource>
+                <directory>src/main/resources</directory>
+            </resource>
+            <resource>
+                <directory>src/main/webapp</directory>
+                <targetPath>META-INF/resources</targetPath>
+            </resource>
+        </resources>
 
 
 

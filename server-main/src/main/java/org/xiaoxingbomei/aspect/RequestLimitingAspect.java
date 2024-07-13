@@ -1,7 +1,8 @@
 package org.xiaoxingbomei.aspect;
 
 
-import lombok.extern.log4j.Log4j2;
+
+import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -28,7 +29,7 @@ import java.util.concurrent.TimeUnit;
  */
 @Aspect
 @Component
-@Log4j2
+@Slf4j
 public class RequestLimitingAspect
 {
 
@@ -59,7 +60,7 @@ public class RequestLimitingAspect
             String ip = request.getRemoteAddr();
             // 请求uri
             String uri = request.getRequestURI();
-            log.warn("\n----------------------------------------------------------\n{}{}{}{}{}{}{}",
+            log.error("\n----------------------------------------------------------\n{}{}{}{}{}{}{}",
                     " << Aspect behavior failure >>",
                     "\n\t【aspect】        : \t" + "RequestLimitingAspect",
                     "\n\t【behavior】      : \t" + "接口限流",
@@ -85,7 +86,7 @@ public class RequestLimitingAspect
 //        catch (RedisConnectionException e)
 //        {
 //            // 如果是 其他可能的redis数据访问异常
-//            e.printStackTrace();
+//            Exception_Utils.recursiveReversePrintStackCauseCommon(e);
 //
 //            ServletRequestAttributes attributes = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes());
 //            HttpServletRequest request = attributes.getRequest();
@@ -108,7 +109,7 @@ public class RequestLimitingAspect
 //        catch (PoolException e)
 //        {
 //            // 如果是 其他可能的redis数据访问异常
-//            e.printStackTrace();
+//            Exception_Utils.recursiveReversePrintStackCauseCommon(e);
 //
 //            ServletRequestAttributes attributes = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes());
 //            HttpServletRequest request = attributes.getRequest();

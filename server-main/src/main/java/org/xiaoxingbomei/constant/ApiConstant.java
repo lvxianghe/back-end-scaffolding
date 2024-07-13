@@ -1,5 +1,15 @@
 package org.xiaoxingbomei.constant;
 
+/**
+ * 全部Api常量
+ * 1、系统
+ * 2、用户
+ * 3、机构
+ * 4、角色
+ * 5、权限
+ * 6、业务-xxx
+ * 7、业务-xxx
+ */
 public class ApiConstant
 {
 
@@ -9,6 +19,32 @@ public class ApiConstant
     public class System
     {
         public static final String getSystemInfo        = "system/getSystemInfo";       // 获取系统信息
+    }
+
+    /**
+     * 配置
+     */
+    public class Config
+    {
+        public static final String getApolloConfig          = "/apollo/getApolloConfig";        // 获取Apollo配置信息
+
+        public static final String getApolloValueByKey      = "/apollo/getApolloValueByKey";    // 获取Apollo配置信息，通过key获取value
+
+        public static final String getNacosConfig           = "/apollo/getNacosConfig";         // 获取Nacos配置信息
+
+        public static final String getMybatisConfig         = "/apollo/getMybatisConfig";       // 获取Mybatis配置信息
+
+        public static final String getOpenFeignConfig       = "/apollo/getOpenFeignConfig";     // 获取OpenFeign配置信息
+
+        public static final String getRedisConfig           = "/apollo/getRedisConfig";         // 获取Redis配置信息
+
+        public static final String getSaTokenConfig         = "/apollo/getSaTokenConfig";       // 获取Sa-token配置信息
+
+        public static final String getElasticSearchConfig   = "/apollo/getElasticSearchConfig"; // 获取es配置信息
+
+        public static final String getXxlJobConfig         = "/apollo/getXxlJobConfig";         // 获取xxl-job配置信息
+
+        public static final String getCamundaConfig         = "/apollo/getCamundaConfig";       // 获取camunda配置信息
     }
 
     /**
@@ -26,9 +62,10 @@ public class ApiConstant
      */
     public class Org
     {
-        public static final String getOrgInfo           = "org/getOrgInfo";             //
-        public static final String getSupOrgInfo        = "org/getSupOrgInfo";          //
-        public static final String getSubOrgInfo        = "org/getSubOrgInfo";          //
+        public static final String getOrgInfo           = "/org/getOrgInfo";             //
+        public static final String getOrgInfoByOrgId    = "/org/getOrgInfoByOrgId";      //
+        public static final String getSupOrgInfo        = "/org/getSupOrgInfo";          //
+        public static final String getSubOrgInfo        = "/org/getSubOrgInfo";          //
     }
 
     /**

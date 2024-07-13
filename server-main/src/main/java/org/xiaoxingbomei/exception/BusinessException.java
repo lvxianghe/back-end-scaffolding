@@ -6,7 +6,6 @@ import org.xiaoxingbomei.Enum.GlobalCodeEnum;
 
 /**
  * 业务异常
- * @Author lvxianghe
  */
 @Getter
 @Setter

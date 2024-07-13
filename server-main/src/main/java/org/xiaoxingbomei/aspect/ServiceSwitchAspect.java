@@ -1,15 +1,13 @@
 package org.xiaoxingbomei.aspect;
 
-import com.alibaba.fastjson.JSON;
-import io.lettuce.core.RedisConnectionException;
 import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.connection.PoolException;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
@@ -24,14 +22,14 @@ import org.xiaoxingbomei.utils.Redis_Utils;
 
 import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Method;
-import java.util.Arrays;
+
 
 /**
  *
  */
 @Aspect
 @Component
-@Log4j2
+@Slf4j
 public class ServiceSwitchAspect
 {
     @Autowired
@@ -48,6 +46,9 @@ public class ServiceSwitchAspect
 
     /**
      * 环绕切面
+     * 1、
+     * 2、
+     * 3、
      */
     @Around("aspect(serviceSwitch)")
     public Object around(ProceedingJoinPoint joinPoint,ServiceSwitch serviceSwitch) throws Throwable
@@ -67,13 +68,13 @@ public class ServiceSwitchAspect
             // 请求uri
             String uri = request.getRequestURI();
 
-            log.warn("\n----------------------------------------------------------\n{}{}{}{}{}{}{}",
+            log.error("\n----------------------------------------------------------\n{}{}{}{}{}{}{}",
                     " << Aspect behavior failure >>",
                     "\n\t【aspect】        : \t" + "ServiceSwitchAspect",
                     "\n\t【behavior】      : \t" + "接口开关",
                     "\n\t【request url】   : \t" + request.getRequestURL().toString(),
                     "\n\t【http method】   : \t" + request.getMethod(),
-                    "\n\t【failure reason】: \t" + "PoolException exception",
+                    "\n\t【failure reason】: \t" + "redis connect failure",
                     "\n----------------------------------------------------------\n");
 
             return joinPoint.proceed();
@@ -81,6 +82,12 @@ public class ServiceSwitchAspect
 
     }
 
+    /**
+     * 接口开关 核心实现
+     * 1、
+     * 2、
+     * 3、
+     */
     private Object handleServiceSwitch(ProceedingJoinPoint joinPoint, ServiceSwitch serviceSwitch) throws Throwable
     {
         // 获取被代理的方法的参数

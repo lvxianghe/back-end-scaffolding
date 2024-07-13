@@ -18,7 +18,7 @@ public class GlobalEntity<T> implements Serializable
 
     public static final String ERROR = "-1";
 
-    private T data;                 // 响应主体
+    private T      data;            // 响应主体
     private String code;            // 响应码
     private String message;         // 技术message
     private String userMessage;     // 用户message
@@ -54,14 +54,14 @@ public class GlobalEntity<T> implements Serializable
     }
 
     // success-all
-    public static GlobalEntity success(String data, String code, String message, String userMessage, String businessMessage)
+    public static <T>GlobalEntity<T> success(T data, String code, String message, String userMessage, String businessMessage)
     {
         GlobalEntity globalEntity = new GlobalEntity(data, code, message, userMessage, businessMessage);
         return globalEntity;
     }
 
     // error-all
-    public static GlobalEntity error(String data, String code, String message, String userMessage, String businessMessage)
+    public static <T>GlobalEntity<T> error(T data, String code, String message, String userMessage, String businessMessage)
     {
         GlobalEntity globalEntity = new GlobalEntity(data, code, message, userMessage, businessMessage);
         return globalEntity;

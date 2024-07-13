@@ -13,7 +13,7 @@
 //
 //@Aspect
 //@Component
-//@Log4j2
+//@Slf4j
 //public class RedisLockAspect {
 //    @Autowired
 //    private StringRedisTemplate stringRedisTemplate;

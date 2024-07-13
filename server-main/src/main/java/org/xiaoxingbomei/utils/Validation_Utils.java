@@ -3,6 +3,7 @@ package org.xiaoxingbomei.utils;
 /*import xyz.hlh.cryptotest.exception.CustomException;*/
 /*import xyz.hlh.cryptotest.exception.ParamException;*/
 
+import org.springframework.stereotype.Component;
 import org.xiaoxingbomei.exception.ParamException;
 
 import javax.validation.ConstraintViolation;
@@ -16,6 +17,7 @@ import java.util.Set;
 /**
  * @description 验证工具类
  */
+@Component
 public class Validation_Utils
 {
 

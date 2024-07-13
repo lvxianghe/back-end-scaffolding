@@ -3,10 +3,12 @@ package org.xiaoxingbomei.advice;
 import cn.dev33.satoken.exception.*;
 import cn.dev33.satoken.util.SaResult;
 
+import com.fasterxml.jackson.databind.exc.MismatchedInputException;
 import lombok.EqualsAndHashCode;
 import org.slf4j.*;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.client.ResourceAccessException;
@@ -14,6 +16,7 @@ import org.xiaoxingbomei.Enum.GlobalCodeEnum;
 import org.xiaoxingbomei.entity.GlobalEntity;
 import org.xiaoxingbomei.exception.BusinessException;
 import org.xiaoxingbomei.exception.UserException;
+import org.xiaoxingbomei.utils.Exception_Utils;
 
 import java.lang.reflect.UndeclaredThrowableException;
 
@@ -81,6 +84,7 @@ public class GlobalExceptionHandler
      *  - 数组越界
      *  - 数字格式
      *  - 日期格式
+     *  - 请求入参异常
      *  - 文件上传
      *  - 文件下载
      *  - 网络异常
@@ -105,7 +109,7 @@ public class GlobalExceptionHandler
     public GlobalEntity handlerException(NotLoginException e)
     {
         // 打印堆栈，以供调试
-        e.printStackTrace();
+        Exception_Utils.recursiveReversePrintStackCauseCommon(e);
         // 返回给前端
         return GlobalEntity.error(null,GlobalCodeEnum.ERROR.getCode(), e.getMessage(),"权限不足，请联系管理员xxx","");
     }
@@ -115,7 +119,7 @@ public class GlobalExceptionHandler
     @ExceptionHandler(NotPermissionException.class)
     public SaResult handlerException(NotPermissionException e)
     {
-        e.printStackTrace();
+        Exception_Utils.recursiveReversePrintStackCauseCommon(e);
         return SaResult.error("缺少权限：" + e.getMessage()); // e.getPermission()
     }
 
@@ -124,7 +128,7 @@ public class GlobalExceptionHandler
     @ExceptionHandler(NotRoleException.class)
     public SaResult handlerException(NotRoleException e)
     {
-        e.printStackTrace();
+        Exception_Utils.recursiveReversePrintStackCauseCommon(e);
         return SaResult.error("缺少角色：" + e.getRole());
     }
 
@@ -133,7 +137,7 @@ public class GlobalExceptionHandler
     @ExceptionHandler(NotSafeException.class)
     public SaResult handlerException(NotSafeException e)
     {
-        e.printStackTrace();
+        Exception_Utils.recursiveReversePrintStackCauseCommon(e);
         return SaResult.error("二级认证校验失败：" +e.getMessage());  //  e.getService()  目前不支持这个版本
     }
 
@@ -142,7 +146,7 @@ public class GlobalExceptionHandler
     @ExceptionHandler(DisableServiceException.class)
     public SaResult handlerException(DisableServiceException e)
     {
-        e.printStackTrace();
+        Exception_Utils.recursiveReversePrintStackCauseCommon(e);
         return SaResult.error("当前账号 " + e.getService() + " 服务已被封禁 (level=" + e.getLevel() + ")：" + e.getDisableTime() + "秒后解封");
     }
 
@@ -159,7 +163,7 @@ public class GlobalExceptionHandler
     @ExceptionHandler(value = ResourceAccessException.class)
     public GlobalEntity exceptionHandler(ResourceAccessException e)
     {
-        e.printStackTrace();
+        Exception_Utils.recursiveReversePrintStackCauseCommon(e);
         return GlobalEntity.error(null,GlobalCodeEnum.ERROR.getCode(), e.getMessage(), "ResourceAccessException,当前功能不可用，请稍后再试", "");
     }
 
@@ -167,7 +171,7 @@ public class GlobalExceptionHandler
     @ExceptionHandler(value = HttpMessageNotReadableException.class)
     public GlobalEntity exceptionHandler(HttpMessageNotReadableException e)
     {
-        e.printStackTrace();
+        Exception_Utils.recursiveReversePrintStackCauseCommon(e);
         return GlobalEntity.error(null,GlobalCodeEnum.ERROR.getCode(), e.getMessage(), "HttpMessageNotReadableException,当前功能不可用，请稍后再试", "");
     }
 
@@ -181,7 +185,7 @@ public class GlobalExceptionHandler
     @ExceptionHandler(value = DataAccessException.class)
     public GlobalEntity exceptionHandler(DataAccessException e)
     {
-        e.printStackTrace();
+        Exception_Utils.recursiveReversePrintStackCauseCommon(e);
         return GlobalEntity.error(GlobalCodeEnum.ERROR.getCode(), e.getMessage(), ",当前功能不可用，请稍后再试", "", null);
     }
 
@@ -195,7 +199,7 @@ public class GlobalExceptionHandler
     @ExceptionHandler(NullPointerException.class)
     public GlobalEntity handlerException(NullPointerException e)
     {
-        e.printStackTrace();
+        Exception_Utils.recursiveReversePrintStackCauseCommon(e);
         return GlobalEntity.error(null,GlobalCodeEnum.ERROR.getCode(), e.getMessage(), "NullPointerException,当前功能不可用，请稍后再试", "");
     }
 
@@ -203,7 +207,7 @@ public class GlobalExceptionHandler
     @ExceptionHandler(ClassCastException.class)
     public GlobalEntity handlerException(ClassCastException e)
     {
-        e.printStackTrace();
+        Exception_Utils.recursiveReversePrintStackCauseCommon(e);
         return GlobalEntity.error(null,GlobalCodeEnum.ERROR.getCode(), e.getMessage(), "ClassCastException,当前功能不可用，请稍后再试", "");
     }
 
@@ -211,7 +215,7 @@ public class GlobalExceptionHandler
     @ExceptionHandler(ArrayIndexOutOfBoundsException.class)
     public GlobalEntity handlerException(ArrayIndexOutOfBoundsException e)
     {
-        e.printStackTrace();
+        Exception_Utils.recursiveReversePrintStackCauseCommon(e);
         return GlobalEntity.error(null,GlobalCodeEnum.ERROR.getCode(), e.getMessage(), "ArrayIndexOutOfBoundsException,当前功能不可用，请稍后再试", "");
     }
 
@@ -219,7 +223,7 @@ public class GlobalExceptionHandler
     @ExceptionHandler(NumberFormatException.class)
     public GlobalEntity handlerException(NumberFormatException e)
     {
-        e.printStackTrace();
+        Exception_Utils.recursiveReversePrintStackCauseCommon(e);
         return GlobalEntity.error(null,GlobalCodeEnum.ERROR.getCode(), e.getMessage(), "NumberFormatException,当前功能不可用，请稍后再试", "");
     }
 
@@ -227,8 +231,24 @@ public class GlobalExceptionHandler
     @ExceptionHandler(IllegalArgumentException.class)
     public GlobalEntity handlerException(IllegalArgumentException e)
     {
-        e.printStackTrace();
+        Exception_Utils.recursiveReversePrintStackCauseCommon(e);
         return GlobalEntity.error(null,GlobalCodeEnum.ERROR.getCode(), e.getMessage(), "IllegalArgumentException,当前功能不可用，请稍后再试", "");
+    }
+
+    // 请求入参异常-MethodArgumentNotValidException
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public GlobalEntity handlerException(MethodArgumentNotValidException e)
+    {
+        Exception_Utils.recursiveReversePrintStackCauseCommon(e);
+        return GlobalEntity.error(null,GlobalCodeEnum.ERROR.getCode(), e.getMessage(), "MethodArgumentNotValidException,当前功能不可用，请稍后再试", "");
+    }
+
+    // 请求入参异常-MethodArgumentNotValidException
+    @ExceptionHandler(MismatchedInputException.class)
+    public GlobalEntity handlerException(MismatchedInputException e)
+    {
+        Exception_Utils.recursiveReversePrintStackCauseCommon(e);
+        return GlobalEntity.error(null,GlobalCodeEnum.ERROR.getCode(), e.getMessage(), "MismatchedInputException,当前功能不可用，请稍后再试", "");
     }
 
 
@@ -236,7 +256,7 @@ public class GlobalExceptionHandler
     @ExceptionHandler(value = UserException.class)
     public GlobalEntity handlerException(UserException e)
     {
-        e.printStackTrace();
+        Exception_Utils.recursiveReversePrintStackCauseCommon(e);
         return GlobalEntity.error(null,e.getErrorCode(), e.getErrorMessage(), "UserException,当前功能不可用，请稍后再试", "");
     }
 
@@ -244,7 +264,7 @@ public class GlobalExceptionHandler
     @ExceptionHandler(value = BusinessException.class)
     public GlobalEntity handlerException(BusinessException e)
     {
-        e.printStackTrace();
+        Exception_Utils.recursiveReversePrintStackCauseCommon(e);
         return GlobalEntity.error(null,e.getErrorCode(), e.getErrorMessage(), "UserException,当前功能不可用，请稍后再试", "");
     }
 
@@ -259,13 +279,14 @@ public class GlobalExceptionHandler
         if(undeclaredThrowable instanceof UserException)
         {
             UserException userException = (UserException)undeclaredThrowable;
+            Exception_Utils.recursiveReversePrintStackCauseCommon(e);
             return GlobalEntity.error(null,userException.getErrorCode(), userException.getErrorMessage(), "UserException,当前功能不可用，请稍后再试", "");
         }
 
         // 如果是其他异常
 
         //
-        e.printStackTrace();
+        Exception_Utils.recursiveReversePrintStackCauseCommon(e);
         return GlobalEntity.error(null,GlobalCodeEnum.ERROR.getCode(),e.getMessage(),"UndeclaredThrowableException,用户功能受限，请稍后重试~","");
     }
 
@@ -274,7 +295,7 @@ public class GlobalExceptionHandler
     @ExceptionHandler(Exception.class)
     public GlobalEntity handlerException(Exception e)
     {
-        e.printStackTrace();
+        Exception_Utils.recursiveReversePrintStackCauseCommon(e);
         return GlobalEntity.error(null,GlobalCodeEnum.ERROR.getCode(), e.getMessage(), "Exception,当前功能不可用，请稍后再试", "");
     }
 
@@ -283,7 +304,7 @@ public class GlobalExceptionHandler
     @ExceptionHandler(Throwable.class)
     public GlobalEntity handlerException(Throwable e)
     {
-        e.printStackTrace();
+        Exception_Utils.recursiveReversePrintStackCauseCommon(e);
         return GlobalEntity.error(null,GlobalCodeEnum.ERROR.getCode(), e.getMessage(), "Throwable,当前功能不可用，请稍后再试", "");
     }
 

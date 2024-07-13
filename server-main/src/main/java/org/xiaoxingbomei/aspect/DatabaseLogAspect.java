@@ -1,6 +1,7 @@
 package org.xiaoxingbomei.aspect;
 
 import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
@@ -35,49 +36,36 @@ import java.util.Arrays;
  */
 @Aspect
 @Component
-@Log4j2
+@Slf4j
 public class DatabaseLogAspect
 {
-    /**
-     * 接口响应时间
-     */
-    ThreadLocal<Long> startTime = new ThreadLocal<>();
 
     /**
      * 切入点
      */
     @Pointcut("execution(public * org.xiaoxingbomei.dao..*.*(..))")
-    public void webLog() {}
+    public void DatabaseLogAspectByPath() {}
 
     /**
-     * 在切入点开始处切入内容
+     * before
+     * 1、
+     * 2、
      */
-    @Before("webLog()")
-    public void doBefore(JoinPoint joinPoint) throws Throwable {
-        startTime.set(System.currentTimeMillis());
-
-        // 接收到请求，记录请求内容
-        ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-        HttpServletRequest request = attributes.getRequest();
-
-        // 记录下请求内容
-        log.info("URL : " + request.getRequestURL().toString());
-        log.info("HTTP_METHOD : " + request.getMethod());
-        log.info("IP : " + request.getRemoteAddr());
-        log.info("CLASS_METHOD : " + joinPoint.getSignature().getDeclaringTypeName() + "." + joinPoint.getSignature().getName());
-        log.info("ARGS : " + Arrays.toString(joinPoint.getArgs()));
-
-    }
-
-    /**
-     * 在切入点return内容之后切入内容（输出返回参数及处理时间）
-     */
-    @AfterReturning(returning = "ret", pointcut = "webLog()")
-    public void doAfterReturning(Object ret) throws Throwable
+    @Before("DatabaseLogAspectByPath()")
+    public void logBefore(JoinPoint joinPoint)
     {
-        // 处理完请求，返回内容
-        log.info("RESPONSE : " + ret);
-        log.info("SPEND TIME : " + (System.currentTimeMillis() - startTime.get()));
+        String className    =   joinPoint.getSignature().getDeclaringTypeName();
+        String methodName   =   joinPoint.getSignature().getName();
+        Object[] args       =   joinPoint.getArgs();
+        log.info("\n----------------------------------------------------------\n\t{}{}{}{}{}",
+        " << dao before aspect info >>",
+        "\n\t【className】    :\t"    +   className,
+        "\n\t【methodName】   :\t"    +   methodName,
+        "\n\t【arguments】    :\t"    +   Arrays.toString(args),
+        "\n----------------------------------------------------------\n"
+                );
+
     }
+
 
 }

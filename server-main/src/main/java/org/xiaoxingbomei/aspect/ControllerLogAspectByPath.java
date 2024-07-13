@@ -3,6 +3,7 @@ package org.xiaoxingbomei.aspect;
 
 import com.alibaba.fastjson.JSON;
 import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.*;
@@ -37,7 +38,7 @@ import java.util.Arrays;
  */
 @Aspect
 @Component
-@Log4j2
+@Slf4j
 public class ControllerLogAspectByPath
 {
 
@@ -63,19 +64,19 @@ public class ControllerLogAspectByPath
         // 记录接口的起始时间
         startTime.set(System.currentTimeMillis());
 
-//        // 接收到请求，记录请求内容
-//        ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-//        HttpServletRequest request = attributes.getRequest();
-//
-//        // 记录下请求内容before request
-//        log.info("\n----------------------------------------------------------\n\t{}{}{}{}{}{}{}",
-//                " << controller before aspect info >>",
-//                "\n\t【request IP】   : \t" + request.getRemoteAddr(),
-//                "\n\t【request url】  : \t" + request.getRequestURL().toString(),
-//                "\n\t【http method】  : \t" + request.getMethod(),
-//                "\n\t【class path】   : \t" + joinPoint.getSignature().getDeclaringTypeName() + "." + joinPoint.getSignature().getName(),
-//                "\n\t【request body】 : \t" + Arrays.toString(joinPoint.getArgs()),
-//                "\n----------------------------------------------------------\n");
+        // 接收到请求，记录请求内容
+        //ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        //HttpServletRequest request = attributes.getRequest();
+        //
+        // 记录下请求内容before request
+        //log.info("\n----------------------------------------------------------\n\t{}{}{}{}{}{}{}",
+        //        " << controller before aspect info >>",
+        //        "\n\t【request IP】   : \t" + request.getRemoteAddr(),
+        //        "\n\t【request url】  : \t" + request.getRequestURL().toString(),
+        //        "\n\t【http method】  : \t" + request.getMethod(),
+        //        "\n\t【class path】   : \t" + joinPoint.getSignature().getDeclaringTypeName() + "." + joinPoint.getSignature().getName(),
+        //        "\n\t【request body】 : \t" + Arrays.toString(joinPoint.getArgs()),
+        //        "\n----------------------------------------------------------\n");
     }
 
     /**
@@ -84,34 +85,34 @@ public class ControllerLogAspectByPath
      * 2、处理异常（暂无）
      * 3、控制方法执行（暂无）
      */
-//    @Around("ControllerLogAspectByPath()")
-//    public Object doAround(ProceedingJoinPoint point) throws Throwable
-//    {
-//
-//        HttpServletRequest request = (HttpServletRequest) RequestContextHolder.getRequestAttributes().resolveReference(RequestAttributes.REFERENCE_REQUEST);
-//        String servletPath = request == null ? "" : request.getServletPath();
-//        Object[] args = point.getArgs();
-//
-//        if (args != null && args.length > 0)
-//        {
-//            log.info("【本系统】【入参打印】访问路径:[{}]\n,入参:[{}]", servletPath, JSON.toJSON(args[0]));
-//        } else
-//        {
-//            log.info("【本系统】【入参打印】访问路径:[{}]", servletPath);
-//        }
-//
-//        Object result;
-//        StopWatch stopWatch = new StopWatch();
-//
-//        stopWatch.start();
-//
-//        result = point.proceed();
-//        stopWatch.stop();
-//
-//        log.info("【本系统】【出参打印】访问路径为:[{}]\n接口耗时:[{}]\n出参为:[{}]\n", servletPath, stopWatch.getTotalTimeSeconds()+" seconds",JSON.toJSONString(result));
-//
-//        return result;
-//    }
+    //    @Around("ControllerLogAspectByPath()")
+    //    public Object doAround(ProceedingJoinPoint point) throws Throwable
+    //    {
+    //
+    //        HttpServletRequest request = (HttpServletRequest) RequestContextHolder.getRequestAttributes().resolveReference(RequestAttributes.REFERENCE_REQUEST);
+    //        String servletPath = request == null ? "" : request.getServletPath();
+    //        Object[] args = point.getArgs();
+    //
+    //        if (args != null && args.length > 0)
+    //        {
+    //            log.info("【本系统】【入参打印】访问路径:[{}]\n,入参:[{}]", servletPath, JSON.toJSON(args[0]));
+    //        } else
+    //        {
+    //            log.info("【本系统】【入参打印】访问路径:[{}]", servletPath);
+    //        }
+    //
+    //        Object result;
+    //        StopWatch stopWatch = new StopWatch();
+    //
+    //        stopWatch.start();
+    //
+    //        result = point.proceed();
+    //        stopWatch.stop();
+    //
+    //        log.info("【本系统】【出参打印】访问路径为:[{}]\n接口耗时:[{}]\n出参为:[{}]\n", servletPath, stopWatch.getTotalTimeSeconds()+" seconds",JSON.toJSONString(result));
+    //
+    //        return result;
+    //    }
 
     /**
      * around
@@ -139,8 +140,8 @@ public class ControllerLogAspectByPath
                 "\n\t【request url】  : \t" + request.getRequestURL().toString(),
                 "\n\t【http method】  : \t" + request.getMethod(),
                 "\n\t【class path】   : \t" + joinPoint.getSignature().getDeclaringTypeName() + "." + joinPoint.getSignature().getName(),
-                "\n\t【request data】 : \t" + ret,
-                "\n\t【response data】: \t" + Arrays.toString(joinPoint.getArgs()),
+                "\n\t【request data】 : \t" + Arrays.toString(joinPoint.getArgs()),
+                "\n\t【response data】: \t" + ret,
                 "\n\t【response json】: \t" + JSON.toJSONString(ret),
                 "\n\t【spend time】   : \t" + (System.currentTimeMillis() - startTime.get())+ "ms",
                 "\n----------------------------------------------------------\n");

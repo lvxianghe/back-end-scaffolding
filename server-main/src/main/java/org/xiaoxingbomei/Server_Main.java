@@ -1,8 +1,6 @@
 package org.xiaoxingbomei;
 
-
-import lombok.extern.log4j.Log4j2;
-
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -13,8 +11,6 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.core.env.Environment;
 import org.springframework.scheduling.annotation.EnableScheduling;
-import org.xiaoxingbomei.constant.ApiConstant;
-import org.xiaoxingbomei.vo.User;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -24,7 +20,7 @@ import java.net.UnknownHostException;
 @ServletComponentScan
 @EnableAspectJAutoProxy
 @EnableScheduling
-@Log4j2
+@Slf4j
 public class Server_Main
 {
     public static void main(String[] args) throws UnknownHostException

@@ -1,4 +1,6 @@
 package org.xiaoxingbomei.config.datasource;
 
-public class MysqlDatabaseConfig {
+public class MysqlDatabaseConfig
+{
+
 }
