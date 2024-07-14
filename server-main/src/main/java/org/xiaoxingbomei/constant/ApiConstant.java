@@ -42,7 +42,7 @@ public class ApiConstant
 
         public static final String getElasticSearchConfig   = "/apollo/getElasticSearchConfig"; // 获取es配置信息
 
-        public static final String getXxlJobConfig         = "/apollo/getXxlJobConfig";         // 获取xxl-job配置信息
+        public static final String getXxlJobConfig          = "/apollo/getXxlJobConfig";        // 获取xxl-job配置信息
 
         public static final String getCamundaConfig         = "/apollo/getCamundaConfig";       // 获取camunda配置信息
     }

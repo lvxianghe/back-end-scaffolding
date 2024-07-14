@@ -27,7 +27,7 @@ public class GlobalConfigServiceImpl implements GlobalConfigService
         Map<String, Object> configMap = new HashMap<>();
 
         // 获取一些常见和重要的配置信息
-        String appId = apolloConfig.getProperty("apollo.app.id", "defaultAppId");
+        String appId = apolloConfig.getProperty("app.id", "defaultAppId");
         log.info("appId:{}", appId);
         configMap.put("appId", appId);
 
