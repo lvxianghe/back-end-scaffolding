@@ -1,4 +1,9 @@
 package org.xiaoxingbomei.utils;
 
-public class Response_Utils {
+/**
+ * http response 工具类
+ */
+public class Response_Utils
+{
+
 }

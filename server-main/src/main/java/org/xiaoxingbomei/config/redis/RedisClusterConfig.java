@@ -23,9 +23,6 @@ import java.time.Duration;
 
 /**
  * redis配置类
- * @author
- * @date
- *
  */
 @Configuration
 @AutoConfigureAfter(RedisAutoConfiguration.class)

@@ -15,5 +15,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  */
 @Target({METHOD})
 @Retention(RUNTIME)
-public @interface  NoGlobalEntity {
+public @interface  NoGlobalEntity
+{
+
 }

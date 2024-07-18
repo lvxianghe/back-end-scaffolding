@@ -10,8 +10,8 @@ import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.core.env.Environment;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
-
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
@@ -20,19 +20,25 @@ import java.net.UnknownHostException;
 @ServletComponentScan
 @EnableAspectJAutoProxy
 @EnableScheduling
+@EnableAsync
 @Slf4j
 public class Server_Main
 {
     public static void main(String[] args) throws UnknownHostException
     {
 
+        //
         long start = System.currentTimeMillis();
-        ConfigurableApplicationContext application = SpringApplication.run(Server_Main.class, args);
-        Environment env = application.getEnvironment();
-        String ip = InetAddress.getLocalHost().getHostAddress();
-        String applicationName = env.getProperty("spring.application.name");
-        String port = env.getProperty("server.port");
-        String path = env.getProperty("server.servlet.context-path");
+
+        //
+        ConfigurableApplicationContext application  = SpringApplication.run(Server_Main.class, args);
+        Environment env                             = application.getEnvironment();
+        String ip                                   = InetAddress.getLocalHost().getHostAddress();
+        String applicationName                      = env.getProperty("spring.application.name");
+        String port                                 = env.getProperty("server.port");
+        String path                                 = env.getProperty("server.servlet.context-path");
+
+        //
         if (StringUtils.isEmpty(path) || "/".equals(path))
         {
             path = "";
@@ -41,9 +47,9 @@ public class Server_Main
         // 打印系统信息
         log.info("\n----------------------------------------------------------\n\t{}{}{}{}{}",
                 applicationName + " is running, Access URLs:",
-                "\n\tLocal    访问网址: \thttp://localhost:" + port + path,
-                "\n\tExternal 访问网址: \thttp://" + ip + ":" + port + path,
-                "\n\tSwagger  访问网址: \thttp://" + ip + ":" + port + path + "/swagger-ui/index.html",
+                "\n\t Local    访问网址: \t http://localhost:"  + port + path,
+                "\n\t External 访问网址: \t http://" + ip + ":" + port + path,
+                "\n\t Swagger  访问网址: \t http://" + ip + ":" + port + path + "/swagger-ui/index.html",
                 "\n----------------------------------------------------------\n");
         log.info("服务启动成功!>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> 耗时：{} s", (System.currentTimeMillis() - start) / 1000);
 

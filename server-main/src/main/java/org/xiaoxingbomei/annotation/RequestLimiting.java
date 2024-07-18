@@ -5,6 +5,7 @@ import java.lang.annotation.*;
 
 /**
  * 接口访问频率限制
+ * 使用方法：将此注解使用在目标controller上，使得接口按照频次限流
  */
 @Documented
 @Target(ElementType.METHOD)

@@ -140,10 +140,10 @@ public class ControllerLogAspectByPath
                 "\n\t【request url】  : \t" + request.getRequestURL().toString(),
                 "\n\t【http method】  : \t" + request.getMethod(),
                 "\n\t【class path】   : \t" + joinPoint.getSignature().getDeclaringTypeName() + "." + joinPoint.getSignature().getName(),
+                "\n\t【spend time】   : \t" + (System.currentTimeMillis() - startTime.get())+ "ms",
                 "\n\t【request data】 : \t" + Arrays.toString(joinPoint.getArgs()),
                 "\n\t【response data】: \t" + ret,
                 "\n\t【response json】: \t" + JSON.toJSONString(ret),
-                "\n\t【spend time】   : \t" + (System.currentTimeMillis() - startTime.get())+ "ms",
                 "\n----------------------------------------------------------\n");
 
     }

@@ -19,6 +19,34 @@ spring:
         max-idle: 60
         min-idle: 60
         max-wait: 6000
+#
+management:
+  #
+  endpoint:
+    health:
+      show-details: always
+    metrics:
+      enabled: true
+  #
+  endpoints:
+    jmx:
+      exposure:
+        include: '*'
+    web:
+      exposure:
+        # include: health,info,metrics,loggers
+        include: '*'
+  #
+  health:
+    elasticsearch:
+      enabled: false
+    redis:
+      enabled: false
+  server:
+    servlet:
+      context-path: /main
+
+
 
 # eureka配置
 eureka:
@@ -38,8 +66,8 @@ app:
   id: ysx
 apollo:
   cluster: app-dev
-#  meta: http://localhost:8070
   meta: http://10.4.175.108:8080
+  prefix: apollo
   autoUpdateInjectedSpringProperties: true
   bootstrap:
     enabled: true
@@ -94,9 +122,9 @@ springdoc:
         #按路径匹配
       pathsToMatch: /**
 
-    - group: auth
-      #按路径匹配
-      pathsToMatch: /auth/**
+#    - group: auth
+#      #按路径匹配
+#      pathsToMatch: /auth/**
 
 
 

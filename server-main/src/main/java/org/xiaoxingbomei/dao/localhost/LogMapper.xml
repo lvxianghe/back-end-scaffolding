@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.xiaoxingbomei.dao.localhost.LogMapper" >
+
+    <insert id="insertBusinessLogCommon" parameterType="org.xiaoxingbomei.vo.BusinessLogCommon">
+        INSERT INTO BUSINESS_LOG_COMMON
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="userId != null">userId,</if>
+            <if test="userName != null">userName,</if>
+            <if test="roleId != null">roleId,</if>
+            <if test="roleName != null">roleName,</if>
+            <if test="orgId != null">orgId,</if>
+            <if test="orgName != null">orgName,</if>
+            <if test="channelId != null">channelId,</if>
+            <if test="channelName != null">channelName,</if>
+            <if test="deviceId != null">deviceId,</if>
+            <if test="deviceName != null">deviceName,</if>
+            <if test="pageId != null">pageId,</if>
+            <if test="pageName != null">pageName,</if>
+            <if test="moduleId != null">moduleId,</if>
+            <if test="moduleName != null">moduleName,</if>
+            <if test="operateTypeId != null">operateTypeId,</if>
+            <if test="operateTypeName != null">operateTypeName,</if>
+            <if test="operateTime != null">operateTime,</if>
+            <if test="content != null">content,</if>
+        </trim>
+        <trim prefix="VALUES (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="userId != null">#{userId},</if>
+            <if test="userName != null">#{userName},</if>
+            <if test="roleId != null">#{roleId},</if>
+            <if test="roleName != null">#{roleName},</if>
+            <if test="orgId != null">#{orgId},</if>
+            <if test="orgName != null">#{orgName},</if>
+            <if test="channelId != null">#{channelId},</if>
+            <if test="channelName != null">#{channelName},</if>
+            <if test="deviceId != null">#{deviceId},</if>
+            <if test="deviceName != null">#{deviceName},</if>
+            <if test="pageId != null">#{pageId},</if>
+            <if test="pageName != null">#{pageName},</if>
+            <if test="moduleId != null">#{moduleId},</if>
+            <if test="moduleName != null">#{moduleName},</if>
+            <if test="operateTypeId != null">#{operateTypeId},</if>
+            <if test="operateTypeName != null">#{operateTypeName},</if>
+            <if test="operateTime != null">#{operateTime},</if>
+            <if test="content != null">#{content},</if>
+        </trim>
+    </insert>
+
+    <insert id="insertSystemLogCommon" parameterType="org.xiaoxingbomei.vo.SystemLogCommon">
+
+    </insert>
+
+
+
+</mapper>

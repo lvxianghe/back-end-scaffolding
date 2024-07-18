@@ -1,4 +1,4 @@
-package org.xiaoxingbomei.implement;
+package org.xiaoxingbomei.service.implement;
 
 import org.xiaoxingbomei.service.ShortLinkService;
 

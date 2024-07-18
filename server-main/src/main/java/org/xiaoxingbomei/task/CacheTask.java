@@ -1,6 +1,5 @@
-package org.xiaoxingbomei.job.task;
+package org.xiaoxingbomei.task;
 
-import lombok.extern.log4j.Log4j2;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -44,11 +43,10 @@ public class CacheTask
             isRedisConnected.set(true);
 
             // log.info("redis client connected successfully");
-        // }catch (RedisConnectionException | PoolException e)
+
         }catch (Exception e)
         {
             // 打印堆栈
-            // Exception_Utils.recursiveReversePrintStackCauseCommon(e);
             Exception_Utils.recursiveReversePrintStackCauseCommon(e);
 
             // 修改redis连接状态

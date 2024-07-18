@@ -1,4 +1,4 @@
-package org.xiaoxingbomei.implement;
+package org.xiaoxingbomei.service.implement;
 
 import cn.dev33.satoken.stp.SaTokenInfo;
 import cn.dev33.satoken.stp.StpUtil;
@@ -9,7 +9,7 @@ import org.xiaoxingbomei.Enum.GlobalCodeEnum;
 import org.xiaoxingbomei.dto.SystemAuthDto;
 import org.xiaoxingbomei.entity.GlobalEntity;
 import org.xiaoxingbomei.service.AuthService;
-import org.xiaoxingbomei.utils.RequestParam_Utils;
+import org.xiaoxingbomei.utils.Request_Utils;
 
 import java.util.List;
 
@@ -23,9 +23,9 @@ public class AuthServiceImpl implements AuthService
     @Override
     public GlobalEntity doLogin(String paramString)
     {
-        String userId = RequestParam_Utils.getParam(paramString, "userId");
-        String auth = RequestParam_Utils.getParam(paramString, "auth");
-
+        //
+        String userId   = Request_Utils.getParam(paramString, "userId");
+        String auth     = Request_Utils.getParam(paramString, "auth");
 
         // 此处用代码替代真实情况下数据库比对操作
         if(StringUtils.equals("ysx",userId) & StringUtils.equals("ysx123",auth))
@@ -66,7 +66,6 @@ public class AuthServiceImpl implements AuthService
         SaResult tokenInfoResult = SaResult.data(tokenInfo);
         return GlobalEntity.success(GlobalCodeEnum.SUCCESS.getCode(), GlobalCodeEnum.SUCCESS.getMessage(), "","",tokenInfoResult.getMsg());
     }
-
 
     /**
      * logOut

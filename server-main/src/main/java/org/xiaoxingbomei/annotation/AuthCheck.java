@@ -4,6 +4,7 @@ import java.lang.annotation.*;
 
 /**
  * 权限校验注解。基于satoken框架
+ * 使用方法
  */
 @Documented
 @Target(ElementType.METHOD)

@@ -1,4 +1,9 @@
 package org.xiaoxingbomei.utils;
 
-public class Http_Utils {
+/**
+ *
+ */
+public class Http_Utils
+{
+
 }

@@ -1,5 +1,6 @@
 package org.xiaoxingbomei.aspect;
 
+import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -7,6 +8,7 @@ import org.aspectj.lang.annotation.Pointcut;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.util.StopWatch;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -21,12 +23,9 @@ import javax.servlet.http.HttpServletRequest;
  */
 @Aspect
 @Component
+@Slf4j
 public class ControllerLogAspect
 {
-
-
-    private static Logger log = LoggerFactory.getLogger(ControllerLogAspect.class);
-
 
     @Pointcut("@annotation(org.xiaoxingbomei.annotation.ControllerLog)")
     public void reqMethodInfo() {}
@@ -35,7 +34,6 @@ public class ControllerLogAspect
     @Around("reqMethodInfo()")
     public Object doMethodInfo(ProceedingJoinPoint point) throws Throwable
     {
-
 
         HttpServletRequest request = (HttpServletRequest) RequestContextHolder.getRequestAttributes().resolveReference(RequestAttributes.REFERENCE_REQUEST);
         String servletPath = request == null ? "" : request.getServletPath();

@@ -5,7 +5,9 @@ import cn.dev33.satoken.util.SaResult;
 
 import com.fasterxml.jackson.databind.exc.MismatchedInputException;
 import lombok.EqualsAndHashCode;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.*;
+import org.springframework.beans.factory.BeanCreationException;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -19,16 +21,17 @@ import org.xiaoxingbomei.exception.UserException;
 import org.xiaoxingbomei.utils.Exception_Utils;
 
 import java.lang.reflect.UndeclaredThrowableException;
+import java.net.ConnectException;
 
 /**
  * 全局异常处理
  */
 @RestControllerAdvice
 @EqualsAndHashCode
+@Slf4j
 public class GlobalExceptionHandler
 {
 
-    private static Logger log = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
 
     /**
@@ -201,6 +204,22 @@ public class GlobalExceptionHandler
     {
         Exception_Utils.recursiveReversePrintStackCauseCommon(e);
         return GlobalEntity.error(null,GlobalCodeEnum.ERROR.getCode(), e.getMessage(), "NullPointerException,当前功能不可用，请稍后再试", "");
+    }
+
+    // 拦截：BeanCreationException
+    @ExceptionHandler(BeanCreationException.class)
+    public GlobalEntity handlerException(BeanCreationException e)
+    {
+        Exception_Utils.recursiveReversePrintStackCauseCommon(e);
+        return GlobalEntity.error(null,GlobalCodeEnum.ERROR.getCode(), e.getMessage(), "BeanCreationException,当前功能不可用，请稍后再试", "");
+    }
+
+    // 拦截：ConnectException
+    @ExceptionHandler(ConnectException.class)
+    public GlobalEntity handlerException(ConnectException e)
+    {
+        Exception_Utils.recursiveReversePrintStackCauseCommon(e);
+        return GlobalEntity.error(null,GlobalCodeEnum.ERROR.getCode(), e.getMessage(), "ConnectException,当前功能不可用，请稍后再试", "");
     }
 
     // 拦截：类型转换异常

@@ -18,7 +18,7 @@ public class ApiConstant
      */
     public class System
     {
-        public static final String getSystemInfo        = "system/getSystemInfo";       // 获取系统信息
+        public static final String getSystemInfo            = "/system/getSystemInfo";       // 获取系统信息
     }
 
     /**
@@ -26,25 +26,24 @@ public class ApiConstant
      */
     public class Config
     {
-        public static final String getApolloConfig          = "/apollo/getApolloConfig";        // 获取Apollo配置信息
+        public static final String getApolloConfig          = "/config/getApolloConfig";        // 获取Apollo配置信息
+        public static final String getApolloValueByKey      = "/config/getApolloValueByKey";    // 获取Apollo配置信息，通过key获取value
 
-        public static final String getApolloValueByKey      = "/apollo/getApolloValueByKey";    // 获取Apollo配置信息，通过key获取value
+        public static final String getNacosConfig           = "/config/getNacosConfig";         // 获取Nacos配置信息
 
-        public static final String getNacosConfig           = "/apollo/getNacosConfig";         // 获取Nacos配置信息
+        public static final String getMybatisConfig         = "/config/getMybatisConfig";       // 获取Mybatis配置信息
 
-        public static final String getMybatisConfig         = "/apollo/getMybatisConfig";       // 获取Mybatis配置信息
+        public static final String getOpenFeignConfig       = "/config/getOpenFeignConfig";     // 获取OpenFeign配置信息
 
-        public static final String getOpenFeignConfig       = "/apollo/getOpenFeignConfig";     // 获取OpenFeign配置信息
+        public static final String getRedisConfig           = "/config/getRedisConfig";         // 获取Redis配置信息
 
-        public static final String getRedisConfig           = "/apollo/getRedisConfig";         // 获取Redis配置信息
+        public static final String getSaTokenConfig         = "/config/getSaTokenConfig";       // 获取Sa-token配置信息
 
-        public static final String getSaTokenConfig         = "/apollo/getSaTokenConfig";       // 获取Sa-token配置信息
+        public static final String getElasticSearchConfig   = "/config/getElasticSearchConfig"; // 获取es配置信息
 
-        public static final String getElasticSearchConfig   = "/apollo/getElasticSearchConfig"; // 获取es配置信息
+        public static final String getXxlJobConfig          = "/config/getXxlJobConfig";        // 获取xxl-job配置信息
 
-        public static final String getXxlJobConfig          = "/apollo/getXxlJobConfig";        // 获取xxl-job配置信息
-
-        public static final String getCamundaConfig         = "/apollo/getCamundaConfig";       // 获取camunda配置信息
+        public static final String getCamundaConfig         = "/config/getCamundaConfig";       // 获取camunda配置信息
     }
 
     /**
@@ -52,9 +51,9 @@ public class ApiConstant
      */
     public class User
     {
-        public static final String getUserInfo          = "user/getUserInfo";           //
-        public static final String getUserCacheInfo     = "user/getUserCacheInfo";      //
-        public static final String removeUserCacheInfo  = "user/removeUserCacheInfo";   //
+        public static final String getUserInfo              = "/user/getUserInfo";           //
+        public static final String getUserCacheInfo         = "/user/getUserCacheInfo";      //
+        public static final String removeUserCacheInfo      = "/user/removeUserCacheInfo";   //
     }
 
     /**
@@ -62,10 +61,10 @@ public class ApiConstant
      */
     public class Org
     {
-        public static final String getOrgInfo           = "/org/getOrgInfo";             //
-        public static final String getOrgInfoByOrgId    = "/org/getOrgInfoByOrgId";      //
-        public static final String getSupOrgInfo        = "/org/getSupOrgInfo";          //
-        public static final String getSubOrgInfo        = "/org/getSubOrgInfo";          //
+        public static final String getOrgInfo               = "/org/getOrgInfo";             //
+        public static final String getOrgInfoByOrgId        = "/org/getOrgInfoByOrgId";      //
+        public static final String getSupOrgInfo            = "/org/getSupOrgInfo";          //
+        public static final String getSubOrgInfo            = "/org/getSubOrgInfo";          //
     }
 
     /**
@@ -100,6 +99,20 @@ public class ApiConstant
         public static final String checkRoleAnd         = "/auth/checkRoleAnd";         // 当前账号是否含有指定角色（指定多个，必须全部通过）
         public static final String checkRoleOr          = "/auth/checkRoleOr";          // 当前账号是否含有指定角色（指定多个，通过一个即可）
     }
+
+
+    /**
+     * 日志
+     */
+    public class Log
+    {
+        public static final String getLogInfo               = "/log/getLogInfo";                    // 获取当前工程所有的日志简介
+
+        public static final String insertBusinessLogCommon  = "/log/insertBusinessLogCommon";       // 更新通用业务日志表
+
+        public static final String insertSystemLogCommon    = "/log/insertSystemLogCommon";         // 更新通用业务日志表
+    }
+
 
     /**
      * 业务：

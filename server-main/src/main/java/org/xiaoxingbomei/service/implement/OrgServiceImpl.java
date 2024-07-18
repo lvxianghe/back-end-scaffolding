@@ -1,4 +1,4 @@
-package org.xiaoxingbomei.implement;
+package org.xiaoxingbomei.service.implement;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

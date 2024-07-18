@@ -1,14 +1,15 @@
-package org.xiaoxingbomei.implement;
+package org.xiaoxingbomei.service.implement;
 
-import cn.hutool.json.JSONObject;
-import cn.hutool.json.JSONUtil;
 import com.ctrip.framework.apollo.Config;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.xiaoxingbomei.Enum.GlobalCodeEnum;
+import org.xiaoxingbomei.config.apollo.ApolloProperties;
 import org.xiaoxingbomei.entity.GlobalEntity;
 import org.xiaoxingbomei.service.GlobalConfigService;
+import org.xiaoxingbomei.utils.Request_Utils;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -21,10 +22,16 @@ public class GlobalConfigServiceImpl implements GlobalConfigService
     @Autowired
     private Config apolloConfig;
 
+    @Autowired
+    private ApolloProperties apolloPropertiesConfig;
+
     @Override
     public GlobalEntity getApolloConfig()
     {
         Map<String, Object> configMap = new HashMap<>();
+
+        String jdbcUrl = apolloPropertiesConfig.getJdbcUrl();
+        log.info("\njdbcUrl:{}", jdbcUrl);
 
         // 获取一些常见和重要的配置信息
         String appId = apolloConfig.getProperty("app.id", "defaultAppId");
@@ -47,13 +54,18 @@ public class GlobalConfigServiceImpl implements GlobalConfigService
     public GlobalEntity getApolloValueByKey(String paramString)
     {
 
-        JSONObject jsonObject = JSONUtil.parseObj(paramString);
-        String apolloKey = jsonObject.getStr("apolloKey");
+        String apolloKey = Request_Utils.getParam(paramString, "apolloKey");
+
+        if(StringUtils.isEmpty(apolloKey))
+        {
+            return GlobalEntity.success(GlobalCodeEnum.SUCCESS.getCode(), GlobalCodeEnum.SUCCESS.getCode(),GlobalCodeEnum.SUCCESS.getMessage(),"获取Apollo配置,正确的格式为key1,key2,key3","获取Apollo配置");
+
+        }
 
         Map<String, Object> configMap = new HashMap<>();
 
         // Split keys based on comma separator
-        String[] keys = apolloKey.split(",");
+        String[] keys = apolloKey.split(",",-1);
 
         // 获取应用的配置项,并对应封装
         for (String key : keys)

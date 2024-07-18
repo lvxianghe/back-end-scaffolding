@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.xiaoxingbomei.config.apollo.ApolloProperties;
 import org.xiaoxingbomei.constant.ApiConstant;
 import org.xiaoxingbomei.entity.GlobalEntity;
 import org.xiaoxingbomei.service.GlobalConfigService;
@@ -14,9 +15,9 @@ import org.xiaoxingbomei.service.GlobalConfigService;
 public class ConfigController
 {
 
-
     @Autowired
     private GlobalConfigService configService;
+
 
 
     @Operation(summary = "获取apollo配置信息",description = "获取apollo配置信息")

@@ -1,4 +1,10 @@
 package org.xiaoxingbomei.utils;
 
-public class Log_Utils {
+
+/**
+ *
+ */
+public class Log_Utils
+{
+
 }

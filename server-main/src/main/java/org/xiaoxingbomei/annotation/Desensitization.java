@@ -12,6 +12,7 @@ import java.lang.annotation.Target;
 
 /**
  *  脱敏注解
+ *  使用方法：
  * `@JsonSerialize(using = DesensitizationSerialize.class)`用于指定在序列化时应该使用哪个自定义序列化器类,
  *  需要和下面的注解搭配使用`DesensitizationSerialize`我们自定义的序列化器才会生效
  *

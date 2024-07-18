@@ -7,7 +7,8 @@ import org.xiaoxingbomei.service.Client;
 import org.xiaoxingbomei.utils.Spring_Utils;
 
 @Slf4j
-public class HttpClient implements Client {
+public class HttpClient implements Client
+{
 
     private HttpMethodEmun httpMethodEmun;
 

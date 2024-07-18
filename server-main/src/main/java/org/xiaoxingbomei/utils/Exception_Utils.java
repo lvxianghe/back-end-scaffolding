@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 
 /**
  * 异常工具类
- * 1、默认桉树进行倒打堆栈
+ * 1、默认参数进行倒打堆栈
  * 2、倒打堆栈
  */
 @Component
@@ -43,7 +43,8 @@ public class Exception_Utils
      * @param stackDepth 每一个异常栈的打印深度
      * @param sb 字符串构造器
      */
-    public static void recursiveReversePrintStackCause(Throwable t, int causeDepth, ForwardCounter counter, int stackDepth, StringBuilder sb){
+    public static void recursiveReversePrintStackCause(Throwable t, int causeDepth, ForwardCounter counter, int stackDepth, StringBuilder sb)
+    {
         if(t == null)
         {
             return;
@@ -57,22 +58,24 @@ public class Exception_Utils
         }
     }
 
-    //
+    // 处理堆栈信息
     public static void doPrintStack(Throwable t, int stackDepth, StringBuilder sb)
     {
         StackTraceElement[] stackTraceElements = t.getStackTrace();
-        if(sb.lastIndexOf("\t") > -1){
+        if(sb.lastIndexOf("\t") > -1)
+        {
             sb.deleteCharAt(sb.length()-1);
             sb.append("Caused: ");
         }
         sb.append(t.getClass().getName()).append(": ").append(t.getMessage()).append("\n\t");
-        for(int i=0; i < stackDepth; ++i){
+        for(int i=0; i < stackDepth; ++i)
+        {
             if(i >= stackTraceElements.length){
                 break;
             }
             StackTraceElement element = stackTraceElements[i];
              sb.append(reduceClassName(element.getClassName()))
-//            sb.append(element.getClassName())
+             // sb.append(element.getClassName())
                     .append("【")
                     .append(element.getMethodName())
                     .append(":")
