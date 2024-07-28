@@ -15,6 +15,7 @@
     <!-- 插件 -->
     <plugins>
         <plugin interceptor="org.xiaoxingbomei.config.mybatis.MybatisLogInterceptor" />
+<!--        <plugin interceptor="org.xiaoxingbomei.config.mybatis.MybatisInterceptor" />-->
     </plugins>
 
 
