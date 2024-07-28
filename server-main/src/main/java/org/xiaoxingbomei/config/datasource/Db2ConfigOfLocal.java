@@ -1,4 +1,6 @@
 package org.xiaoxingbomei.config.datasource;
 
-public class Db2DatabaseConfig {
+public class Db2ConfigOfLocal
+{
+
 }

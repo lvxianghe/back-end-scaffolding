@@ -23,8 +23,30 @@ public class AuthController
     @Autowired
     public AuthService authService;
 
-    // doLogin
-    @Operation(summary = "登录",description = "集成sa-token，登录")
+    @Operation(summary = "生成验证码", description = "生成验证码")
+    @RequestMapping(value = ApiConstant.Auth.generateCaptcha, method = RequestMethod.POST)
+    public GlobalEntity generateCaptcha(@RequestBody String paramString)
+    {
+        GlobalEntity ret = null;
+
+        ret = authService.generateCaptcha(paramString);
+
+        return ret;
+    }
+
+    @Operation(summary = "生成验证码", description = "生成验证码")
+    @RequestMapping(value = ApiConstant.Auth.validateCaptcha, method = RequestMethod.POST)
+    public GlobalEntity validateCaptcha(@RequestBody String paramString)
+    {
+        GlobalEntity ret = null;
+
+        ret = authService.validateCaptcha(paramString);
+
+        return ret;
+    }
+
+
+    @Operation(summary = "doLogin",description = "集成sa-token，登录")
     @RequestLimiting
     @ServiceSwitch(switchKey = Constant.SwitchConfigCode.XX_SWITCH)
     @RequestMapping(value = ApiConstant.Auth.doLogin, method = RequestMethod.POST)
@@ -37,7 +59,7 @@ public class AuthController
         return ret;
     }
 
-    // isLogin
+    @Operation(summary = "isLogin",description = "集成sa-token，验证是否已经登录")
     @RequestMapping(value = ApiConstant.Auth.isLogin, method = RequestMethod.POST)
     public GlobalEntity isLogin(@RequestBody String paramString)
     {
@@ -49,7 +71,7 @@ public class AuthController
     }
 
 
-    // checkLogin
+    @Operation(summary = "checkLogin",description = "")
     @RequestMapping(value = ApiConstant.Auth.checkLogin, method = RequestMethod.POST)
     public GlobalEntity checkLogin(@RequestBody String paramString)
     {
@@ -61,7 +83,7 @@ public class AuthController
     }
 
 
-    // tokenInfo
+    @Operation(summary = "",description = "")
     @RequestMapping(value = ApiConstant.Auth.tokenInfo, method = RequestMethod.POST)
     public GlobalEntity tokenInfo(@RequestBody String paramString)
     {
@@ -73,7 +95,7 @@ public class AuthController
 
         return ret;
     }
-    // logOut
+    @Operation(summary = "logOut",description = "登出")
     @RequestMapping(value = ApiConstant.Auth.logOut, method = RequestMethod.POST)
     public GlobalEntity logOut(@RequestBody String paramString)
     {
@@ -87,7 +109,7 @@ public class AuthController
     }
 
 
-    // getPermissionList
+    @Operation(summary = "getPermissionList",description = "")
     @RequestMapping(value = ApiConstant.Auth.getPermissionList, method = RequestMethod.POST)
     public GlobalEntity getPermissionList(@RequestBody String paramString)
     {
@@ -106,7 +128,7 @@ public class AuthController
         return ret;
     }
 
-    // hasPermissionList
+    @Operation(summary = "hasPermissionList",description = "")
     @RequestMapping(value = ApiConstant.Auth.hasPermissionList, method = RequestMethod.POST)
     public GlobalEntity hasPermissionList(@RequestBody String paramString)
     {
@@ -125,7 +147,7 @@ public class AuthController
         return ret;
     }
 
-    // checkPermissionList
+    @Operation(summary = "checkPermissionList",description = "")
     @RequestMapping(value = ApiConstant.Auth.checkPermissionList, method = RequestMethod.POST)
     public GlobalEntity checkPermissionList(@RequestBody String paramString)
     {
@@ -143,7 +165,7 @@ public class AuthController
         return ret;
     }
 
-    // checkPermissionAnd
+    @Operation(summary = "checkPermissionAnd",description = "")
     @RequestMapping(value = ApiConstant.Auth.checkPermissionAnd, method = RequestMethod.POST)
     public GlobalEntity checkPermissionAnd(@RequestBody String paramString)
     {
@@ -161,7 +183,7 @@ public class AuthController
         return ret;
     }
 
-    // CheckPermissionOr
+    @Operation(summary = "CheckPermissionOr",description = "")
     @RequestMapping(value = ApiConstant.Auth.CheckPermissionOr, method = RequestMethod.POST)
     public GlobalEntity CheckPermissionOr(@RequestBody String paramString)
     {
@@ -179,7 +201,7 @@ public class AuthController
         return ret;
     }
 
-    // getRoleList
+    @Operation(summary = "getRoleList",description = "获取角色列表")
     @RequestMapping(value = ApiConstant.Auth.getRoleList, method = RequestMethod.POST)
     public GlobalEntity getRoleList(@RequestBody String paramString)
     {
@@ -197,7 +219,7 @@ public class AuthController
         return ret;
     }
 
-    // hasRole
+    @Operation(summary = "hasRole",description = "")
     @RequestMapping(value = ApiConstant.Auth.hasRole, method = RequestMethod.POST)
     public GlobalEntity hasRole(@RequestBody String paramString)
     {
@@ -215,7 +237,7 @@ public class AuthController
         return ret;
     }
 
-    // checkRole
+    @Operation(summary = "checkRole",description = "")
     @RequestMapping(value = ApiConstant.Auth.checkRole, method = RequestMethod.POST)
     public GlobalEntity checkRole(@RequestBody String paramString)
     {
@@ -233,7 +255,7 @@ public class AuthController
         return ret;
     }
 
-    // checkRoleAnd
+    @Operation(summary = "checkRoleAnd",description = "")
     @RequestMapping(value = ApiConstant.Auth.checkRoleAnd, method = RequestMethod.POST)
     public GlobalEntity checkRoleAnd(@RequestBody String paramString)
     {
@@ -251,7 +273,7 @@ public class AuthController
         return ret;
     }
 
-    // checkRoleOr
+    @Operation(summary = "checkRoleOr",description = "")
     @RequestMapping(value = ApiConstant.Auth.checkRoleOr, method = RequestMethod.POST)
     public GlobalEntity checkRoleOr(@RequestBody String paramString)
     {

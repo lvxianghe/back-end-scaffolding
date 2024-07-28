@@ -15,15 +15,15 @@
 
 - 技术简介：
 
-| 技术                | 说明           | 官网                                            |
-| :------------------ | -------------- | ----------------------------------------------- |
+| 技术                  | 说明           | 官网                                            |
+|:--------------------| -------------- | ----------------------------------------------- |
 | springboot          | web框架        | https://spring.io/projects/spring-boot          |
 | springcloud netflix | 分布式框架     | https://spring.io/projects/spring-cloud-netflix |
 | mybatis             | orm框架        | https://blog.mybatis.org/                       |
 | mybatis-plus        | orm框架        | https://baomidou.com/                           |
 | redis               | 缓存           | https://redis.io/                               |
 | mongodb             | 缓存           | https://www.mongodb.com/zh-cn                   |
-| Caffeine            | 本地缓存       | https://github.com/ben-manes/caffeine           |
+| caffeine            | 本地缓存       | https://github.com/ben-manes/caffeine           |
 | kafka               | 消息队列       | https://kafka.apache.org/                       |
 | hutool              | 工具类         | https://hutool.cn/                              |
 | sa-token            | 权限框架       | https://sa-token.cc/doc.html#/                  |

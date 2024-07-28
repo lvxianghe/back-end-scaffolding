@@ -72,7 +72,7 @@ public class ApiConstant
      */
     public class Role
     {
-        public static final String getRoleInfo          = "role/getRoleInfo";           //
+        public static final String getRoleInfo              = "role/getRoleInfo";           // 获取角色信息
     }
 
 
@@ -81,23 +81,30 @@ public class ApiConstant
      */
     public class Auth
     {
-        public static final String doLogin              = "/auth/doLogin";              // 登录
-        public static final String isLogin              = "/auth/isLogin";              // 是否登录，true/false
-        public static final String checkLogin           = "/auth/checkLogin";           // 检查登录，抛出异常
-        public static final String tokenInfo            = "/auth/tokenInfo";            // token信息
-        public static final String logOut               = "/auth/logOut";               // 注销
 
-        public static final String getPermissionList    = "/auth/getPermissionList";    // 获取当前账号拥有的权限集合
-        public static final String hasPermissionList    = "/auth/hasPermissionList";    // 当前账号是否拥有指定权限，true/false
-        public static final String checkPermissionList  = "/auth/checkPermissionList";  // 当前账号是否含有指定权限标识，抛出异常
-        public static final String checkPermissionAnd   = "/auth/checkPermissionAnd";   // 当前账号是否含有指定权限（指定多个，必须全部通过）
-        public static final String CheckPermissionOr    = "/auth/CheckPermissionOr";    // 当前账号是否含有指定权限（指定多个，通过一个即可）
+        public static final String getAuthInfo              = "/auth/getAuthInfo";
 
-        public static final String getRoleList          = "/auth/getRoleList";          // 获取当前账号拥有的角色集合
-        public static final String hasRole              = "/auth/hasRole";              // 当前账号是否拥有指定角色，true/false
-        public static final String checkRole            = "/auth/checkRole";            // 当前账号是否含有指定角色标识，如果验证未通过，则抛出异常
-        public static final String checkRoleAnd         = "/auth/checkRoleAnd";         // 当前账号是否含有指定角色（指定多个，必须全部通过）
-        public static final String checkRoleOr          = "/auth/checkRoleOr";          // 当前账号是否含有指定角色（指定多个，通过一个即可）
+        public static final String generateCaptcha          = "/auth/generateCaptcha";      // 获取验证吗
+        public static final String validateCaptcha          = "/auth/validateCaptcha";      // 校验验证吗
+
+
+        public static final String doLogin                  = "/auth/doLogin";              // 登录
+        public static final String isLogin                  = "/auth/isLogin";              // 是否登录，true/false
+        public static final String checkLogin               = "/auth/checkLogin";           // 检查登录，抛出异常
+        public static final String tokenInfo                = "/auth/tokenInfo";            // token信息
+        public static final String logOut                   = "/auth/logOut";               // 注销
+
+        public static final String getPermissionList        = "/auth/getPermissionList";    // 获取当前账号拥有的权限集合
+        public static final String hasPermissionList        = "/auth/hasPermissionList";    // 当前账号是否拥有指定权限，true/false
+        public static final String checkPermissionList      = "/auth/checkPermissionList";  // 当前账号是否含有指定权限标识，抛出异常
+        public static final String checkPermissionAnd       = "/auth/checkPermissionAnd";   // 当前账号是否含有指定权限（指定多个，必须全部通过）
+        public static final String CheckPermissionOr        = "/auth/CheckPermissionOr";    // 当前账号是否含有指定权限（指定多个，通过一个即可）
+
+        public static final String getRoleList              = "/auth/getRoleList";          // 获取当前账号拥有的角色集合
+        public static final String hasRole                  = "/auth/hasRole";              // 当前账号是否拥有指定角色，true/false
+        public static final String checkRole                = "/auth/checkRole";            // 当前账号是否含有指定角色标识，如果验证未通过，则抛出异常
+        public static final String checkRoleAnd             = "/auth/checkRoleAnd";         // 当前账号是否含有指定角色（指定多个，必须全部通过）
+        public static final String checkRoleOr              = "/auth/checkRoleOr";          // 当前账号是否含有指定角色（指定多个，通过一个即可）
     }
 
 
@@ -115,16 +122,16 @@ public class ApiConstant
 
 
     /**
-     * 业务：
+     * 业务：kakarot
      */
-    public class BusinessOfXxx1
+    public class BusinessOfKakarot
     {
 
     }
     /**
-     * 业务：
+     * 业务：xiaoxingbomei
      */
-    public class BusinessOfXxx2
+    public class BusinessOfXiaoxingbomei
     {
 
     }
@@ -137,6 +144,55 @@ public class ApiConstant
 
     }
 
+
+    public class Tech
+    {
+        public static final String getTechLearningInfo  = "/tech/getTechLearningInfo";      // 获取技术学习信息
+
+        public static final String mongodbOfInsert      = "/tech/mongodbOfInsert";          // mongodb-创建
+        public static final String mongodbOfMultiInsert = "/tech/mongodbOfMultiInsert";     // mongodb-批量创建
+        public static final String mongodbOfSave        = "/tech/mongodbOfSave";            // mongodb-创建
+
+        public static final String mongodbOfSearch      = "/tech/mongodbOfSearch";          // mongodb-查询
+        public static final String mongodbOfUpdate      = "/tech/mongodbOfUpdate";          // mongodb-修改
+        public static final String mongodbOfDelete      = "/tech/mongodbOfDelete";          // mongodb-删除
+
+        public static final String fastJsonOfXxx1       = "/tech/fastJsonTestOfXxx1";       // fastJson-
+        public static final String fastJsonOfXxx2       = "/tech/fastJsonTestOfXxx2";       // fastJson-
+        public static final String fastJsonOfXxx3       = "/tech/fastJsonTestOfXxx3";       // fastJson-
+
+        public static final String redisOfStringGet     = "/tech/redisTestOfGet";           // redis-
+        public static final String redisOfStringSet     = "/tech/redisTestOfGet";           // redis-
+
+        public static final String cookieOfCreate       = "/tech/cookieOfCreate";           // cookie-
+        public static final String cookieOfUpdate       = "/tech/cookieOfUpdate";           // cookie-
+        public static final String cookieOfSearch       = "/tech/cookieOfSearch";           // cookie-
+        public static final String cookieOfDelete       = "/tech/cookieOfDelete";           // cookie-
+
+        public static final String sessionOfCreate      = "/tech/sessionOfCreate";          // session-
+        public static final String sessionOfUpdate      = "/tech/sessionOfUpdate";          // session-
+        public static final String sessionOfSearch      = "/tech/sessionOfSearch";          // session-
+        public static final String sessionOfDelete      = "/tech/sessionOfDelete";          // session-
+
+        public static final String elasticsearchOfXxx   = "/tech/elasticsearchOfXxx";       // elasticsearch-
+
+        public static final String xxljobOfXxx          = "/tech/xxljobOfXxx";              // xxljob-
+
+        public static final String camundaOfXxx         = "/tech/camundaOfXxx";             // camunda-
+
+        public static final String mybatisOfXxx         = "/tech/mybatisOfXxx";             // mybatis-
+
+        public static final String feignOfXxx           = "/tech/feignOfXxx";               // feign-
+
+        public static final String streamOfXxx          = "/tech/streamOfXxx";              // stream-
+
+
+
+
+
+
+
+    }
 
 
 }

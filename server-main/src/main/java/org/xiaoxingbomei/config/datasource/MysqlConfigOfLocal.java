@@ -1,5 +1,6 @@
 package org.xiaoxingbomei.config.datasource;
 
+import org.apache.ibatis.plugin.Interceptor;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.SqlSessionTemplate;
@@ -9,6 +10,7 @@ import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
+import org.xiaoxingbomei.config.mybatis.MybatisLogInterceptor;
 
 import javax.sql.DataSource;
 
@@ -17,7 +19,7 @@ import javax.sql.DataSource;
  */
 @Configuration
 @MapperScan(basePackages = "org.xiaoxingbomei.dao.localhost", sqlSessionTemplateRef = "localhostSqlSessionTemplate")
-public class LocalHostDatabaseConfig
+public class MysqlConfigOfLocal
 {
     @Bean
     @ConfigurationProperties(prefix = "spring.datasource.localhost")
@@ -33,6 +35,7 @@ public class LocalHostDatabaseConfig
     {
         SqlSessionFactoryBean factoryBean = new SqlSessionFactoryBean();
         factoryBean.setDataSource(localhostDataSource());
+        factoryBean.setPlugins(new Interceptor[]{new MybatisLogInterceptor()});
 
         org.apache.ibatis.session.Configuration configuration = new org.apache.ibatis.session.Configuration();
         configuration.setCallSettersOnNulls(true);

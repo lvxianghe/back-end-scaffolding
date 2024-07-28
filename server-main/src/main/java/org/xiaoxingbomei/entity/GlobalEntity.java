@@ -3,26 +3,27 @@ package org.xiaoxingbomei.entity;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
+import org.xiaoxingbomei.Enum.GlobalCodeEnum;
 
 import java.io.Serializable;
 
 /**
- * http通用返回体
+ * http通用响应体
  */
 @Data
 public class GlobalEntity<T> implements Serializable
 {
     private static final long serialVersionUID  = 1L;
 
+    private T       data;            // 响应主体
+    private String  code;            // 响应码
+    private String  message;         // 技术message
+    private String  userMessage;     // 用户message
+    private String  businessMessage; // 业务message
+
     public static final String SUCCESS = "0";
 
     public static final String ERROR = "-1";
-
-    private T      data;            // 响应主体
-    private String code;            // 响应码
-    private String message;         // 技术message
-    private String userMessage;     // 用户message
-    private String businessMessage; // 业务message
 
     // 无参构造
     public GlobalEntity() {}
@@ -53,10 +54,24 @@ public class GlobalEntity<T> implements Serializable
         return this;
     }
 
+    // success-message
+    public static <T>GlobalEntity<T> success(String message)
+    {
+        GlobalEntity globalEntity = new GlobalEntity(null, GlobalCodeEnum.SUCCESS.getCode(), message, message, message);
+        return globalEntity;
+    }
+
     // success-all
     public static <T>GlobalEntity<T> success(T data, String code, String message, String userMessage, String businessMessage)
     {
         GlobalEntity globalEntity = new GlobalEntity(data, code, message, userMessage, businessMessage);
+        return globalEntity;
+    }
+
+    // success-message
+    public static <T>GlobalEntity<T> error(String message)
+    {
+        GlobalEntity globalEntity = new GlobalEntity(null, GlobalCodeEnum.ERROR.getCode(), message, message, message);
         return globalEntity;
     }
 

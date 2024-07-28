@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.slf4j.*;
 import org.springframework.beans.factory.BeanCreationException;
 import org.springframework.dao.DataAccessException;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -26,9 +27,9 @@ import java.net.ConnectException;
 /**
  * 全局异常处理
  */
-@RestControllerAdvice
 @EqualsAndHashCode
 @Slf4j
+@RestControllerAdvice
 public class GlobalExceptionHandler
 {
 
@@ -174,6 +175,7 @@ public class GlobalExceptionHandler
     @ExceptionHandler(value = HttpMessageNotReadableException.class)
     public GlobalEntity exceptionHandler(HttpMessageNotReadableException e)
     {
+        e.printStackTrace();
         Exception_Utils.recursiveReversePrintStackCauseCommon(e);
         return GlobalEntity.error(null,GlobalCodeEnum.ERROR.getCode(), e.getMessage(), "HttpMessageNotReadableException,当前功能不可用，请稍后再试", "");
     }
@@ -268,6 +270,14 @@ public class GlobalExceptionHandler
     {
         Exception_Utils.recursiveReversePrintStackCauseCommon(e);
         return GlobalEntity.error(null,GlobalCodeEnum.ERROR.getCode(), e.getMessage(), "MismatchedInputException,当前功能不可用，请稍后再试", "");
+    }
+
+    // 请求入参异常-DuplicateKeyException
+    @ExceptionHandler(DuplicateKeyException.class)
+    public GlobalEntity handlerException(DuplicateKeyException e)
+    {
+        Exception_Utils.recursiveReversePrintStackCauseCommon(e);
+        return GlobalEntity.error(null,GlobalCodeEnum.ERROR.getCode(), e.getMessage(), "DuplicateKeyException,当前功能不可用，请稍后再试", "");
     }
 
 

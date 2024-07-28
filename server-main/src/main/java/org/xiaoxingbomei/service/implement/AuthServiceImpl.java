@@ -4,18 +4,80 @@ import cn.dev33.satoken.stp.SaTokenInfo;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.dev33.satoken.util.SaResult;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.xiaoxingbomei.Enum.GlobalCodeEnum;
 import org.xiaoxingbomei.dto.SystemAuthDto;
 import org.xiaoxingbomei.entity.GlobalEntity;
 import org.xiaoxingbomei.service.AuthService;
+import org.xiaoxingbomei.utils.Redis_Utils;
 import org.xiaoxingbomei.utils.Request_Utils;
 
 import java.util.List;
+import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 @Service
 public class AuthServiceImpl implements AuthService
 {
+
+    @Autowired
+    private RedisTemplate  redisTemplate;
+
+    @Autowired
+    private Redis_Utils redis_utils;
+
+    private static final String CAPTCHA_PREFIX = "captcha_";    // 验证码存于reids的前缀
+    private static final long CAPTCHA_EXPIRATION = 5;          // 验证码过期时间
+
+
+    @Override
+    public GlobalEntity generateCaptcha(String paramString)
+    {
+        // 获取手机号
+        String phone = Request_Utils.getParam(paramString, "phone");
+
+        // 校验验证码系统可用性（暂用redis）,验证码系统不可用的时候
+        if(!redis_utils.isRedisConnected())
+        {
+            return GlobalEntity.error("生成验证码失败，redis暂不可用");
+        }
+
+        // 生成验证码（这里真实情况下应该接入外部接口获取验证码）
+        String captcha = String.valueOf(new Random().nextInt(999999));
+
+        // 将生成验证码存于缓存
+        redisTemplate.opsForValue().set(CAPTCHA_PREFIX+phone,captcha,CAPTCHA_EXPIRATION, TimeUnit.MINUTES);
+
+        //
+        return GlobalEntity.success("生成验证码成功，对应的手机号为："+phone);
+    }
+
+    @Override
+    public GlobalEntity validateCaptcha(String paramString)
+    {
+        // 获取手机号
+        String phone    = Request_Utils.getParam(paramString, "phone");
+        String captcha  = Request_Utils.getParam(paramString, "captcha");
+
+        // 校验验证码系统可用性（暂用redis）
+        if(!redis_utils.isRedisConnected())
+        {
+            return GlobalEntity.error("校验验证码失败，redis暂不可用");
+        }
+
+        // 校验验证码的对错，正确的话 消费掉
+        String storedCaptcha = (String) redisTemplate.opsForValue().get(CAPTCHA_PREFIX + phone);
+        if(StringUtils.equals(storedCaptcha,captcha ))
+        {
+            redisTemplate.delete(CAPTCHA_PREFIX + phone);
+            return GlobalEntity.success("校验验证码成功,手机号为"+phone);
+        }
+
+        //
+        return GlobalEntity.error("校验验证码失败，验证码不匹配");
+    }
 
     /**
      * doLogin
@@ -36,6 +98,8 @@ public class AuthServiceImpl implements AuthService
 
         return GlobalEntity.error(GlobalCodeEnum.ERROR.getCode(), GlobalCodeEnum.ERROR.getMessage(), "登录失败","",null);
     }
+
+
 
     /**
      * isLogin

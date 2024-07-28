@@ -3,13 +3,12 @@ package org.xiaoxingbomei.aspect;
 import lombok.extern.log4j.Log4j2;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
-import org.aspectj.lang.annotation.AfterReturning;
-import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Before;
-import org.aspectj.lang.annotation.Pointcut;
+import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.annotation.*;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
+import org.xiaoxingbomei.annotation.RequestLimiting;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Arrays;
@@ -35,38 +34,39 @@ import java.util.Arrays;
  *
  * `@After`: final增强，不管是抛出异常或者正常退出都会执行
  */
-@Aspect
-@Component
-@Slf4j
-public class DatabaseLogAspect
-{
-
-    /**
-     * 切入点
-     */
-    @Pointcut("execution(public * org.xiaoxingbomei.dao..*.*(..))")
-    public void DatabaseLogAspectByPath() {}
-
-    /**
-     * before
-     * 1、
-     * 2、
-     */
-    @Before("DatabaseLogAspectByPath()")
-    public void logBefore(JoinPoint joinPoint)
-    {
-        String className    =   joinPoint.getSignature().getDeclaringTypeName();
-        String methodName   =   joinPoint.getSignature().getName();
-        Object[] args       =   joinPoint.getArgs();
-        log.info("\n----------------------------------------------------------\n\t{}{}{}{}{}",
-        " << dao before aspect info >>",
-        "\n\t【className】    :\t"    +   className,
-        "\n\t【methodName】   :\t"    +   methodName,
-        "\n\t【arguments】    :\t"    +   Arrays.toString(args),
-        "\n----------------------------------------------------------\n"
-                );
-
-    }
-
-
-}
+//@Aspect
+//@Component
+//@Slf4j
+//public class DatabaseLogAspect
+//{
+//
+//    /**
+//     * 切入点
+//     */
+//    @Pointcut("execution(public * org.xiaoxingbomei.dao..*.*(..))")
+////    @Pointcut("execution(public * org.xiaoxingbomei.config.mybatis.MybatisLogInterceptor.intercept())")
+//    public void DatabaseLogAspectByPath() {}
+//
+//    /**
+//     * before
+//     * 1、
+//     * 2、
+//     */
+//    @Before("DatabaseLogAspectByPath()")
+//    public void logBefore(JoinPoint joinPoint)
+//    {
+//        String className    =   joinPoint.getSignature().getDeclaringTypeName();
+//        String methodName   =   joinPoint.getSignature().getName();
+//        Object[] args       =   joinPoint.getArgs();
+//        log.info("\n----------------------------------------------------------\n\t{}{}{}{}{}",
+//        " << dao before aspect info >>",
+//        "\n\t【className】    :\t"    +   className,
+//        "\n\t【methodName】   :\t"    +   methodName,
+//        "\n\t【arguments】    :\t"    +   Arrays.toString(args),
+//        "\n----------------------------------------------------------\n"
+//                );
+//
+//    }
+//
+//
+//}

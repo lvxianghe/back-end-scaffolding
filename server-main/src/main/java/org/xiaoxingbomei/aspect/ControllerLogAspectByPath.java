@@ -2,16 +2,13 @@ package org.xiaoxingbomei.aspect;
 
 
 import com.alibaba.fastjson.JSON;
-import lombok.extern.log4j.Log4j2;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
-import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.*;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StopWatch;
-import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
+import org.xiaoxingbomei.entity.GlobalRequestContext;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Arrays;
 
@@ -42,6 +39,8 @@ import java.util.Arrays;
 public class ControllerLogAspectByPath
 {
 
+    private static final ThreadLocal<GlobalRequestContext> requestContext = new ThreadLocal<>();
+
     /**
      * 接口响应时间
      */
@@ -65,60 +64,40 @@ public class ControllerLogAspectByPath
         startTime.set(System.currentTimeMillis());
 
         // 接收到请求，记录请求内容
-        //ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-        //HttpServletRequest request = attributes.getRequest();
-        //
-        // 记录下请求内容before request
-        //log.info("\n----------------------------------------------------------\n\t{}{}{}{}{}{}{}",
-        //        " << controller before aspect info >>",
-        //        "\n\t【request IP】   : \t" + request.getRemoteAddr(),
-        //        "\n\t【request url】  : \t" + request.getRequestURL().toString(),
-        //        "\n\t【http method】  : \t" + request.getMethod(),
-        //        "\n\t【class path】   : \t" + joinPoint.getSignature().getDeclaringTypeName() + "." + joinPoint.getSignature().getName(),
-        //        "\n\t【request body】 : \t" + Arrays.toString(joinPoint.getArgs()),
-        //        "\n----------------------------------------------------------\n");
+        ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        HttpServletRequest request = attributes.getRequest();
+        String requestIp    = request.getRemoteAddr();
+        String requestUrl   = request.getRequestURL().toString();
+        String requestMethod = request.getMethod();
+        String requestClassName = joinPoint.getSignature().getDeclaringTypeName();
+        String requestMethodName = joinPoint.getSignature().getName();
+        Object[] args = joinPoint.getArgs();
+
+        GlobalRequestContext globalRequestContext = new GlobalRequestContext();
+        globalRequestContext.setIp(requestIp);
+        globalRequestContext.setUrl(requestUrl);
+        globalRequestContext.setMethodType(requestMethod);
+        globalRequestContext.setClassName(requestClassName);
+        globalRequestContext.setMethodName(requestMethodName);
+        globalRequestContext.setArgs(args);
+
+        // 将当前的请求信息设置进threadlocal中
+        requestContext.set(globalRequestContext);
+
     }
 
-    /**
-     * around
-     * 1、测量执行时间（暂无）
-     * 2、处理异常（暂无）
-     * 3、控制方法执行（暂无）
-     */
-    //    @Around("ControllerLogAspectByPath()")
-    //    public Object doAround(ProceedingJoinPoint point) throws Throwable
-    //    {
-    //
-    //        HttpServletRequest request = (HttpServletRequest) RequestContextHolder.getRequestAttributes().resolveReference(RequestAttributes.REFERENCE_REQUEST);
-    //        String servletPath = request == null ? "" : request.getServletPath();
-    //        Object[] args = point.getArgs();
-    //
-    //        if (args != null && args.length > 0)
-    //        {
-    //            log.info("【本系统】【入参打印】访问路径:[{}]\n,入参:[{}]", servletPath, JSON.toJSON(args[0]));
-    //        } else
-    //        {
-    //            log.info("【本系统】【入参打印】访问路径:[{}]", servletPath);
-    //        }
-    //
-    //        Object result;
-    //        StopWatch stopWatch = new StopWatch();
-    //
-    //        stopWatch.start();
-    //
-    //        result = point.proceed();
-    //        stopWatch.stop();
-    //
-    //        log.info("【本系统】【出参打印】访问路径为:[{}]\n接口耗时:[{}]\n出参为:[{}]\n", servletPath, stopWatch.getTotalTimeSeconds()+" seconds",JSON.toJSONString(result));
-    //
-    //        return result;
-    //    }
 
     /**
      * around
      * 1、清理资源（暂无）
      * 2、记录方法结束状态
      */
+    @After("ControllerLogAspectByPath()")
+    public void after(JoinPoint joinPoint) throws Throwable
+    {
+        // 清理threadlocal变量
+        requestContext.remove();
+    }
 
     /**
      * after returning（输出返回参数及处理时间）
@@ -149,6 +128,9 @@ public class ControllerLogAspectByPath
     }
 
 
-
+    public static GlobalRequestContext getGlobalRequestContext()
+    {
+        return requestContext.get();
+    }
 
 }

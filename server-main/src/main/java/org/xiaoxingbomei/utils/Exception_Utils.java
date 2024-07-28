@@ -12,7 +12,6 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class Exception_Utils
 {
-
     // ForwardCounter 类定义
     public static class ForwardCounter
     {
@@ -33,7 +32,6 @@ public class Exception_Utils
         log.error("\n" +sb.toString());
         log.error("\n---------------------reverse exception stackTrace end---------------------\n");
     }
-
 
     /**
      * 2、倒打堆栈：递归逆向打印堆栈及cause(即从最底层的异常开始往上打)
@@ -76,11 +74,11 @@ public class Exception_Utils
             StackTraceElement element = stackTraceElements[i];
              sb.append(reduceClassName(element.getClassName()))
              // sb.append(element.getClassName())
-                    .append("【")
+                    .append("[")
                     .append(element.getMethodName())
                     .append(":")
                     .append(element.getLineNumber())
-                    .append("】")
+                    .append("]")
                     .append("\n\t");
         }
     }
@@ -97,8 +95,5 @@ public class Exception_Utils
         sb.append(parts[parts.length - 1]);
         return sb.toString();
     }
-
-
-
 
 }

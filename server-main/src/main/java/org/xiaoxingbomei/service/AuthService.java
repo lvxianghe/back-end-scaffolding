@@ -13,6 +13,9 @@ public interface AuthService
 
     public GlobalEntity doLogin(String paramString);
 
+    public GlobalEntity generateCaptcha(String paramString);
+    public GlobalEntity validateCaptcha(String paramString);
+
     public GlobalEntity isLogin(String paramString);
     public GlobalEntity checkLogin(String paramString);
     public GlobalEntity tokenInfo(String paramString);
