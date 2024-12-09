@@ -1,8 +1,8 @@
 package org.xiaoxingbomei.config.mybatis;
 
 import lombok.extern.slf4j.Slf4j;
+import org.apache.ibatis.cache.CacheKey;
 import org.apache.ibatis.executor.Executor;
-import org.apache.ibatis.executor.statement.StatementHandler;
 import org.apache.ibatis.mapping.BoundSql;
 import org.apache.ibatis.mapping.MappedStatement;
 import org.apache.ibatis.mapping.ParameterMapping;
@@ -25,10 +25,12 @@ import java.util.*;
  */
 @Slf4j
 @Component
-@Intercepts({
+@Intercepts
+        ({
         @Signature(type = Executor.class, method = "update", args = { MappedStatement.class, Object.class }),
-        @Signature(type = Executor.class, method = "query", args = { MappedStatement.class, Object.class,
-                RowBounds.class, ResultHandler.class }) })
+        @Signature(type = Executor.class, method = "query", args = { MappedStatement.class, Object.class, RowBounds.class, ResultHandler.class }),
+//        @Signature(type = Executor.class, method = "query", args = { MappedStatement.class, Object.class, RowBounds.class, ResultHandler.class, CacheKey.class, BoundSql.class,BoundSql.class })
+        })
 public class MybatisLogInterceptor implements Interceptor
 {
 
@@ -74,22 +76,28 @@ public class MybatisLogInterceptor implements Interceptor
     }
 
 
-    private static String getParameterValue(Object obj) {
+    private static String getParameterValue(Object obj)
+    {
         String value = null;
 
         // 判断对象是否为字符串类型
-        if (obj instanceof String) {
+        if (obj instanceof String)
+        {
             // 如果是字符串类型，则用单引号包裹字符串值
             value = "'" + obj.toString() + "'";
-        } else if (obj instanceof Date) {
+        } else if (obj instanceof Date)
+        {
             // 如果是日期类型，则格式化日期并用 `to_date` 包裹
             DateFormat formatter = DateFormat.getDateTimeInstance(DateFormat.DEFAULT, DateFormat.DEFAULT, Locale.CHINA);
             value = "to_date('" + formatter.format(obj) + "','yyyy-MM-dd hh24:mi:ss')";
-        } else {
+        } else
+        {
             // 如果对象不为空，则直接将其转换为字符串
-            if (obj != null) {
+            if (obj != null)
+            {
                 value = obj.toString();
-            } else {
+            } else
+            {
                 // 如果对象为空，则将值设为空字符串
                 value = "";
             }
@@ -98,7 +106,8 @@ public class MybatisLogInterceptor implements Interceptor
     }
 
 
-    public static String showSql(Configuration configuration, BoundSql boundSql) {
+    public static String showSql(Configuration configuration, BoundSql boundSql)
+    {
         // 获取 SQL 语句的参数对象
         Object parameterObject = boundSql.getParameterObject();
         // 获取 SQL 语句中的参数映射

@@ -34,7 +34,8 @@ public class MysqlConfigOfLocal {
     // 定义一个 SqlSessionFactory Bean，依赖于 `localhostDataSource`
     @Bean
     @DependsOn("localhostDataSource")
-    public SqlSessionFactory localhostSqlSessionFactory() throws Exception {
+    public SqlSessionFactory localhostSqlSessionFactory() throws Exception
+    {
         SqlSessionFactoryBean factoryBean = new SqlSessionFactoryBean();
         // 设置数据源为 `localhostDataSource`
         factoryBean.setDataSource(localhostDataSource());

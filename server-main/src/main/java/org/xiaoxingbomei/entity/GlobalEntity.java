@@ -39,11 +39,17 @@ public class GlobalEntity<T> implements Serializable
     }
 
     // success-data
-    public GlobalEntity<T> success(T data)
+    public static <T>GlobalEntity<T> success(T data)
     {
-        this.data = data;
-        this.code = SUCCESS;
-        return this;
+        GlobalEntity globalEntity = new GlobalEntity(data, GlobalCodeEnum.SUCCESS.getCode(), GlobalCodeEnum.SUCCESS.getMessage(), "", "");
+        return globalEntity;
+    }
+
+    // success-data,businessMessage
+    public static <T>GlobalEntity<T> success(T data,String userMessage)
+    {
+        GlobalEntity globalEntity = new GlobalEntity(data, GlobalCodeEnum.SUCCESS.getCode(), GlobalCodeEnum.SUCCESS.getMessage(), userMessage, "");
+        return globalEntity;
     }
 
     // error-data
@@ -68,10 +74,17 @@ public class GlobalEntity<T> implements Serializable
         return globalEntity;
     }
 
-    // success-message
+    // error-message
     public static <T>GlobalEntity<T> error(String message)
     {
         GlobalEntity globalEntity = new GlobalEntity(null, GlobalCodeEnum.ERROR.getCode(), message, message, message);
+        return globalEntity;
+    }
+
+    // error-data,businessMessage
+    public static <T>GlobalEntity<T> error(T data,String userMessage)
+    {
+        GlobalEntity globalEntity = new GlobalEntity(data, GlobalCodeEnum.ERROR.getCode(), GlobalCodeEnum.ERROR.getMessage(), userMessage, "");
         return globalEntity;
     }
 

@@ -12,7 +12,7 @@ app:
   id: ysx
 apollo:
   cluster: app-dev
-  meta: http://10.4.175.108:8080
+  meta: http://localhost:8080
   prefix: apollo
   autoUpdateInjectedSpringProperties: true
   bootstrap:

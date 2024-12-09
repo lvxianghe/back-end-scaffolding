@@ -41,4 +41,5 @@ public class User implements Serializable
     @Desensitization(type = DesensitizationTypeEnum.CUSTOM_RULE,start = 0,end = 3)
     private String address;
 
+
 }

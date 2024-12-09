@@ -103,10 +103,10 @@
         </Root>
 
         <!-- dao层sql 记录器 -->
-<!--         <logger name="org.xiaoxingbomei.dao" level="DEBUG" additivity="false">-->
-<!--             <AppenderRef ref="Console"/>-->
-<!--             <AppenderRef ref="RollingMybatisFile"/>-->
-<!--         </logger>-->
+         <logger name="org.xiaoxingbomei.dao" level="DEBUG" additivity="false">
+             <AppenderRef ref="Console"/>
+             <AppenderRef ref="RollingMybatisFile"/>
+         </logger>
 
 <!--        <Logger name="org.mybatis" level="DEBUG" additivity="false">-->
 <!--            <AppenderRef ref="Console"/>-->

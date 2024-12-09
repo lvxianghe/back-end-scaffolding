@@ -124,14 +124,14 @@ public class ApiConstant
     /**
      * 业务：kakarot
      */
-    public class BusinessOfKakarot
+    public class Kakarot
     {
 
     }
     /**
      * 业务：xiaoxingbomei
      */
-    public class BusinessOfXiaoxingbomei
+    public class Xiaoxingbomei
     {
 
     }
@@ -139,60 +139,96 @@ public class ApiConstant
     /**
      * 业务：
      */
-    public class BusinessOfXxx3
+    public class Xxx3
     {
 
     }
 
 
-    public class Tech
+    /**
+     * 持续不断的学习
+     */
+    public class Study
     {
-        public static final String getTechLearningInfo  = "/tech/getTechLearningInfo";      // 获取技术学习信息
+        public static final String getTechLearningInfo          = "/study/getTechLearningInfo";          // 获取技术学习信息
 
-        public static final String mongodbOfInsert      = "/tech/mongodbOfInsert";          // mongodb-创建
-        public static final String mongodbOfMultiInsert = "/tech/mongodbOfMultiInsert";     // mongodb-批量创建
-        public static final String mongodbOfSave        = "/tech/mongodbOfSave";            // mongodb-创建
+        public static final String java_io_Xxx                  = "java_io_Xxx"; // java-io-
 
-        public static final String mongodbOfSearch      = "/tech/mongodbOfSearch";          // mongodb-查询
-        public static final String mongodbOfUpdate      = "/tech/mongodbOfUpdate";          // mongodb-修改
-        public static final String mongodbOfDelete      = "/tech/mongodbOfDelete";          // mongodb-删除
+        public static final String java_stream_Xxx              = "java_stream_Xxx"; // java-stream-
 
-        public static final String fastJsonOfXxx1       = "/tech/fastJsonTestOfXxx1";       // fastJson-
-        public static final String fastJsonOfXxx2       = "/tech/fastJsonTestOfXxx2";       // fastJson-
-        public static final String fastJsonOfXxx3       = "/tech/fastJsonTestOfXxx3";       // fastJson-
+        public static final String mongodb_Insert               = "/study/mongodb_Insert";               // mongodb-创建
+        public static final String mongodb_MultiInsert          = "/study/mongodb_MultiInsert";          // mongodb-批量创建
+        public static final String mongodb_Save                 = "/study/mongodb_Save";                 // mongodb-创
+        public static final String mongodb_Search               = "/study/mongodb_Search";               // mongodb-查询
+        public static final String mongodb_Update               = "/study/mongodb_Update";               // mongodb-修改
+        public static final String mongodb_Delete               = "/study/mongodb_Delete";               // mongodb-删除
 
-        public static final String redisOfStringGet     = "/tech/redisTestOfGet";           // redis-
-        public static final String redisOfStringSet     = "/tech/redisTestOfGet";           // redis-
+        public static final String fastJson_ObjectToJsonString  = "/study/fastJson_ObjectToJsonString";  // fastJson-对象转JSON字符串（序列化）
+        public static final String fastJson_JsonStringToObject  = "/study/fastJson_JsonStringToObject";  // fastJson-JSON字符串转对象（反序列化）
+        public static final String fastJson_PrettyPrint         = "/study/fastJson_PrettyPrint";         // fastJson-格式化JSON输出
+        public static final String fastJson_JSONStringToMap     = "/study/fastJson_JSONStringToMap";     // fastJson-JSON转为Map
+        public static final String fastJson_JSONStringToList    = "/study/fastJson_JSONStringToList";    // fastJson-JSON转为List
 
-        public static final String cookieOfCreate       = "/tech/cookieOfCreate";           // cookie-
-        public static final String cookieOfUpdate       = "/tech/cookieOfUpdate";           // cookie-
-        public static final String cookieOfSearch       = "/tech/cookieOfSearch";           // cookie-
-        public static final String cookieOfDelete       = "/tech/cookieOfDelete";           // cookie-
+        public static final String redis_StringSet              = "/study/redis_StringSet";              // redis-存储
+        public static final String redis_StringSetWithExpire    = "/study/redis_StringSetWithExpire";    // redis-存储携带过期时间
+        public static final String redis_StringGet              = "/study/redis_StringGet";              // redis-获取
+        public static final String redis_StringDelete           = "/study/redis_StringDelete";           // redis-删除
+        public static final String redis_StringIncr             = "/study/redis_StringIncr";             // redis-自增
+        public static final String redis_StringDecr             = "/study/redis_StringDecr";             // redis-自减
 
-        public static final String sessionOfCreate      = "/tech/sessionOfCreate";          // session-
-        public static final String sessionOfUpdate      = "/tech/sessionOfUpdate";          // session-
-        public static final String sessionOfSearch      = "/tech/sessionOfSearch";          // session-
-        public static final String sessionOfDelete      = "/tech/sessionOfDelete";          // session-
+        public static final String cookie_Create                = "/study/cookie_Create";                // cookie-
+        public static final String cookie_Update                = "/study/cookie_Update";                // cookie-
+        public static final String cookie_Search                = "/study/cookie_Search";                // cookie-
+        public static final String cookie_Delete                = "/study/cookie_Delete";                // cookie-
 
-        public static final String elasticsearchOfXxx   = "/tech/elasticsearchOfXxx";       // elasticsearch-
+        public static final String session_Create               = "/study/session_Create";               // session-
+        public static final String session_Update               = "/study/session_Update";               // session-
+        public static final String session_Search               = "/study/session_Search";               // session-
+        public static final String session_Delete               = "/study/session_Delete";               // session-
 
-        public static final String xxljobOfXxx          = "/tech/xxljobOfXxx";              // xxljob-
+        public static final String elasticsearch_Xxx            = "/study/elasticsearch_Xxx";  // elasticsearch-
 
-        public static final String camundaOfXxx         = "/tech/camundaOfXxx";             // camunda-
+        public static final String xxljob_Xxx                   = "/study/xxljob_Xxx";         // xxljob-
 
-        public static final String mybatisOfXxx         = "/tech/mybatisOfXxx";             // mybatis-
+        public static final String camunda_Xxx                  = "/study/camunda_Xxx";        // camunda-
 
-        public static final String feignOfXxx           = "/tech/feignOfXxx";               // feign-
+        public static final String mybatis_Xxx                  = "/study/mybatis_Xxx";        // mybatis-
 
-        public static final String streamOfXxx          = "/tech/streamOfXxx";              // stream-
+        public static final String mybatisplus_Xxx              = "/study/mybatisplus_Xxx";    // mybatisplus-
+
+        public static final String feign_Xxx                    = "/study/feign_Xxx";          // feign-
+
+        public static final String stream_Xxx                   = "/study/stream_Xxx";         // stream-
+
+        public static final String mapstruct_Xxx                = "/study/mapstruct_xx";       // mapstruct-
+
+        public static final String netty_Xxx                    = "/study/netty_Xxx";          // netty-
+
+        public static final String kafka_Xxx                    = "/study/kafka_Xxx";          // kafka-
+
+        public static final String rocketMq_Xxx                 = "/study/kafka_Xxx";          // kafka-
+
+        public static final String easyexcelplus_Xxx            = "/study/easyexcelplus_Xxx";  //
+
+        public static final String minio_createBucket           = "/study/minio_createBucket"; // minio-创建bucket
+        public static final String minio_searchBucket           = "/study/minio_searchBucket"; // minio-列出bucket和对象
+        public static final String minio_deleteBucket           = "/study/minio_deleteBucket"; // minio-删除bucket
+        public static final String minio_uploadFile             = "/study/minio_uploadFile";   // minio-上传文件
+        public static final String minio_downloadFile           = "/study/minio_downloadFile"; // minio-下载文件
+        public static final String minio_deleteFile             = "/study/minio_deleteFile";   // minio-删除文件
+     }
 
 
+    /**
+     * 算法
+     */
+    public class LeetCode
+    {
+        public static final String easy_1   = "/leetCode/easy_1"; //
 
+        public static final String normal_1 = "/leetCode/normal_1"; //
 
-
-
-
+        public static final String hard_1   = "/leetCode/hard_1"; //
     }
-
 
 }

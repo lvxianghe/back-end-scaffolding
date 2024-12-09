@@ -5,7 +5,9 @@ import org.xiaoxingbomei.Enum.OperateTypeEnum;
 import java.lang.annotation.*;
 
 /**
- * 自定义操作日志记录注解
+ * 异步落库日志
+ * 使用方法：将此注解用于落库日志的操作service之上，即可实现异步落库
+ * 实现方式：
  */
 @Target(ElementType.METHOD) // 注解只能用于方法
 @Retention(RetentionPolicy.RUNTIME) // 修饰注解的生命周期

@@ -12,7 +12,7 @@ app:
   id: ysx
 apollo:
   cluster: back_end_scaffolding
-  meta: http://192.168.226.1:8080
+  meta: http://localhost:8080
   autoUpdateInjectedSpringProperties: true
   bootstrap:
     enabled: true
