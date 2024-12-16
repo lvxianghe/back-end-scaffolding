@@ -2,7 +2,8 @@ package org.xiaoxingbomei.service;
 
 
 import org.xiaoxingbomei.dto.SystemAuthDto;
-import org.xiaoxingbomei.entity.GlobalEntity;
+
+import org.xiaoxingbomei.common.entity.GlobalEntity;
 
 /**
  * 权限 Service

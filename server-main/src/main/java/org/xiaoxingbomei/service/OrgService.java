@@ -1,9 +1,7 @@
 package org.xiaoxingbomei.service;
 
-import org.springframework.stereotype.Service;
+import org.xiaoxingbomei.common.entity.GlobalEntity;
 import org.xiaoxingbomei.controller.request.GetOrgInfoDto;
-import org.xiaoxingbomei.entity.GlobalEntity;
-import org.xiaoxingbomei.vo.Org;
 
 public interface OrgService
 {

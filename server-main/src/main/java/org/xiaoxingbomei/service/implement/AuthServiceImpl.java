@@ -8,11 +8,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.xiaoxingbomei.Enum.GlobalCodeEnum;
+import org.xiaoxingbomei.common.entity.GlobalEntity;
 import org.xiaoxingbomei.dto.SystemAuthDto;
-import org.xiaoxingbomei.entity.GlobalEntity;
 import org.xiaoxingbomei.service.AuthService;
 import org.xiaoxingbomei.utils.Redis_Utils;
-import org.xiaoxingbomei.utils.Request_Utils;
+import org.xiaoxingbomei.common.utils.Request_Utils;
 
 import java.util.List;
 import java.util.Random;

@@ -1,6 +1,5 @@
 package org.xiaoxingbomei.aspect;
 
-import lombok.extern.log4j.Log4j2;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -15,8 +14,8 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.xiaoxingbomei.Enum.GlobalCodeEnum;
 import org.xiaoxingbomei.annotation.ServiceSwitch;
+import org.xiaoxingbomei.common.entity.GlobalEntity;
 import org.xiaoxingbomei.constant.Constant;
-import org.xiaoxingbomei.entity.GlobalEntity;
 import org.xiaoxingbomei.exception.BusinessException;
 import org.xiaoxingbomei.utils.Redis_Utils;
 

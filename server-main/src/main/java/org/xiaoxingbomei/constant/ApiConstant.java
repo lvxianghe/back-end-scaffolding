@@ -156,6 +156,10 @@ public class ApiConstant
 
         public static final String java_stream_Xxx              = "java_stream_Xxx"; // java-stream-
 
+        public static final String java_multi_Xxx              = "java_multi_Xxx"; // java-并发-
+
+        public static final String java_Async_Xxx              = "java_Async_Xxx"; // java-异步-
+
         public static final String mongodb_Insert               = "/study/mongodb_Insert";               // mongodb-创建
         public static final String mongodb_MultiInsert          = "/study/mongodb_MultiInsert";          // mongodb-批量创建
         public static final String mongodb_Save                 = "/study/mongodb_Save";                 // mongodb-创
@@ -204,9 +208,10 @@ public class ApiConstant
 
         public static final String netty_Xxx                    = "/study/netty_Xxx";          // netty-
 
-        public static final String kafka_Xxx                    = "/study/kafka_Xxx";          // kafka-
+        public static final String kafka_Product                = "/study/kafka_Product";      // kafka-生产一条消息
+        public static final String kafka_Consume                = "/study/kafka_Consume";      // kafka-消费一条消息
 
-        public static final String rocketMq_Xxx                 = "/study/kafka_Xxx";          // kafka-
+        public static final String rocketMq_Xxx                 = "/study/rocketMq_Xxx";       // rocketMq-
 
         public static final String easyexcelplus_Xxx            = "/study/easyexcelplus_Xxx";  //
 
@@ -224,7 +229,8 @@ public class ApiConstant
      */
     public class LeetCode
     {
-        public static final String easy_1   = "/leetCode/easy_1"; //
+        public static final String easy_1       = "/leetCode/easy_1";   // 两数之和
+        public static final String easy_206     = "/leetCode/easy_206"; // 反转链表
 
         public static final String normal_1 = "/leetCode/normal_1"; //
 

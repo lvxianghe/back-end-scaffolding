@@ -10,7 +10,7 @@ import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 import org.xiaoxingbomei.annotation.NoGlobalEntity;
-import org.xiaoxingbomei.entity.GlobalEntity;
+import org.xiaoxingbomei.common.entity.GlobalEntity;
 import org.xiaoxingbomei.utils.Exception_Utils;
 
 

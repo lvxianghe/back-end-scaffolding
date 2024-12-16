@@ -7,9 +7,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import org.xiaoxingbomei.common.entity.GlobalEntity;
 import org.xiaoxingbomei.constant.ApiConstant;
 import org.xiaoxingbomei.controller.request.GetOrgInfoDto;
-import org.xiaoxingbomei.entity.GlobalEntity;
 import org.xiaoxingbomei.service.OrgService;
 
 import javax.validation.Valid;

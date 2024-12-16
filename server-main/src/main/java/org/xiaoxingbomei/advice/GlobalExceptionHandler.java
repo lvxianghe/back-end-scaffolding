@@ -6,7 +6,6 @@ import cn.dev33.satoken.util.SaResult;
 import com.fasterxml.jackson.databind.exc.MismatchedInputException;
 import lombok.EqualsAndHashCode;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.*;
 import org.springframework.beans.factory.BeanCreationException;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DuplicateKeyException;
@@ -16,13 +15,13 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.client.ResourceAccessException;
 import org.xiaoxingbomei.Enum.GlobalCodeEnum;
-import org.xiaoxingbomei.entity.GlobalEntity;
 import org.xiaoxingbomei.exception.BusinessException;
 import org.xiaoxingbomei.exception.UserException;
 import org.xiaoxingbomei.utils.Exception_Utils;
 
 import java.lang.reflect.UndeclaredThrowableException;
 import java.net.ConnectException;
+import org.xiaoxingbomei.common.entity.GlobalEntity;
 
 /**
  * 全局异常处理

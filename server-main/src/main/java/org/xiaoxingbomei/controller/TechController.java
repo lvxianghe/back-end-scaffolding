@@ -8,8 +8,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.xiaoxingbomei.constant.ApiConstant;
-import org.xiaoxingbomei.entity.GlobalEntity;
 import org.xiaoxingbomei.service.TechService;
+
+import org.xiaoxingbomei.common.entity.GlobalEntity;
 
 @Tag(name = "技术controller",description = "用于学习测试技术的controller")
 @RestController
@@ -149,6 +150,23 @@ public class TechController
         GlobalEntity ret = techService.redis_StringDecr(paramString);
         return ret;
     }
+
+    @Operation(summary = "kafka学习接口", description = "kafka-生产一条消息")
+    @RequestMapping(value = ApiConstant.Study.kafka_Product,method = RequestMethod.POST)
+    public GlobalEntity kafka_Product(@RequestBody String paramString)
+    {
+        GlobalEntity ret = techService.kafka_Product(paramString);
+        return ret;
+    }
+
+    @Operation(summary = "kafka学习接口", description = "kafka-消费一条消息")
+    @RequestMapping(value = ApiConstant.Study.kafka_Consume,method = RequestMethod.POST)
+    public GlobalEntity kafka_Consume(@RequestBody String paramString)
+    {
+        GlobalEntity ret = techService.kafka_Consume(paramString);
+        return ret;
+    }
+
 
     @Operation(summary = "minio学习接口", description = "minio-创建bucket")
     @RequestMapping(value = ApiConstant.Study.minio_createBucket,method = RequestMethod.POST)

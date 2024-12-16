@@ -1,4 +1,4 @@
-//package org.xiaoxingbomei.utils;
+package org.xiaoxingbomei.utils;//package org.xiaoxingbomei.utils;
 //
 //import com.google.common.hash.Funnels;
 //import com.google.common.hash.Hashing;

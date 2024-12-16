@@ -6,10 +6,10 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.xiaoxingbomei.Enum.GlobalCodeEnum;
+import org.xiaoxingbomei.common.entity.GlobalEntity;
 import org.xiaoxingbomei.config.apollo.ApolloProperties;
-import org.xiaoxingbomei.entity.GlobalEntity;
 import org.xiaoxingbomei.service.GlobalConfigService;
-import org.xiaoxingbomei.utils.Request_Utils;
+import org.xiaoxingbomei.common.utils.Request_Utils;
 
 import java.util.HashMap;
 import java.util.Map;

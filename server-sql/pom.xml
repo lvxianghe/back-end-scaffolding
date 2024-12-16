@@ -19,7 +19,13 @@
     </parent>
 
 
-
+    <dependencies>
+        <dependency>
+            <groupId>org.xiaoxingbomei</groupId>
+            <artifactId>server-common</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
 
 
 </project>

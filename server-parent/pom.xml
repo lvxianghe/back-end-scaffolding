@@ -40,6 +40,8 @@
         <druid.version>1.1.24</druid.version>
         <aliyun-sdk-oss.version>3.5.0</aliyun-sdk-oss.version>
         <minio-dsk.version>8.4.3</minio-dsk.version>
+        <kafka.client.version>2.8.2</kafka.client.version>
+        <spring-kafka.version>2.2.13.RELEASE</spring-kafka.version>
         <springdoc-openapi-ui.version>1.7.0</springdoc-openapi-ui.version>
         <swagger-core.version>2.2.12</swagger-core.version>
         <jakarta.mail-api.version>2.1.0</jakarta.mail-api.version>
@@ -66,6 +68,7 @@
         <module>../server-mq</module>
         <module>../server-es</module>
         <module>../server-sql</module>
+        <module>../server-common</module>
     </modules>
 
     <!-- 依赖管理 -->
@@ -143,6 +146,7 @@
 
     <!-- 依赖 -->
     <dependencies>
+
 
         <!--===================Spring依赖==================-->
 
@@ -286,6 +290,18 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-mongodb</artifactId>
         </dependency>
+
+        <!-- kafka -->
+        <dependency>
+            <groupId>org.springframework.kafka</groupId>
+            <artifactId>spring-kafka</artifactId>
+            <version>${spring-kafka.version}</version>
+        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>org.apache.kafka</groupId>-->
+<!--            <artifactId>kafka-clients</artifactId>-->
+<!--            <version>${kafka.client.version}</version>-->
+<!--        </dependency>-->
 
 
         <!--========== 工具 ========= -->
@@ -470,55 +486,39 @@
             </plugin>
 
 <!--             spring-boot-maven-plugin (提供了直接运行项目的插件：如果是通过parent方式继承spring-boot-starter-parent则不用此插件)-->
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-                <version>2.4.2</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>repackage</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
+<!--            <plugin>-->
+<!--                <groupId>org.springframework.boot</groupId>-->
+<!--                <artifactId>spring-boot-maven-plugin</artifactId>-->
+<!--                <version>2.4.2</version>-->
+<!--                <executions>-->
+<!--                    <execution>-->
+<!--                        <goals>-->
+<!--                            <goal>repackage</goal>-->
+<!--                        </goals>-->
+<!--                    </execution>-->
+<!--                </executions>-->
+<!--            </plugin>-->
 
 
-            <plugin>
-                <artifactId>maven-assembly-plugin</artifactId>
-                <configuration>
-                    <descriptors>
-                        <!--  -->
-                        <descriptor>assembly.xml</descriptor>
-                    </descriptors>
-                    <finalName>${project.artifactId}</finalName>
-                    <appendAssemblyId>false</appendAssemblyId>
-                </configuration>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>single</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-
-            <!-- dependency:tree -->
-            <!-- <plugin>-->
-            <!--     <groupId>org.apache.maven.plugins</groupId>-->
-            <!--     <artifactId>maven-dependency-plugin</artifactId>-->
-            <!--     <version>3.1.2</version>-->
-            <!--     <executions>-->
-            <!--         <execution>-->
-            <!--             <goals>-->
-            <!--                 <goal>tree</goal>-->
-            <!--             </goals>-->
-            <!--         </execution>-->
-            <!--     </executions>-->
-            <!-- </plugin>-->
-
-
+<!--            <plugin>-->
+<!--                <artifactId>maven-assembly-plugin</artifactId>-->
+<!--                <configuration>-->
+<!--                    <descriptors>-->
+<!--                        &lt;!&ndash;  &ndash;&gt;-->
+<!--                        <descriptor>assembly.xml</descriptor>-->
+<!--                    </descriptors>-->
+<!--                    <finalName>${project.artifactId}</finalName>-->
+<!--                    <appendAssemblyId>false</appendAssemblyId>-->
+<!--                </configuration>-->
+<!--                <executions>-->
+<!--                    <execution>-->
+<!--                        <phase>package</phase>-->
+<!--                        <goals>-->
+<!--                            <goal>single</goal>-->
+<!--                        </goals>-->
+<!--                    </execution>-->
+<!--                </executions>-->
+<!--            </plugin>-->
 
         </plugins>
 

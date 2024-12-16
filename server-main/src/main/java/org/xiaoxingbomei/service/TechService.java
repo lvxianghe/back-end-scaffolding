@@ -1,6 +1,6 @@
 package org.xiaoxingbomei.service;
 
-import org.xiaoxingbomei.entity.GlobalEntity;
+import org.xiaoxingbomei.common.entity.GlobalEntity;
 
 public interface TechService
 {
@@ -24,6 +24,9 @@ public interface TechService
     public GlobalEntity redis_StringDelete       (String paramString);
     public GlobalEntity redis_StringIncr         (String paramString);
     public GlobalEntity redis_StringDecr         (String paramString);
+
+    public GlobalEntity kafka_Product(String paramString);
+    public GlobalEntity kafka_Consume(String paramString);
 
     public GlobalEntity minio_createBucket(String paramString);
     public GlobalEntity minio_searchBucket(String paramString);

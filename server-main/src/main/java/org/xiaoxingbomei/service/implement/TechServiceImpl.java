@@ -6,32 +6,31 @@ import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import io.minio.*;
 import io.minio.messages.Bucket;
-import io.minio.messages.Item;
-import jdk.nashorn.internal.objects.Global;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.kafka.clients.consumer.ConsumerRecord;
+import org.apache.kafka.clients.consumer.ConsumerRecords;
+import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.xiaoxingbomei.config.minio.MinioConfig;
-import org.xiaoxingbomei.entity.GlobalEntity;
 import org.xiaoxingbomei.service.TechService;
 import org.xiaoxingbomei.utils.Exception_Utils;
-import org.xiaoxingbomei.utils.Minio_Utils;
-import org.xiaoxingbomei.utils.Redis_Utils;
-import org.xiaoxingbomei.utils.Request_Utils;
 import org.xiaoxingbomei.vo.User;
 
 import java.io.FileOutputStream;
 import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
+import org.xiaoxingbomei.common.entity.GlobalEntity;
+import org.xiaoxingbomei.utils.Minio_Utils;
+import org.xiaoxingbomei.utils.Redis_Utils;
+import org.xiaoxingbomei.common.utils.Request_Utils;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -54,9 +53,9 @@ public class TechServiceImpl implements TechService
     @Qualifier("mongoTemplateOfLocal")
     private MongoTemplate mongoTemplateOfLocal;
 
-//    @Autowired
-//    @Qualifier("mongoTemplateOfDgs")
-//    private MongoTemplate mongoTemplateOfDgs;
+    // @Autowired
+    // @Qualifier("mongoTemplateOfDgs")
+    // private MongoTemplate mongoTemplateOfDgs;
 
     @Autowired
     private Redis_Utils redisUtils;
@@ -67,7 +66,11 @@ public class TechServiceImpl implements TechService
     @Autowired
     private MinioConfig minioConfig;
 
+    @Autowired
+    private KafkaTemplate<String, String> kafkaTemplate;
 
+    @Autowired
+    private KafkaConsumer<String,String> kafkaConsumer;
 
 
     @Override
@@ -75,8 +78,8 @@ public class TechServiceImpl implements TechService
     {
         User user = JSONObject.parseObject(paramString, User.class);
 
-//        String name = mongoTemplateOfDgs.getDb().getName();
-//        log.info("dgs database name:{}",name);
+    //  String name = mongoTemplateOfDgs.getDb().getName();
+    //  log.info("dgs database name:{}",name);
 
         mongoTemplateOfLocal.insert(user);
 
@@ -378,6 +381,56 @@ public class TechServiceImpl implements TechService
         HashMap<Object, Object> resultMap = new HashMap<>();
         resultMap.put("decrement",decrement);
         return GlobalEntity.success(resultMap,"redis-String自减");
+    }
+
+    @Override
+    public GlobalEntity kafka_Product(String paramString)
+    {
+        // 1、接收前端参数
+        String topic    = Request_Utils.getParam(paramString, "topic");
+        String message  = Request_Utils.getParam(paramString, "message");
+
+        // 2、
+        kafkaTemplate.send(topic,message);
+        log.info("kafka produced message:{}"+message);
+
+        // 3、
+        HashMap<String, Object> resultMap = new HashMap<>();
+        resultMap.put("successFlag",true);
+        resultMap.put("message",message);
+        resultMap.put("topic",topic);
+        return GlobalEntity.success(resultMap,"kafka-生产消息-成功");
+    }
+
+    @Override
+    public GlobalEntity kafka_Consume(String paramString)
+    {
+        // 1、接收前端参数
+        String topic = Request_Utils.getParam(paramString, "topic");
+        kafkaConsumer.subscribe(Arrays.asList(topic)); // 订阅指定的topic
+
+        // 2、消费kafka消息
+        boolean consumeFlag = true;
+        while (consumeFlag)
+        {
+            ConsumerRecords<String, String> records = kafkaConsumer.poll(1000); // 拉取消息，等待1000毫秒
+            for (ConsumerRecord<String, String> record : records)
+            {
+                log.info
+                        ("消费到消息: topic={},partition={},offset={},key={},value={}",
+                        record.topic(),
+                        record.partition(),
+                        record.offset(),
+                        record.key(),
+                        record.value()
+                        );
+                consumeFlag = false;
+            }
+        }
+
+        // 3、构建反参
+        HashMap<String, Object> resultMap = new HashMap<>();
+        return GlobalEntity.success("kafka-消費消息-成功");
     }
 
     @Override

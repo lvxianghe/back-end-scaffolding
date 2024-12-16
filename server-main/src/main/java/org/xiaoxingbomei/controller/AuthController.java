@@ -10,8 +10,9 @@ import org.xiaoxingbomei.annotation.ServiceSwitch;
 import org.xiaoxingbomei.constant.ApiConstant;
 import org.xiaoxingbomei.constant.Constant;
 import org.xiaoxingbomei.dto.SystemAuthDto;
-import org.xiaoxingbomei.entity.GlobalEntity;
 import org.xiaoxingbomei.service.AuthService;
+
+import org.xiaoxingbomei.common.entity.GlobalEntity;
 
 /**
  * 集成sa-token，权限controller

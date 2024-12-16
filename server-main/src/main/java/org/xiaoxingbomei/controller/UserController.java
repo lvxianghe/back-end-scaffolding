@@ -4,10 +4,9 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.xiaoxingbomei.annotation.Desensitization;
 import org.xiaoxingbomei.annotation.ServiceSwitch;
+import org.xiaoxingbomei.common.entity.GlobalEntity;
 import org.xiaoxingbomei.constant.Constant;
-import org.xiaoxingbomei.entity.GlobalEntity;
 import org.xiaoxingbomei.vo.User;
 
 /**

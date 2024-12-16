@@ -3,9 +3,9 @@ package org.xiaoxingbomei.service.implement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.xiaoxingbomei.Enum.GlobalCodeEnum;
+import org.xiaoxingbomei.common.entity.GlobalEntity;
 import org.xiaoxingbomei.controller.request.GetOrgInfoDto;
 import org.xiaoxingbomei.dao.localhost.OrgMapper;
-import org.xiaoxingbomei.entity.GlobalEntity;
 import org.xiaoxingbomei.service.OrgService;
 
 import java.util.List;

@@ -1,6 +1,6 @@
 package org.xiaoxingbomei.service;
 
-import org.xiaoxingbomei.entity.GlobalEntity;
+import org.xiaoxingbomei.common.entity.GlobalEntity;
 
 /**
  * 配置config
