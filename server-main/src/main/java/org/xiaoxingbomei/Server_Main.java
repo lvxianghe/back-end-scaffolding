@@ -12,6 +12,7 @@ import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.core.env.Environment;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
+import org.xiaoxingbomei.config.springboot.MyBanner;
 
 
 import java.net.InetAddress;
@@ -32,8 +33,16 @@ public class Server_Main
         //
         long start = System.currentTimeMillis();
 
+        // 创建SpringApplication实例
+        SpringApplication app = new SpringApplication(Server_Main.class);
+
+        // 设置自定义的banner
+        app.setBanner(new MyBanner());
+
+        // 启动springboot应用并获取上下文
+        ConfigurableApplicationContext application  = app.run(args);
+
         //
-        ConfigurableApplicationContext application  = SpringApplication.run(Server_Main.class, args);
         Environment env                             = application.getEnvironment();
         String ip                                   = InetAddress.getLocalHost().getHostAddress();
         String applicationName                      = env.getProperty("spring.application.name");

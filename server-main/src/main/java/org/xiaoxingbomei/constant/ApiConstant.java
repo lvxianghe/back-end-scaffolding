@@ -156,9 +156,15 @@ public class ApiConstant
 
         public static final String java_stream_Xxx              = "java_stream_Xxx"; // java-stream-
 
-        public static final String java_multi_Xxx              = "java_multi_Xxx"; // java-并发-
+        public static final String java_multi_Xxx0              = "java_multi_Xxx0"; // java-并发-创建线程（）
+        public static final String java_multi_Xxx1              = "java_multi_Xxx1"; // java-并发-创建线程（）
+        public static final String java_multi_Xxx2              = "java_multi_Xxx2"; // java-并发-创建线程（）
+        public static final String java_multi_Xxx3              = "java_multi_Xxx3"; // java-并发-创建线程（）
+        public static final String java_multi_Xxx4              = "java_multi_Xxx4"; // java-并发-创建线程（）
+        public static final String java_multi_Xxx5              = "java_multi_Xxx5"; // java-并发-创建线程（）
+        public static final String java_multi_Xxx6              = "java_multi_Xxx6"; // java-并发-创建线程（）
 
-        public static final String java_Async_Xxx              = "java_Async_Xxx"; // java-异步-
+        public static final String java_Async_Xxx               = "java_Async_Xxx"; // java-异步-
 
         public static final String mongodb_Insert               = "/study/mongodb_Insert";               // mongodb-创建
         public static final String mongodb_MultiInsert          = "/study/mongodb_MultiInsert";          // mongodb-批量创建
@@ -180,17 +186,29 @@ public class ApiConstant
         public static final String redis_StringIncr             = "/study/redis_StringIncr";             // redis-自增
         public static final String redis_StringDecr             = "/study/redis_StringDecr";             // redis-自减
 
-        public static final String cookie_Create                = "/study/cookie_Create";                // cookie-
-        public static final String cookie_Update                = "/study/cookie_Update";                // cookie-
-        public static final String cookie_Search                = "/study/cookie_Search";                // cookie-
-        public static final String cookie_Delete                = "/study/cookie_Delete";                // cookie-
+        public static final String cookie_create                = "/study/cookie_create";                // cookie-创建
+        public static final String cookie_update                = "/study/cookie_update";                // cookie-修改
+        public static final String cookie_search                = "/study/cookie_search";                // cookie-查询
+        public static final String cookie_delete                = "/study/cookie_delete";                // cookie-删除
 
-        public static final String session_Create               = "/study/session_Create";               // session-
-        public static final String session_Update               = "/study/session_Update";               // session-
-        public static final String session_Search               = "/study/session_Search";               // session-
-        public static final String session_Delete               = "/study/session_Delete";               // session-
+        public static final String session_create               = "/study/session_create";               // session-创建
+        public static final String session_update               = "/study/session_update";               // session-修改
+        public static final String session_search               = "/study/session_search";               // session-查询
+        public static final String session_delete               = "/study/session_delete";               // session-删除
 
-        public static final String elasticsearch_Xxx            = "/study/elasticsearch_Xxx";  // elasticsearch-
+        public static final String elasticsearch_createIndex         = "/study/elasticsearch_createIndex";         // elasticsearch-创建索引
+        public static final String elasticsearch_deleteIndex         = "/study/elasticsearch_deleteIndex";         // elasticsearch-删除索引
+        public static final String elasticsearch_insertDocument      = "/study/elasticsearch_insertDocument";      // elasticsearch-插入单条数据
+        public static final String elasticsearch_getDocument         = "/study/elasticsearch_getDocument";         // elasticsearch-查询单条数据
+        public static final String elasticsearch_deleteDocument      = "/study/elasticsearch_deleteDocument";      // elasticsearch-删除单条数据
+        public static final String elasticsearch_updateDocument      = "/study/elasticsearch_updateDocument";      // elasticsearch-更新单条文档
+        public static final String elasticsearch_bulkInsertDocument  = "/study/elasticsearch_bulkInsertDocument";  // elasticsearch-更新文档
+        public static final String elasticsearch_batchDeleteDocument = "/study/elasticsearch_batchDeleteDocument"; // elasticsearch-批量删除文档
+        public static final String elasticsearch_match               = "/study/elasticsearch_match";               // elasticsearch-match查询
+        public static final String elasticsearch_term                = "/study/elasticsearch_term";                // elasticsearch-term查询
+        public static final String elasticsearch_bool                = "/study/elasticsearch_bool";                // elasticsearch-bool查询
+        public static final String elasticsearch_highlight           = "/study/elasticsearch_highlight";           // elasticsearch-高亮显示
+        public static final String elasticsearch_multimatch          = "/study/elasticsearch_multimatch";          // elasticsearch-multimatch
 
         public static final String xxljob_Xxx                   = "/study/xxljob_Xxx";         // xxljob-
 
@@ -213,14 +231,17 @@ public class ApiConstant
 
         public static final String rocketMq_Xxx                 = "/study/rocketMq_Xxx";       // rocketMq-
 
-        public static final String easyexcelplus_Xxx            = "/study/easyexcelplus_Xxx";  //
-
         public static final String minio_createBucket           = "/study/minio_createBucket"; // minio-创建bucket
         public static final String minio_searchBucket           = "/study/minio_searchBucket"; // minio-列出bucket和对象
         public static final String minio_deleteBucket           = "/study/minio_deleteBucket"; // minio-删除bucket
         public static final String minio_uploadFile             = "/study/minio_uploadFile";   // minio-上传文件
         public static final String minio_downloadFile           = "/study/minio_downloadFile"; // minio-下载文件
         public static final String minio_deleteFile             = "/study/minio_deleteFile";   // minio-删除文件
+
+        public static final String fastexcel_downloadExcel      = "/study/fastexcel_downloadExcel"; // fastexcel-下载模板
+        public static final String fastexcel_uploadExcel        = "/study/fastexcel_uploadExcel";   // fastexcel-上传文件
+        public static final String fastexcel_ReadExcel          = "/study/fastexcel_ReadExcel";     // fastexcel-读取excel文件
+        public static final String fastexcel_CreateExcel        = "/study/fastexcel_CreateExcel";   // fastexcel-创建excel文件
      }
 
 
@@ -230,6 +251,7 @@ public class ApiConstant
     public class LeetCode
     {
         public static final String easy_1       = "/leetCode/easy_1";   // 两数之和
+        public static final String easy_136     = "/leetCode/easy_136"; // 只出现一次的数字
         public static final String easy_206     = "/leetCode/easy_206"; // 反转链表
 
         public static final String normal_1 = "/leetCode/normal_1"; //

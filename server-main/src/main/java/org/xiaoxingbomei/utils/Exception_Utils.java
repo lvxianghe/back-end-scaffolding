@@ -25,8 +25,8 @@ public class Exception_Utils
     {
         StringBuilder sb        = new StringBuilder();  //
         ForwardCounter counter  = new ForwardCounter(); //
-        int causeDepth = 5;     // 递归打印的cause的最大深度
-        int stackDepth = 5;     // 每一个异常栈的打印深度
+        int causeDepth = 15;     // 递归打印的cause的最大深度
+        int stackDepth = 15;     // 每一个异常栈的打印深度
         recursiveReversePrintStackCause(t,causeDepth,counter,stackDepth,sb);
         log.error("\n---------------------reverse exception stackTrace begin---------------------\n");
         log.error("\n" +sb.toString());
