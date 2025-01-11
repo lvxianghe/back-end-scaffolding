@@ -15,11 +15,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.minio.*;
 import io.minio.http.Method;
 import io.minio.messages.Bucket;
+import jdk.nashorn.internal.objects.Global;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
+import org.jcodings.util.Hash;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -28,8 +30,10 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import org.xiaoxingbomei.config.Thread.DynamicThreadPool;
 import org.xiaoxingbomei.config.fastexcel.CommonLogUploadDataListener;
 import org.xiaoxingbomei.config.minio.MinioConfig;
+import org.xiaoxingbomei.entity.DynamicLinkedBlockingQueue;
 import org.xiaoxingbomei.service.TechService;
 import org.xiaoxingbomei.utils.ES_Utils;
 import org.xiaoxingbomei.utils.Exception_Utils;
@@ -49,7 +53,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.*;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -93,8 +97,300 @@ public class TechServiceImpl implements TechService
     @Autowired
     private ES_Utils esUtils;
 
+    @Autowired
+    private DynamicThreadPool threadPool;
+
     // @Autowired
     // private RestHighLevelClient restHighLevelClient;
+
+    // ==============================================================================================
+
+
+    @Override
+    public GlobalEntity java_multi_createThreadByThread(String paramString)
+    {
+
+        // 1、定义一个线程类
+        Thread thread = new Thread()
+        {
+            @Override
+            public void run()
+            {
+                log.info("thread by thread is running~");
+            }
+        };
+        log.info("主线程 is running~");
+
+        // 2、启动线程
+        thread.start();
+
+        // 3、创建返回结果
+        HashMap<String, Object> resultMap = new HashMap<>();
+        return GlobalEntity.success("使用thread创建线程成功，简洁但不灵活，不支持结果返回，受单继承限制，适用于简单场景下快速实现线程" +
+                "thread是java中对线程的封装，底层调用本地方法（JNI调用）" +
+                "thread负责启动和管理线程");
+    }
+
+    @Override
+    public GlobalEntity java_multi_createThreadByRunnable(String paramString)
+    {
+        // 1、创建runnable对象
+        Runnable runnable = () ->
+        {
+            log.info("thread by Runnable is running~");
+        };
+
+        // 2、用thread包装runnable
+        Thread thread = new Thread(runnable);
+        log.info("主线程 is running~");
+
+        // 3、启动线程
+        thread.start();
+
+        // 4、创建返回结果
+        HashMap<String, Object> resultMap = new HashMap<>();
+        return GlobalEntity.success(
+                "通过Runnable创建线程成功，简洁灵活，解耦线程逻辑和运行机制，且不受单继承限制，适合不需要返回结果的线程任务" +
+                "Runnable本质是一个任务逻辑，thread接收一个runnable对象，并执行它的run方法" +
+                        "runnable只是逻辑的载体，本身不负责线程的生命周期");
+    }
+
+    @Override
+    public GlobalEntity java_multi_createThreadByCallable(String paramString)
+    {
+        // 1、创建callable
+        Callable<String> task = () ->
+        {
+            log.info("thread by Callable is running~");
+            return "Callable create thread result";
+        };
+
+        // 2、用futuretask包装callable
+        FutureTask<String> futureTask = new FutureTask<>(task);
+        Thread thread = new Thread(futureTask);
+        thread.start();
+
+        // 3、执行线程并获取callable的返回结果
+        HashMap<String, Object> resultMap = new HashMap<>();
+        try
+        {
+            String futureTaskResult = futureTask.get();
+            resultMap.put("futureTaskResult", futureTaskResult);
+        } catch (Exception e)
+        {
+            Exception_Utils.recursiveReversePrintStackCauseCommon(e);
+            return GlobalEntity.error("通过callable创建线程失败：{}",e.getMessage());
+        }
+
+        // 4、创建返回结果
+        return GlobalEntity.success(resultMap,
+                "通过callable创建线程成功，复杂但灵活，支持返回结果和异常处理，适用于任务需要返回值或抛出异常的场景" +
+                "Callable是一个支持返回结果的任务，本质通过futuretask封装，并调用futuretask.run()" +
+                        "Callable只是逻辑的载体，本身不负责线程的生命周期，并且是runnable的扩展（携带返回值和异常支持）");
+    }
+
+    @Override
+    public GlobalEntity java_multi_createThreadByThreadPool(String paramString)
+    {
+        // 创建一个固定大小的线程池
+        ExecutorService executorService = Executors.newFixedThreadPool(3);
+
+        // 提交多个任务到线程池
+        for (int i = 0; i < 5; i++)
+        {
+            int tastId = i;
+            executorService.submit
+                    (
+                            () -> log.info("Task-"+tastId+"executed by threadName"+Thread.currentThread().getName()+"threadId"+Thread.currentThread().getId())
+                    );
+        }
+
+        // 关闭线程池
+        executorService.shutdown();
+
+        // 创建结果反参
+        HashMap<String, Object> resultMap = new HashMap<>();
+
+        return GlobalEntity.success(resultMap,
+                "通过线程池创建线程成功，高效且灵活，资源复用、减少开销且管理方便，需要额外维护线程池，适用于高并发场景频繁执行短时间任务" +
+                "线程池是基于thread和runnable封装，底层通过blockingqueue管理任务队列，线程池内容维护多个线程，反复取出任务执行" +
+                "线程池本质是多个thread组合，通过任务队列管理任务分发，避免频繁创建和销毁线程" +
+                        "所有创建现成的方式最终都会调用Thread类的底层方法来启动线程，底层使用操作系统原生线程API");
+    }
+
+    @Override
+    public GlobalEntity java_multi_threadStateNew(String paramString)
+    {
+        //
+        Thread thread = new Thread
+                (
+                        ()->
+                        {
+                            log.info("thread is in NEW state");
+                        }
+                );
+        Thread.State threadState = thread.getState();
+        HashMap<String, Object> resultMap = new HashMap<>();
+        resultMap.put("threadState", threadState);
+        return GlobalEntity.success(resultMap,"java线程状态-NEW");
+    }
+
+    @Override
+    public GlobalEntity java_multi_threadStateRunnable(String paramString)
+    {
+        HashMap<String, Object> resultMap = new HashMap<>();
+
+        // 创建线程
+        Thread thread = new Thread
+                (
+                        ()->
+                        {
+                            while (true)
+                            {
+                                log.info("thread is in RUNNABLE state");
+                            }
+                        }
+                );
+        try
+        {
+            thread.start();
+            thread.sleep(100); // 确保线程启动
+            Thread.State threadState = thread.getState();
+            resultMap.put("threadState", threadState);
+        } catch (InterruptedException e)
+        {
+            Exception_Utils.recursiveReversePrintStackCauseCommon(e);
+            return GlobalEntity.error("");
+        }
+
+        return GlobalEntity.success(resultMap,"java线程状态-RUNNABLE");
+    }
+
+    @Override
+    public GlobalEntity java_multi_threadStateBlocked(String paramString)
+    {
+        return null;
+    }
+
+    @Override
+    public GlobalEntity java_multi_threadStateWaiting(String paramString)
+    {
+        return null;
+    }
+
+    @Override
+    public GlobalEntity java_multi_threadStateTimedWaiting(String paramString)
+    {
+        return null;
+    }
+
+    @Override
+    public GlobalEntity java_multi_threadStateTerminated(String paramString)
+    {
+        return null;
+    }
+
+    @Override
+    public GlobalEntity dynamicThreadPool_create(String paramString)
+    {
+        // 1、接收前端参数
+        Integer corePoolSize     = Integer.parseInt(Request_Utils.getParam(paramString, "corePoolSize"));
+        Integer maximumPoolSize  = Integer.parseInt(Request_Utils.getParam(paramString, "maximumPoolSize"));
+        Integer queueCapacity    = Integer.parseInt(Request_Utils.getParam(paramString, "queueCapacity"));
+
+        // 2、创建线程池、
+        HashMap<String, Object> resultMap = new HashMap<>();
+        if(threadPool==null)
+        {
+            resultMap.put("createResult","fail");
+            return GlobalEntity.error(resultMap,"手动创建动态线程池成功,线程池已存在");
+        }
+
+        threadPool = new DynamicThreadPool(corePoolSize, maximumPoolSize, 60L, TimeUnit.SECONDS, new DynamicLinkedBlockingQueue<>(queueCapacity));
+
+        threadPool.printThreadPoolStatus();
+        String threadPoolStatus = threadPool.getThreadPoolStatus();
+
+        // 3、手动销毁线程池
+        // threadPool.shutdown();
+
+        // 4、创建结果反参
+
+        resultMap.put("threadPoolStatus", threadPoolStatus);
+        resultMap.put("createResult","success");
+        return GlobalEntity.success(resultMap,"手动创建动态线程池成功");
+    }
+
+    @Override
+    public GlobalEntity dynamicThreadPool_update(String paramString)
+    {
+        // 1、获取前端参数
+        Integer corePoolSize     = Integer.parseInt(Request_Utils.getParam(paramString, "corePoolSize"));
+        Integer maximumPoolSize  = Integer.parseInt(Request_Utils.getParam(paramString, "maximumPoolSize"));
+        Integer queueCapacity    = Integer.parseInt(Request_Utils.getParam(paramString, "queueCapacity"));
+
+        // 2、尝试更新线程池
+        HashMap<String, Object> resultMap = new HashMap<>();
+        if(threadPool==null || threadPool.isShutdown() || threadPool.isTerminated())
+        {
+            resultMap.put("updateResult","fail");
+            return GlobalEntity.error(resultMap,"线程池不存在");
+        }
+        String threadPoolStatusBefore = threadPool.getThreadPoolStatus();
+        threadPool.printThreadPoolStatus();
+        resultMap.put("threadPoolStatusBefore", threadPoolStatusBefore);
+
+        threadPool.updateCorePoolSize(corePoolSize);
+        threadPool.updateMaximumPoolSize(maximumPoolSize);
+
+        String threadPoolStatusAfter = threadPool.getThreadPoolStatus();
+        threadPool.printThreadPoolStatus();
+        resultMap.put("threadPoolStatusAfter", threadPoolStatusAfter);
+        resultMap.put("updateResult","success");
+        return GlobalEntity.success(resultMap,"更新动态线程池参数成功");
+    }
+
+    @Override
+    public GlobalEntity dynamicThreadPool_get(String paramString)
+    {
+        HashMap<String, Object> resultMap = new HashMap<>();
+        if(threadPool==null)
+        {
+            resultMap.put("getResult","fail");
+            return GlobalEntity.error(resultMap,"线程池不存在");
+        }
+        String threadPoolStatus = threadPool.getThreadPoolStatus();
+
+        resultMap.put("threadPoolStatus", threadPoolStatus);
+        return GlobalEntity.success(resultMap,"获取动态线程池参数成功");
+    }
+
+    @Override
+    public GlobalEntity dynamicThreadPool_delete(String paramString)
+    {
+        HashMap<String, Object> resultMap = new HashMap<>();
+        if(threadPool==null || threadPool.isShutdown() || threadPool.isTerminated())
+        {
+            resultMap.put("deleteResult","fail");
+            return GlobalEntity.error(resultMap,"线程池不存在或已注销,无需销毁");
+        }
+        String threadPoolStatus = threadPool.getThreadPoolStatus();
+        resultMap.put("threadPoolStatus", threadPoolStatus);
+        threadPool.shutdown();
+        resultMap.put("deleteResult","success");
+        return GlobalEntity.success(resultMap,"销毁动态线程池成功");
+    }
+
+    /**
+     * 状态               描述
+     * NEW              新建状态，线程被创建但尚未启动，调用 Thread t = new Thread() 时进入此状态。
+     * RUNNABLE         可运行状态，线程已经启动并准备被 CPU 调度执行，调用 start() 后进入该状态。
+     * BLOCKED          阻塞状态，线程尝试进入一个被其他线程锁定的同步块或方法时会进入该状态（如等待锁释放）。
+     * WAITING          无限期等待状态，线程在没有超时的情况下等待其他线程的通知，调用 wait()、join() 或 park() 时进入此状态。
+     * TIMED_WAITING    有限期等待状态，线程在指定时间内等待其他线程的通知，调用 sleep()、join(timeout) 或 wait(timeout) 等方法时进入此状态。
+     * TERMINATED       终止状态，线程执行完成或因异常结束后进入此状态。
+     */
+
 
 
     @Override
@@ -119,7 +415,6 @@ public class TechServiceImpl implements TechService
 
         if(!CollectionUtil.isEmpty(users))
         {
-
             mongoTemplateOfLocal.insert(users,User.class);
         }
         else
@@ -171,7 +466,6 @@ public class TechServiceImpl implements TechService
         resultMap.put("resultJSONStirngPrettified",jsonStringPrettified);
 
         return GlobalEntity.success(resultMap,"fastjson-序列化,将一个对象转为jsonString");
-
     }
 
     @Override
@@ -315,10 +609,11 @@ public class TechServiceImpl implements TechService
 
         // 3、查询对应的rediskey，循环封装进hashmap中
         Map<String, Object> resultMap = redisStringKeyList.stream()
-                .collect(Collectors.toMap(
+                .collect(Collectors.toMap
+                        (
                         key -> key,
                         key -> redisTemplate.opsForValue().get(key)
-                ));
+                        ));
 
         // 4、封装结果对象
         return GlobalEntity.success(resultMap,"redis-String获取");
@@ -405,6 +700,131 @@ public class TechServiceImpl implements TechService
         HashMap<Object, Object> resultMap = new HashMap<>();
         resultMap.put("decrement",decrement);
         return GlobalEntity.success(resultMap,"redis-String自减");
+    }
+
+    @Override
+    public GlobalEntity redis_hashSave(String paramString)
+    {
+        // 1、判断redis连接状态，如果redis挂了就没必要进行了
+        if(!redisUtils.isRedisConnected())
+        {
+            return GlobalEntity.error("redis暂不可用");
+        }
+
+        // 2、接收前端参数
+        String key      = Request_Utils.getParam(paramString, "key");
+        String hashKey  = Request_Utils.getParam(paramString, "hashKey");
+        String value    = Request_Utils.getParam(paramString, "value");
+
+        // 3、执行 redis hash 操作存储数据
+        redisTemplate.opsForHash().put(key,hashKey,value);
+
+        // 4、封装返回体
+        HashMap<String, Object> resultMap = new HashMap<>();
+        resultMap.put("saveResult","success");
+        resultMap.put("key",key);
+        resultMap.put("hashKey",hashKey);
+        resultMap.put("value",value);
+
+        return GlobalEntity.success(resultMap,"redis-hash存储成功");
+    }
+
+    @Override
+    public GlobalEntity redis_hashFind(String paramString)
+    {
+        // 1、判断redis连接状态，如果redis挂了就没必要进行了
+        if(!redisUtils.isRedisConnected())
+        {
+            return GlobalEntity.error("redis暂不可用");
+        }
+
+        // 2、接收前端参数
+        String key      = Request_Utils.getParam(paramString, "key");
+        String hashKey  = Request_Utils.getParam(paramString, "hashKey");
+
+        // 3、执行 redis hash 操作查询数据
+        Object value = redisTemplate.opsForHash().get(key, hashKey);
+
+        // 4、封装返回体
+        HashMap<String, Object> resultMap = new HashMap<>();
+        resultMap.put("saveResult","success");
+        resultMap.put("key",key);
+        resultMap.put("hashKey",hashKey);
+        resultMap.put("value",value);
+
+        return GlobalEntity.success(resultMap,"redis-hash查询成功");
+    }
+
+    @Override
+    public GlobalEntity redis_hashFindAll(String paramString)
+    {
+        // 1、判断redis连接状态，如果redis挂了就没必要进行了
+        if(!redisUtils.isRedisConnected())
+        {
+            return GlobalEntity.error("redis暂不可用");
+        }
+
+        // 2、接收前端参数
+        String key      = Request_Utils.getParam(paramString, "key");
+
+        // 3、执行 redis hash 操作 查询全部数据
+        Map<Object,Object> entries = redisTemplate.opsForHash().entries(key);
+
+        // 4、封装返回体
+        HashMap<String, Object> resultMap = new HashMap<>();
+        resultMap.put("saveResult","success");
+        resultMap.put("key",key);
+        resultMap.put("value",entries.toString());
+
+        return GlobalEntity.success(resultMap,"redis-hash查询全部成功");
+    }
+
+    @Override
+    public GlobalEntity redis_hashDelete(String paramString)
+    {
+        // 1、判断redis连接状态，如果redis挂了就没必要进行了
+        if(!redisUtils.isRedisConnected())
+        {
+            return GlobalEntity.error("redis暂不可用");
+        }
+
+        // 2、接收前端参数
+        String key      = Request_Utils.getParam(paramString, "key");
+        String hashKey  = Request_Utils.getParam(paramString, "hashKey");
+
+        // 3、执行 redis hash 操作 删除指定数据
+        redisTemplate.opsForHash().delete(key,hashKey);
+
+        // 4、封装返回体
+        HashMap<String, Object> resultMap = new HashMap<>();
+        resultMap.put("deleteResult","success");
+        resultMap.put("key",key);
+        resultMap.put("hashKey",hashKey);
+
+        return GlobalEntity.success(resultMap,"redis-hash删除指定数据成功");
+    }
+
+    @Override
+    public GlobalEntity redis_hashDeleteAll(String paramString)
+    {
+        // 1、判断redis连接状态，如果redis挂了就没必要进行了
+        if(!redisUtils.isRedisConnected())
+        {
+            return GlobalEntity.error("redis暂不可用");
+        }
+
+        // 2、接收前端参数
+        String key      = Request_Utils.getParam(paramString, "key");
+
+        // 3、执行 redis hash 操作 删除指定数据
+        redisTemplate.delete(key);
+
+        // 4、封装返回体
+        HashMap<String, Object> resultMap = new HashMap<>();
+        resultMap.put("deleteAllResult","success");
+        resultMap.put("key",key);
+
+        return GlobalEntity.success(resultMap,"redis-hash删除全部数据成功");
     }
 
     @Override

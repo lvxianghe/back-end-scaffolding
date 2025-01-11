@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 @Data
 public class ApolloProperties
 {
-    @Value("${spring.datasource.localhost.jdbc-url}}")
+    @Value("${spring.datasource.localhost.jdbc-url}")
     private String jdbcUrl;
 
 }

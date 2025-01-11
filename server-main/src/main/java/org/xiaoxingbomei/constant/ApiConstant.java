@@ -122,24 +122,28 @@ public class ApiConstant
 
 
     /**
-     * 业务：kakarot
+     * 业务：知识库
      */
-    public class Kakarot
+    public class Wiki
     {
-
+        public static final String mine_knowledgeBases_search       = "/wiki/mine/knowledgeBases/search";     // 个人知识库列表查询
+        public static final String mine_knowledgeBase_search        = "/wiki/mine/knowledgeBase/search";      // 个人知识库列表查询
+        public static final String mine_knowledgeBase_create        = "/wiki/mine/knowledgeBase/create";      // 个人知识库创建
+        public static final String mine_knowledgeBase_multiCreate   = "/wiki/mine/knowledgeBase/multiCreate"; // 个人知识库批量创建
     }
     /**
-     * 业务：xiaoxingbomei
+     * 业务：IM
      */
-    public class Xiaoxingbomei
+    public class Chat
     {
-
+        public static final String search = "/chat/search";
+        public static final String create = "/chat/create";
     }
 
     /**
-     * 业务：
+     * 业务：Gpt
      */
-    public class Xxx3
+    public class Gpt
     {
 
     }
@@ -152,23 +156,33 @@ public class ApiConstant
     {
         public static final String getTechLearningInfo          = "/study/getTechLearningInfo";          // 获取技术学习信息
 
-        public static final String java_io_Xxx                  = "java_io_Xxx"; // java-io-
+        public static final String java_io_Xxx                  = "/study/java_io_Xxx";     // java-io-
 
-        public static final String java_stream_Xxx              = "java_stream_Xxx"; // java-stream-
+        public static final String java_stream_Xxx1             = "/study/java_stream_Xxx"; // java-stream-
+        public static final String java_stream_Xxx2             = "/study/java_stream_Xxx"; // java-stream-
 
-        public static final String java_multi_Xxx0              = "java_multi_Xxx0"; // java-并发-创建线程（）
-        public static final String java_multi_Xxx1              = "java_multi_Xxx1"; // java-并发-创建线程（）
-        public static final String java_multi_Xxx2              = "java_multi_Xxx2"; // java-并发-创建线程（）
-        public static final String java_multi_Xxx3              = "java_multi_Xxx3"; // java-并发-创建线程（）
-        public static final String java_multi_Xxx4              = "java_multi_Xxx4"; // java-并发-创建线程（）
-        public static final String java_multi_Xxx5              = "java_multi_Xxx5"; // java-并发-创建线程（）
-        public static final String java_multi_Xxx6              = "java_multi_Xxx6"; // java-并发-创建线程（）
+        public static final String java_multi_createThreadByThread      = "/study/java_multi_createThreadByThread";     // java-并发-创建线程（thread）
+        public static final String java_multi_createThreadByRunnable    = "/study/java_multi_createThreadByRunnable";   // java-并发-创建线程（runnable）
+        public static final String java_multi_createThreadByCallable    = "/study/java_multi_createThreadByCallable";   // java-并发-创建线程（callable）
+        public static final String java_multi_createThreadByThreadPool  = "/study/java_multi_createThreadByThreadPool"; // java-并发-创建线程（线程池）
+        public static final String java_multi_threadStateNew            = "/study/java_multi_threadStateNew";           // java-并发-线程状态-new
+        public static final String java_multi_threadStateRunnable       = "/study/java_multi_threadStateRunnable";      // java-并发-线程状态-runnable
+        public static final String java_multi_threadStateBlocked        = "/study/java_multi_threadStateBlocked";       // java-并发-线程状态-blocked
+        public static final String java_multi_threadStateWaiting        = "/study/java_multi_threadStateWaiting";       // java-并发-线程状态-waiting
+        public static final String java_multi_threadStateTimedWaiting   = "/study/java_multi_threadStateTimedWaiting";  // java-并发-线程状态-timedwaiting
+        public static final String java_multi_threadStateTerminated     = "/study/java_multi_threadStateTerminated";    // java-并发-线程状态-terminated
 
-        public static final String java_Async_Xxx               = "java_Async_Xxx"; // java-异步-
+        public static final String dynamicThreadPool_create     = "/study/dynamicThreadPool_create";     // 动态线程池-创建
+        public static final String dynamicThreadPool_update     = "/study/dynamicThreadPool_update";     // 动态线程池-更新参数
+        public static final String dynamicThreadPool_get        = "/study/dynamicThreadPool_get";        // 动态线程池-查询状态
+        public static final String dynamicThreadPool_delete     = "/study/dynamicThreadPool_delete";     // 动态线程池-销毁
+        public static final String dynamicThreadPool_createTask = "/study/dynamicThreadPool_createTask"; // 动态线程池-创建任务
+
+        public static final String java_Async_Xxx               = "/study/java_Async_Xxx";               // java-异步-
 
         public static final String mongodb_Insert               = "/study/mongodb_Insert";               // mongodb-创建
         public static final String mongodb_MultiInsert          = "/study/mongodb_MultiInsert";          // mongodb-批量创建
-        public static final String mongodb_Save                 = "/study/mongodb_Save";                 // mongodb-创
+        public static final String mongodb_Save                 = "/study/mongodb_Save";                 // mongodb-保存
         public static final String mongodb_Search               = "/study/mongodb_Search";               // mongodb-查询
         public static final String mongodb_Update               = "/study/mongodb_Update";               // mongodb-修改
         public static final String mongodb_Delete               = "/study/mongodb_Delete";               // mongodb-删除
@@ -185,6 +199,12 @@ public class ApiConstant
         public static final String redis_StringDelete           = "/study/redis_StringDelete";           // redis-删除
         public static final String redis_StringIncr             = "/study/redis_StringIncr";             // redis-自增
         public static final String redis_StringDecr             = "/study/redis_StringDecr";             // redis-自减
+
+        public static final String redis_hashSave               = "/study/redis_hashSave";               // hash-指定hash中添加或者更新
+        public static final String redis_hashFind               = "/study/redis_hashFind";               // hash-查询hash中指定字段的值
+        public static final String redis_hashFindAll            = "/study/redis_hashFindAll";            // hash-查询整个hash中所有字段和值
+        public static final String redis_hashDelete             = "/study/redis_hashDelete";             // hash-删除hash中指定字段
+        public static final String redis_hashDeleteAll          = "/study/redis_hashDeleteAll";          // hash-删除整个hash
 
         public static final String cookie_create                = "/study/cookie_create";                // cookie-创建
         public static final String cookie_update                = "/study/cookie_update";                // cookie-修改
@@ -220,8 +240,6 @@ public class ApiConstant
 
         public static final String feign_Xxx                    = "/study/feign_Xxx";          // feign-
 
-        public static final String stream_Xxx                   = "/study/stream_Xxx";         // stream-
-
         public static final String mapstruct_Xxx                = "/study/mapstruct_xx";       // mapstruct-
 
         public static final String netty_Xxx                    = "/study/netty_Xxx";          // netty-
@@ -229,7 +247,8 @@ public class ApiConstant
         public static final String kafka_Product                = "/study/kafka_Product";      // kafka-生产一条消息
         public static final String kafka_Consume                = "/study/kafka_Consume";      // kafka-消费一条消息
 
-        public static final String rocketMq_Xxx                 = "/study/rocketMq_Xxx";       // rocketMq-
+        public static final String rocketMq_product             = "/study/rocketMq_product";   // rocketMq-生产一条消息
+        public static final String rocketMq_consume             = "/study/rocketMq_consume";   // rocketMq-生产一条消息
 
         public static final String minio_createBucket           = "/study/minio_createBucket"; // minio-创建bucket
         public static final String minio_searchBucket           = "/study/minio_searchBucket"; // minio-列出bucket和对象
@@ -239,7 +258,7 @@ public class ApiConstant
         public static final String minio_deleteFile             = "/study/minio_deleteFile";   // minio-删除文件
 
         public static final String fastexcel_downloadExcel      = "/study/fastexcel_downloadExcel"; // fastexcel-下载模板
-        public static final String fastexcel_uploadExcel        = "/study/fastexcel_uploadExcel";   // fastexcel-上传文件
+        public static final String fastexcel_uploadExcel        = "/study/fastexcel_uploadExcel";   // fastexcel-上传文件 读取excel中日志并落库
         public static final String fastexcel_ReadExcel          = "/study/fastexcel_ReadExcel";     // fastexcel-读取excel文件
         public static final String fastexcel_CreateExcel        = "/study/fastexcel_CreateExcel";   // fastexcel-创建excel文件
      }

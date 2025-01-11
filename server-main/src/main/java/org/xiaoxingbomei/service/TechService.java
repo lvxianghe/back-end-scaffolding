@@ -9,6 +9,26 @@ import javax.servlet.http.HttpServletResponse;
 public interface TechService
 {
 
+    public GlobalEntity java_multi_createThreadByThread    (String paramString);
+    public GlobalEntity java_multi_createThreadByRunnable  (String paramString);
+    public GlobalEntity java_multi_createThreadByCallable  (String paramString);
+    public GlobalEntity java_multi_createThreadByThreadPool(String paramString);
+
+    public GlobalEntity java_multi_threadStateNew         (String paramString);
+    public GlobalEntity java_multi_threadStateRunnable    (String paramString);
+    public GlobalEntity java_multi_threadStateBlocked     (String paramString);
+    public GlobalEntity java_multi_threadStateWaiting     (String paramString);
+    public GlobalEntity java_multi_threadStateTimedWaiting(String paramString);
+    public GlobalEntity java_multi_threadStateTerminated  (String paramString);
+
+    public GlobalEntity dynamicThreadPool_create(String paramString);
+    public GlobalEntity dynamicThreadPool_update(String paramString);
+    public GlobalEntity dynamicThreadPool_get   (String paramString);
+    public GlobalEntity dynamicThreadPool_delete(String paramString);
+
+
+
+
     public GlobalEntity mongodb_Insert     (String paramString);
     public GlobalEntity mongodb_MultiInsert(String paramString);
     public GlobalEntity mongodb_Save       (String paramString);
@@ -28,6 +48,12 @@ public interface TechService
     public GlobalEntity redis_StringDelete       (String paramString);
     public GlobalEntity redis_StringIncr         (String paramString);
     public GlobalEntity redis_StringDecr         (String paramString);
+
+    public GlobalEntity redis_hashSave     (String paramString);
+    public GlobalEntity redis_hashFind     (String paramString);
+    public GlobalEntity redis_hashFindAll  (String paramString);
+    public GlobalEntity redis_hashDelete   (String paramString);
+    public GlobalEntity redis_hashDeleteAll(String paramString);
 
 
     public GlobalEntity cookie_create(String paramString, HttpServletResponse response);

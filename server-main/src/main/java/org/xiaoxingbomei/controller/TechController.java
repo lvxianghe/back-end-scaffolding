@@ -21,6 +21,119 @@ public class TechController
     @Autowired
     private TechService techService;
 
+    // =====================================================================================================
+
+    @Operation(summary = "java学习接口",description = "java-并发编程-创建线程-thread")
+    @RequestMapping(value = ApiConstant.Study.java_multi_createThreadByThread,method = RequestMethod.POST)
+    public GlobalEntity java_multi_createThreadByThread(@RequestBody String paramString)
+    {
+        GlobalEntity ret = techService.java_multi_createThreadByThread(paramString);
+        return ret;
+    }
+
+    @Operation(summary = "java学习接口",description = "java-并发编程-创建线程-Runnable")
+    @RequestMapping(value = ApiConstant.Study.java_multi_createThreadByRunnable,method = RequestMethod.POST)
+    public GlobalEntity java_multi_createThreadByRunnable(@RequestBody String paramString)
+    {
+        GlobalEntity ret = techService.java_multi_createThreadByRunnable(paramString);
+        return ret;
+    }
+
+    @Operation(summary = "java学习接口",description = "java-并发编程-创建线程-Callable")
+    @RequestMapping(value = ApiConstant.Study.java_multi_createThreadByCallable,method = RequestMethod.POST)
+    public GlobalEntity java_multi_createThreadByCallable(@RequestBody String paramString)
+    {
+        GlobalEntity ret = techService.java_multi_createThreadByCallable(paramString);
+        return ret;
+    }
+
+    @Operation(summary = "java学习接口",description = "java-并发编程-创建线程-threadpool")
+    @RequestMapping(value = ApiConstant.Study.java_multi_createThreadByThreadPool,method = RequestMethod.POST)
+    public GlobalEntity java_multi_createThreadByThreadPool(@RequestBody String paramString)
+    {
+        GlobalEntity ret = techService.java_multi_createThreadByThreadPool(paramString);
+        return ret;
+    }
+
+    @Operation(summary = "java学习接口",description = "java-并发编程-创建线程-threadpool")
+    @RequestMapping(value = ApiConstant.Study.java_multi_threadStateNew,method = RequestMethod.POST)
+    public GlobalEntity java_multi_threadStateNew(@RequestBody String paramString)
+    {
+        GlobalEntity ret = techService.java_multi_threadStateNew(paramString);
+        return ret;
+    }
+
+    @Operation(summary = "java学习接口",description = "java-并发编程-创建线程-threadpool")
+    @RequestMapping(value = ApiConstant.Study.java_multi_threadStateRunnable,method = RequestMethod.POST)
+    public GlobalEntity java_multi_threadStateRunnable(@RequestBody String paramString)
+    {
+        GlobalEntity ret = techService.java_multi_threadStateRunnable(paramString);
+        return ret;
+    }
+
+    @Operation(summary = "java学习接口",description = "java-并发编程-创建线程-threadpool")
+    @RequestMapping(value = ApiConstant.Study.java_multi_threadStateBlocked,method = RequestMethod.POST)
+    public GlobalEntity java_multi_threadStateBlocked(@RequestBody String paramString)
+    {
+        GlobalEntity ret = techService.java_multi_threadStateBlocked(paramString);
+        return ret;
+    }
+
+    @Operation(summary = "java学习接口",description = "java-并发编程-创建线程-threadpool")
+    @RequestMapping(value = ApiConstant.Study.java_multi_threadStateWaiting,method = RequestMethod.POST)
+    public GlobalEntity java_multi_threadStateWaiting(@RequestBody String paramString)
+    {
+        GlobalEntity ret = techService.java_multi_threadStateWaiting(paramString);
+        return ret;
+    }
+
+    @Operation(summary = "java学习接口",description = "java-并发编程-创建线程-threadpool")
+    @RequestMapping(value = ApiConstant.Study.java_multi_threadStateTimedWaiting,method = RequestMethod.POST)
+    public GlobalEntity java_multi_threadStateTimedWaiting(@RequestBody String paramString)
+    {
+        GlobalEntity ret = techService.java_multi_threadStateTimedWaiting(paramString);
+        return ret;
+    }
+
+    @Operation(summary = "java学习接口",description = "java-并发编程-创建线程-threadpool")
+    @RequestMapping(value = ApiConstant.Study.java_multi_threadStateTerminated,method = RequestMethod.POST)
+    public GlobalEntity java_multi_threadStateTerminated(@RequestBody String paramString)
+    {
+        GlobalEntity ret = techService.java_multi_threadStateTerminated(paramString);
+        return ret;
+    }
+
+    @Operation(summary = "java学习接口",description = "动态线程池-创建")
+    @RequestMapping(value = ApiConstant.Study.dynamicThreadPool_create,method = RequestMethod.POST)
+    public GlobalEntity dynamicThreadPool_create(@RequestBody String paramString)
+    {
+        GlobalEntity ret = techService.dynamicThreadPool_create(paramString);
+        return ret;
+    }
+    @Operation(summary = "java学习接口",description = "动态线程池-更新参数")
+    @RequestMapping(value = ApiConstant.Study.dynamicThreadPool_update,method = RequestMethod.POST)
+    public GlobalEntity dynamicThreadPool_update(@RequestBody String paramString)
+    {
+        GlobalEntity ret = techService.dynamicThreadPool_update(paramString);
+        return ret;
+    }
+    @Operation(summary = "java学习接口",description = "动态线程池-获取状态")
+    @RequestMapping(value = ApiConstant.Study.dynamicThreadPool_get,method = RequestMethod.POST)
+    public GlobalEntity dynamicThreadPool_get(@RequestBody String paramString)
+    {
+        GlobalEntity ret = techService.dynamicThreadPool_get(paramString);
+        return ret;
+    }
+    @Operation(summary = "java学习接口",description = "动态线程池-销毁")
+    @RequestMapping(value = ApiConstant.Study.dynamicThreadPool_delete,method = RequestMethod.POST)
+    public GlobalEntity dynamicThreadPool_delete(@RequestBody String paramString)
+    {
+        GlobalEntity ret = techService.dynamicThreadPool_delete(paramString);
+        return ret;
+    }
+
+
+
     @Operation(summary = "mongodb学习接口",description = "mongodb-单条insert")
     @RequestMapping(value = ApiConstant.Study.mongodb_Insert,method = RequestMethod.POST)
     public GlobalEntity mongodb_Insert(@RequestBody String paramString)
@@ -151,6 +264,43 @@ public class TechController
         GlobalEntity ret = techService.redis_StringDecr(paramString);
         return ret;
     }
+
+    @Operation(summary = "redis学习接口", description = "hash-指定hash中添加或者更新")
+    @RequestMapping(value = ApiConstant.Study.redis_hashSave,method = RequestMethod.POST)
+    public GlobalEntity redis_hashSave(@RequestBody String paramString)
+    {
+        GlobalEntity ret = techService.redis_hashSave(paramString);
+        return ret;
+    }
+    @Operation(summary = "redis学习接口", description = "查询hash中指定字段的值")
+    @RequestMapping(value = ApiConstant.Study.redis_hashFind,method = RequestMethod.POST)
+    public GlobalEntity redis_hashFind(@RequestBody String paramString)
+    {
+        GlobalEntity ret = techService.redis_hashFind(paramString);
+        return ret;
+    }
+    @Operation(summary = "redis学习接口", description = "hash-查询整个hash中所有字段和值")
+    @RequestMapping(value = ApiConstant.Study.redis_hashFindAll,method = RequestMethod.POST)
+    public GlobalEntity redis_hashFindAll(@RequestBody String paramString)
+    {
+        GlobalEntity ret = techService.redis_hashFindAll(paramString);
+        return ret;
+    }
+    @Operation(summary = "redis学习接口", description = "hash-删除hash中指定字段")
+    @RequestMapping(value = ApiConstant.Study.redis_hashDelete,method = RequestMethod.POST)
+    public GlobalEntity redis_hashDelete(@RequestBody String paramString)
+    {
+        GlobalEntity ret = techService.redis_hashDelete(paramString);
+        return ret;
+    }
+    @Operation(summary = "redis学习接口", description = "hash-删除整个hash")
+    @RequestMapping(value = ApiConstant.Study.redis_hashDeleteAll,method = RequestMethod.POST)
+    public GlobalEntity redis_hashDeleteAll(@RequestBody String paramString)
+    {
+        GlobalEntity ret = techService.redis_hashDeleteAll(paramString);
+        return ret;
+    }
+
 
     @Operation(summary = "cookie学习接口", description = "cookie-创建")
     @RequestMapping(value = ApiConstant.Study.cookie_create,method = RequestMethod.POST)

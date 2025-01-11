@@ -17,6 +17,7 @@ import org.xiaoxingbomei.config.springboot.MyBanner;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.Arrays;
 
 @SpringBootApplication(exclude = { DataSourceAutoConfiguration.class })
 @EnableEurekaClient
@@ -64,9 +65,40 @@ public class Server_Main
                 "\n----------------------------------------------------------\n");
         log.info("服务启动成功!>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> 耗时：{} s", (System.currentTimeMillis() - start) / 1000);
 
+        // 打印自定义注册的Bean信息
+        printCustomBeans(application);
 
     }
 
+    /**
+     * 打印自定义注册的Bean信息
+     */
+    private static void printCustomBeans(ConfigurableApplicationContext application)
+    {
+        log.info("\n--------------------以下是自定义注册的 Bean 信息----------------------\n");
+
+        // 获取所有Bean名称
+        String[] beanNames = application.getBeanDefinitionNames();
+        Arrays.sort(beanNames); // 按名称排序，方便查看
+
+
+        for (String beanName : beanNames)
+        {
+            if (application.containsBean(beanName))
+            { // 判断是否存在
+                Object bean = application.getBean(beanName);
+                if (bean.getClass().getPackage() != null && bean.getClass().getPackage().getName().startsWith("org.xiaoxingbomei"))
+                {
+                    log.info("Bean 名称: {}, Bean 类型: {}", beanName, bean.getClass().getName());
+                }
+            } else
+            {
+                log.warn("Bean 名称: {} 未在容器中找到！", beanName);
+            }
+        }
+
+        log.info("\n----------------------------------------------------------\n");
+    }
 
 }
 
