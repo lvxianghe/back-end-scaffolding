@@ -828,6 +828,175 @@ public class TechServiceImpl implements TechService
     }
 
     @Override
+    public GlobalEntity redis_listLeftPush(String paramString)
+    {
+        // 1、获取前端参数
+        String key   = Request_Utils.getParam(paramString, "key");
+        String value = Request_Utils.getParam(paramString, "value");
+
+        // 2、核心处理：
+        redisTemplate.opsForList().leftPush(key,value);
+
+        // 3、创建结果反参
+        HashMap<String, Object> resultMap = new HashMap<>();
+        resultMap.put("listLeftPushResult","success");
+        resultMap.put("key",key);
+        resultMap.put("value",value);
+        return GlobalEntity.success(resultMap,"向列表左侧推入元素（左压栈）");
+    }
+
+    @Override
+    public GlobalEntity redis_listRightPush(String paramString)
+    {
+        // 1、获取前端参数
+        String key   = Request_Utils.getParam(paramString, "key");
+        String value = Request_Utils.getParam(paramString, "value");
+
+        // 2、核心处理：
+        redisTemplate.opsForList().rightPush(key,value);
+
+        // 3、创建结果反参
+        HashMap<String, Object> resultMap = new HashMap<>();
+        resultMap.put("listRightPushResult","success");
+        resultMap.put("key",key);
+        resultMap.put("value",value);
+        return GlobalEntity.success(resultMap,"向列表右侧推入元素（右压栈）");
+    }
+
+    @Override
+    public GlobalEntity redis_listLeftPop(String paramString)
+    {
+        // 1、获取前端参数
+        String key   = Request_Utils.getParam(paramString, "key");
+        String value = Request_Utils.getParam(paramString, "value");
+
+        // 2、核心处理：
+        Object popResult = redisTemplate.opsForList().leftPop(key);
+
+        // 3、创建结果反参
+        HashMap<String, Object> resultMap = new HashMap<>();
+        resultMap.put("listLeftPopResultFlag","success");
+        resultMap.put("key",key);
+        resultMap.put("value",value);
+        resultMap.put("listLeftPopResult",popResult);
+        return GlobalEntity.success(resultMap,"从列表左侧弹出元素（左出栈）");
+    }
+
+    @Override
+    public GlobalEntity redis_listRightPop(String paramString)
+    {
+        // 1、获取前端参数
+        String key   = Request_Utils.getParam(paramString, "key");
+        String value = Request_Utils.getParam(paramString, "value");
+
+        // 2、核心处理：
+        Object popResult = redisTemplate.opsForList().rightPop(key);
+
+        // 3、创建结果反参
+        HashMap<String, Object> resultMap = new HashMap<>();
+        resultMap.put("listRightPopResultFlag","success");
+        resultMap.put("key",key);
+        resultMap.put("value",value);
+        resultMap.put("listRightPopResult",popResult);
+        return GlobalEntity.success(resultMap,"从列表左侧弹出元素（左出栈）");
+    }
+
+    @Override
+    public GlobalEntity redis_listRange(String paramString)
+    {
+        // 1、获取前端参数
+        String key   = Request_Utils.getParam(paramString, "key");
+        String start = Request_Utils.getParam(paramString, "start");
+        String end   = Request_Utils.getParam(paramString, "end");
+
+        // 2、核心处理：
+        List<Object> rangeResult = redisTemplate.opsForList().range(key, Long.parseLong(start), Long.parseLong(end));
+
+        // 3、创建结果反参
+        HashMap<String, Object> resultMap = new HashMap<>();
+        resultMap.put("rangeResultFlag","success");
+        resultMap.put("key",key);
+        resultMap.put("rangeResult",rangeResult);
+        return GlobalEntity.success(resultMap,"获取列表中的指定范围的元素");
+    }
+
+    @Override
+    public GlobalEntity redis_listRemove(String paramString)
+    {
+        // 1、获取前端参数
+        String key   = Request_Utils.getParam(paramString, "key");   // 列表的键
+        String count = Request_Utils.getParam(paramString, "count"); // 删除的数量（正数从左到右，负数从右到左，0 删除所有）
+        String value = Request_Utils.getParam(paramString, "value"); // 要删除的值
+
+        // 2、核心处理：
+        redisTemplate.opsForList().remove(key,Long.parseLong(count),Long.parseLong(value));
+
+        // 3、创建结果反参
+        HashMap<String, Object> resultMap = new HashMap<>();
+        resultMap.put("removeResultFlag","success");
+        resultMap.put("key",key);
+        resultMap.put("count",count);
+        resultMap.put("value",value);
+        return GlobalEntity.success(resultMap,"删除列表中指定数量的某个值");
+    }
+
+    @Override
+    public GlobalEntity redis_listSize(String paramString)
+    {
+        // 1、获取前端参数
+        String key   = Request_Utils.getParam(paramString, "key");
+
+        // 2、核心处理：
+        Long size = redisTemplate.opsForList().size(key);
+
+        // 3、创建结果反参
+        HashMap<String, Object> resultMap = new HashMap<>();
+        resultMap.put("sizeResult","success");
+        resultMap.put("key",key);
+        resultMap.put("size",size);
+        return GlobalEntity.success(resultMap,"获取列表的长度");
+    }
+
+    @Override
+    public GlobalEntity redis_listSet(String paramString)
+    {
+        // 1、获取前端参数
+        String key   = Request_Utils.getParam(paramString, "key");
+        String index = Request_Utils.getParam(paramString, "index");
+        String value = Request_Utils.getParam(paramString, "value");
+
+        // 2、核心处理：
+        redisTemplate.opsForList().set(key,Long.parseLong(index),value);
+
+        // 3、创建结果反参
+        HashMap<String, Object> resultMap = new HashMap<>();
+        resultMap.put("setResult","success");
+        resultMap.put("key",key);
+        resultMap.put("index",index);
+        resultMap.put("value",value);
+        return GlobalEntity.success(resultMap,"设置列表中指定索引的值");
+    }
+
+    @Override
+    public GlobalEntity redis_expire(String paramString)
+    {
+        // 1、获取前端参数
+        String key   = Request_Utils.getParam(paramString, "key");
+        String timeout = Request_Utils.getParam(paramString, "timeout");
+
+        // 2、核心处理：
+        Boolean expired = redisTemplate.expire(key, Long.parseLong(timeout), TimeUnit.SECONDS);
+
+        // 3、创建结果反参
+        HashMap<String, Object> resultMap = new HashMap<>();
+        resultMap.put("listLeftPushResult","success");
+        resultMap.put("key",key);
+        resultMap.put("timeout",timeout);
+        resultMap.put("expired",expired);
+        return GlobalEntity.success(resultMap,"设置键的过期时间");
+    }
+
+    @Override
     public GlobalEntity cookie_create(String paramString, HttpServletResponse response)
     {
         // 1、接收前端参数

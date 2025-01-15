@@ -301,6 +301,70 @@ public class TechController
         return ret;
     }
 
+    @Operation(summary = "redis学习接口", description = "list-XXX")
+    @RequestMapping(value = ApiConstant.Study.redis_listLeftPush,method = RequestMethod.POST)
+    public GlobalEntity redis_listLeftPush(@RequestBody String paramString)
+    {
+        GlobalEntity ret = techService.redis_listLeftPush(paramString);
+        return ret;
+    }
+    @Operation(summary = "redis学习接口", description = "list-XXX")
+    @RequestMapping(value = ApiConstant.Study.redis_listRightPush,method = RequestMethod.POST)
+    public GlobalEntity redis_listRightPush(@RequestBody String paramString)
+    {
+        GlobalEntity ret = techService.redis_listRightPush(paramString);
+        return ret;
+    }
+    @Operation(summary = "redis学习接口", description = "list-XXX")
+    @RequestMapping(value = ApiConstant.Study.redis_listLeftPop,method = RequestMethod.POST)
+    public GlobalEntity redis_listLeftPop(@RequestBody String paramString)
+    {
+        GlobalEntity ret = techService.redis_listLeftPop(paramString);
+        return ret;
+    }
+    @Operation(summary = "redis学习接口", description = "list-XXX")
+    @RequestMapping(value = ApiConstant.Study.redis_listRightPop,method = RequestMethod.POST)
+    public GlobalEntity redis_listRightPop(@RequestBody String paramString)
+    {
+        GlobalEntity ret = techService.redis_listRightPop(paramString);
+        return ret;
+    }
+    @Operation(summary = "redis学习接口", description = "list-XXX")
+    @RequestMapping(value = ApiConstant.Study.redis_listRange,method = RequestMethod.POST)
+    public GlobalEntity redis_listRange(@RequestBody String paramString)
+    {
+        GlobalEntity ret = techService.redis_listRange(paramString);
+        return ret;
+    }
+    @Operation(summary = "redis学习接口", description = "list-XXX")
+    @RequestMapping(value = ApiConstant.Study.redis_listRemove,method = RequestMethod.POST)
+    public GlobalEntity redis_listRemove(@RequestBody String paramString)
+    {
+        GlobalEntity ret = techService.redis_listRemove(paramString);
+        return ret;
+    }
+    @Operation(summary = "redis学习接口", description = "list-XXX")
+    @RequestMapping(value = ApiConstant.Study.redis_listSize,method = RequestMethod.POST)
+    public GlobalEntity redis_listSize(@RequestBody String paramString)
+    {
+        GlobalEntity ret = techService.redis_listSize(paramString);
+        return ret;
+    }
+    @Operation(summary = "redis学习接口", description = "list-XXX")
+    @RequestMapping(value = ApiConstant.Study.redis_listSet,method = RequestMethod.POST)
+    public GlobalEntity redis_listSet(@RequestBody String paramString)
+    {
+        GlobalEntity ret = techService.redis_listSet(paramString);
+        return ret;
+    }
+    @Operation(summary = "redis学习接口", description = "list-XXX")
+    @RequestMapping(value = ApiConstant.Study.redis_expire,method = RequestMethod.POST)
+    public GlobalEntity redis_expire(@RequestBody String paramString)
+    {
+        GlobalEntity ret = techService.redis_expire(paramString);
+        return ret;
+    }
+
 
     @Operation(summary = "cookie学习接口", description = "cookie-创建")
     @RequestMapping(value = ApiConstant.Study.cookie_create,method = RequestMethod.POST)

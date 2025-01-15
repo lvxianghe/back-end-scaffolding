@@ -57,11 +57,11 @@ public class PingPongTask
     {
         log.info("\n------------------------------------------------\n\t{}{}{}{}{}{}{}",
                 "<<Checking middleware connection status>>",
-                "\n\tRedis          \t connected:           \t "+isRedisConnected(),
-                "\n\tMinio          \t connected:           \t "+isMinioConnected(),
-                "\n\tElasticsearch  \t connected:           \t "+isElasticConnected(),
-                "\n\tKafka          \t connected:           \t "+isKafkaConnected(),
-                "\n\tApollo         \t connected:           \t "+isApolloConnected(),
+                "\n\tRedis          \tconnected:\t "+isRedisConnected(),
+                "\n\tMinio          \tconnected:\t "+isMinioConnected(),
+                "\n\tElasticsearch  \tconnected:\t "+isElasticConnected(),
+                "\n\tKafka          \tconnected:\t "+isKafkaConnected(),
+                "\n\tApollo         \tconnected:\t "+isApolloConnected(),
                 "\n------------------------------------------------\n"
                 );
     }

@@ -55,6 +55,16 @@ public interface TechService
     public GlobalEntity redis_hashDelete   (String paramString);
     public GlobalEntity redis_hashDeleteAll(String paramString);
 
+    public GlobalEntity redis_listLeftPush (String paramString);
+    public GlobalEntity redis_listRightPush(String paramString);
+    public GlobalEntity redis_listLeftPop  (String paramString);
+    public GlobalEntity redis_listRightPop (String paramString);
+    public GlobalEntity redis_listRange    (String paramString);
+    public GlobalEntity redis_listRemove   (String paramString);
+    public GlobalEntity redis_listSize     (String paramString);
+    public GlobalEntity redis_listSet      (String paramString);
+    public GlobalEntity redis_expire       (String paramString);
+
 
     public GlobalEntity cookie_create(String paramString, HttpServletResponse response);
     public GlobalEntity cookie_update(String paramString);
