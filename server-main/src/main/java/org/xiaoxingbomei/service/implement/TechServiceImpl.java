@@ -534,6 +534,25 @@ public class TechServiceImpl implements TechService
     }
 
     @Override
+    public GlobalEntity redis_expire(String paramString)
+    {
+        // 1、获取前端参数
+        String key     = Request_Utils.getParam(paramString, "key");
+        String timeout = Request_Utils.getParam(paramString, "timeout");
+
+        // 2、核心处理：
+        Boolean expired = redisTemplate.expire(key, Long.parseLong(timeout), TimeUnit.SECONDS);
+
+        // 3、创建结果反参
+        HashMap<String, Object> resultMap = new HashMap<>();
+        resultMap.put("listLeftPushResult","success");
+        resultMap.put("key",key);
+        resultMap.put("timeout",timeout);
+        resultMap.put("expired",expired);
+        return GlobalEntity.success(resultMap,"设置键的过期时间");
+    }
+
+    @Override
     public GlobalEntity redis_StringSet(String paramString)
     {
         // 1、判断redis链接状态，如果redis挂了就没必要进行了
@@ -929,7 +948,7 @@ public class TechServiceImpl implements TechService
         String value = Request_Utils.getParam(paramString, "value"); // 要删除的值
 
         // 2、核心处理：
-        redisTemplate.opsForList().remove(key,Long.parseLong(count),Long.parseLong(value));
+        redisTemplate.opsForList().remove(key,Long.parseLong(count),value);
 
         // 3、创建结果反参
         HashMap<String, Object> resultMap = new HashMap<>();
@@ -938,6 +957,53 @@ public class TechServiceImpl implements TechService
         resultMap.put("count",count);
         resultMap.put("value",value);
         return GlobalEntity.success(resultMap,"删除列表中指定数量的某个值");
+    }
+
+    @Override
+    public GlobalEntity redis_listRemoveByIndex(String paramString)
+    {
+        // 1、获取前端参数
+        String key   = Request_Utils.getParam(paramString, "key");   // redis key
+        String index = Request_Utils.getParam(paramString, "index"); // redis index
+
+        // 2、获取整个list数据
+        List<Object> list = redisTemplate.opsForList().range(key, 0, -1);
+        if(list==null || Integer.parseInt(index)<0 || Integer.parseInt(index)>=list.size())
+        {
+            throw new IllegalArgumentException("索引无效");
+        }
+
+        // 3、删除指定索引的数据
+        list.remove(Integer.parseInt(index));
+
+        // 4、删除原始list
+        redisTemplate.delete(key);
+
+        // 5、重新保存列表
+        redisTemplate.opsForList().rightPushAll(key,list);
+
+        // 6、创建结果反参
+        HashMap<String, Object> resultMap = new HashMap<>();
+        resultMap.put("removeResultFlag","success");
+        resultMap.put("key",key);
+        resultMap.put("index",index);
+        return GlobalEntity.success(resultMap,"通过索引删除范围内元素");
+    }
+
+    @Override
+    public GlobalEntity redis_listRemoveByRange(String paramString)
+    {
+        // 1、接收前端参数
+        String key   = Request_Utils.getParam(paramString, "key");
+        String start = Request_Utils.getParam(paramString, "start");
+        String end   = Request_Utils.getParam(paramString, "end");
+
+        // 2、保留索引范围内元素（删除范围外数据）
+        redisTemplate.opsForList().trim(key, Long.parseLong(start), Long.parseLong(end));
+
+        // 3、创建返回体
+        HashMap<String, Object> resultMap = new HashMap<>();
+        return GlobalEntity.success(resultMap,"通过范围反向删除元素");
     }
 
     @Override
@@ -977,24 +1043,7 @@ public class TechServiceImpl implements TechService
         return GlobalEntity.success(resultMap,"设置列表中指定索引的值");
     }
 
-    @Override
-    public GlobalEntity redis_expire(String paramString)
-    {
-        // 1、获取前端参数
-        String key   = Request_Utils.getParam(paramString, "key");
-        String timeout = Request_Utils.getParam(paramString, "timeout");
 
-        // 2、核心处理：
-        Boolean expired = redisTemplate.expire(key, Long.parseLong(timeout), TimeUnit.SECONDS);
-
-        // 3、创建结果反参
-        HashMap<String, Object> resultMap = new HashMap<>();
-        resultMap.put("listLeftPushResult","success");
-        resultMap.put("key",key);
-        resultMap.put("timeout",timeout);
-        resultMap.put("expired",expired);
-        return GlobalEntity.success(resultMap,"设置键的过期时间");
-    }
 
     @Override
     public GlobalEntity cookie_create(String paramString, HttpServletResponse response)

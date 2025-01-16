@@ -61,6 +61,8 @@ public interface TechService
     public GlobalEntity redis_listRightPop (String paramString);
     public GlobalEntity redis_listRange    (String paramString);
     public GlobalEntity redis_listRemove   (String paramString);
+    public GlobalEntity redis_listRemoveByIndex   (String paramString);
+    public GlobalEntity redis_listRemoveByRange   (String paramString);
     public GlobalEntity redis_listSize     (String paramString);
     public GlobalEntity redis_listSet      (String paramString);
     public GlobalEntity redis_expire       (String paramString);

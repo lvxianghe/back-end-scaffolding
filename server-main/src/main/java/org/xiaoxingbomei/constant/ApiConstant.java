@@ -248,6 +248,8 @@ public class ApiConstant
         public static final String fastJson_JSONStringToMap             = "/study/fastJson_JSONStringToMap";     // fastJson-JSON转为Map
         public static final String fastJson_JSONStringToList            = "/study/fastJson_JSONStringToList";    // fastJson-JSON转为List
 
+        public static final String redis_expire                         = "/study/redis_expire";                 // redis-list-设置键的过期时间
+
         public static final String redis_StringSet                      = "/study/redis_StringSet";              // redis-String-存储
         public static final String redis_StringSetWithExpire            = "/study/redis_StringSetWithExpire";    // redis-String-存储携带过期时间
         public static final String redis_StringGet                      = "/study/redis_StringGet";              // redis-String-获取
@@ -267,9 +269,11 @@ public class ApiConstant
         public static final String redis_listRightPop                   = "/study/redis_listRightPop";           // redis-list-从列表右侧弹出元素（右出栈）
         public static final String redis_listRange                      = "/study/redis_listRange";              // redis-list-获取列表中的指定范围的元素
         public static final String redis_listRemove                     = "/study/redis_listRemove";             // redis-list-删除列表中指定数量的某个值
+        public static final String redis_listRemoveByIndex              = "/study/redis_listRemoveByIndex";      // redis-list-通过索引删除范围内元素
+        public static final String redis_listRemoveByRange              = "/study/redis_listRemoveByRange";      // redis-list-通过范围反向删除元素
         public static final String redis_listSize                       = "/study/redis_listSize";               // redis-list-获取列表的长度
         public static final String redis_listSet                        = "/study/redis_listSet";                // redis-list-设置列表中指定索引的值
-        public static final String redis_expire                         = "/study/redis_expire";                 // redis-list-设置键的过期时间
+
 
         public static final String cookie_create                        = "/study/cookie_create";                // cookie-创建
         public static final String cookie_update                        = "/study/cookie_update";                // cookie-修改
