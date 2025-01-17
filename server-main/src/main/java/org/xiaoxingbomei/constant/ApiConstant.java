@@ -274,6 +274,25 @@ public class ApiConstant
         public static final String redis_listSize                       = "/study/redis_listSize";               // redis-list-获取列表的长度
         public static final String redis_listSet                        = "/study/redis_listSet";                // redis-list-设置列表中指定索引的值
 
+        public static final String redis_setAdd                         = "/study/redis_setAdd";                 // redis-set-添加一个元素
+        public static final String redis_setGetAll                      = "/study/redis_setGetAll";              // redis-set-获取所有成员
+        public static final String redis_setGetRandom                   = "/study/redis_setGetRandom";           // redis-set-获取指定数量的随机成员
+        public static final String redis_setIsMember                    = "/study/redis_setIsMember";            // redis-set-检查某个元素是否是成员
+        public static final String redis_setRemove                      = "/study/redis_setRemove";              // redis-set-删除指定的元素
+        public static final String redis_setSize                        = "/study/redis_setSize";                // redis-set-获取大小（成员数量）
+        
+        public static final String redis_zsetAdd                        = "/study/redis_zsetAdd                   "; // redis-zset-将元素添加到 Redis ZSet 中，并指定分数
+        public static final String redis_zsetGetByRange                 = "/study/redis_zsetGetByRange            "; // redis-zset-获取 Redis ZSet 中指定区间的成员（按分数排序）
+        public static final String redis_zsetGetByRangeReverse          = "/study/redis_zsetGetByRangeReverse     "; // redis-zset-获取 Redis ZSet 中指定区间的成员（按分数倒序排序）
+        public static final String redis_zsetGetByScoreRange            = "/study/redis_zsetGetByScoreRange       "; // redis-zset-根据指定的分数范围获取 Redis ZSet 中的成员
+        public static final String redis_zsetGetByScoreRangeReverse     = "/study/redis_zsetGetByScoreRangeReverse"; // redis-zset-根据指定的分数范围获取 Redis ZSet 中的成员（按分数倒序排序）
+        public static final String redis_zsetSize                       = "/study/redis_zsetSize                  "; // redis-zset-获取 Redis ZSet 的大小（成员数量）
+        public static final String redis_zsetRemove                     = "/study/redis_zsetRemove                "; // redis-zset-从 Redis ZSet 中移除指定的元素
+        public static final String redis_zsetRemoveByRange              = "/study/redis_zsetRemoveByRange         "; // redis-zset-根据成员的排名范围从 Redis ZSet 中移除元素
+        public static final String redis_zsetRemoveByScoreRange         = "/study/redis_zsetRemoveByScoreRange    "; // redis-zset-根据分数范围从 Redis ZSet 中移除元素
+        public static final String redis_zsetGetScore                   = "/study/redis_zsetGetScore              "; // redis-zset-获取 Redis ZSet 中指定元素的分数
+        public static final String redis_zsetIncrementScore             = "/study/redis_zsetIncrementScore        "; // redis-zset-增量增加 Redis ZSet 中指定元素的分数
+
 
         public static final String cookie_create                        = "/study/cookie_create";                // cookie-创建
         public static final String cookie_update                        = "/study/cookie_update";                // cookie-修改
