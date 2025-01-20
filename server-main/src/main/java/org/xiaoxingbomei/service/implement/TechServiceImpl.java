@@ -2,12 +2,15 @@ package org.xiaoxingbomei.service.implement;
 
 import cn.hutool.core.collection.CollectionUtil;
 import cn.idev.excel.FastExcel;
-import co.elastic.clients.elasticsearch.core.BulkResponse;
-import co.elastic.clients.elasticsearch.core.DeleteResponse;
-import co.elastic.clients.elasticsearch.core.IndexResponse;
-import co.elastic.clients.elasticsearch.core.UpdateResponse;
-import co.elastic.clients.elasticsearch.indices.CreateIndexResponse;
-import co.elastic.clients.elasticsearch.indices.DeleteIndexResponse;
+import co.elastic.clients.elasticsearch.ElasticsearchClient;
+import co.elastic.clients.elasticsearch._types.AcknowledgedResponse;
+import co.elastic.clients.elasticsearch._types.mapping.TypeMapping;
+import co.elastic.clients.elasticsearch.core.*;
+import co.elastic.clients.elasticsearch.core.bulk.BulkOperation;
+import co.elastic.clients.elasticsearch.indices.*;
+import co.elastic.clients.elasticsearch.indices.ExistsRequest;
+import co.elastic.clients.json.JsonData;
+import co.elastic.clients.transport.endpoints.BooleanResponse;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.serializer.SerializerFeature;
@@ -21,6 +24,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
+import org.elasticsearch.client.RequestOptions;
 import org.jcodings.util.Hash;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -98,7 +102,12 @@ public class TechServiceImpl implements TechService
     private ES_Utils esUtils;
 
     @Autowired
+    private ElasticsearchClient elasticsearchClient;
+
+    @Autowired
     private DynamicThreadPool threadPool;
+
+
 
     // @Autowired
     // private RestHighLevelClient restHighLevelClient;
@@ -1044,6 +1053,324 @@ public class TechServiceImpl implements TechService
     }
 
 
+    @Override
+    public GlobalEntity redis_setAdd(String paramString)
+    {
+        // 1、获取前端参数
+        String key   = Request_Utils.getParam(paramString, "key");
+        String value = Request_Utils.getParam(paramString, "value");
+
+        // 2、操作redis hash add
+        Long addResult = redisTemplate.opsForSet().add(key, value);
+
+        // 3、创建结果反参
+        HashMap<String, Object> resultMap = new HashMap<>();
+        resultMap.put("setResult",addResult);
+        resultMap.put("key",key);
+        resultMap.put("value",value);
+
+        return GlobalEntity.success(resultMap,"redis-set-add一个元素");
+    }
+
+    @Override
+    public GlobalEntity redis_setAddAll(String paramString)
+    {
+        // 1、获取前端参数
+        String key      = Request_Utils.getParam(paramString, "key");
+        String[] values = Request_Utils.getParam(paramString, "values").split(",");
+
+        // 2、操作 redis set 添加多个元素
+        Long result = redisTemplate.opsForSet().add(key, values);
+
+        // 3、创建结果反参
+        HashMap<String, Object> resultMap = new HashMap<>();
+        resultMap.put("key",    key);
+        resultMap.put("values", values);
+        resultMap.put("result", result);
+        return GlobalEntity.success(resultMap, "redis-set-批量添加元素");
+    }
+
+    @Override
+    public GlobalEntity redis_setGetAll(String paramString)
+    {
+        // 1、获取前端参数
+        String key = Request_Utils.getParam(paramString, "key");
+
+        // 2、操作 redis set 获取全部成员
+        Set<String> members = redisTemplate.opsForSet().members(key);
+
+        // 3、创建结果反参
+        HashMap<String, Object> resultMap = new HashMap<>();
+        resultMap.put("members", members);
+        resultMap.put("key", key);
+        return GlobalEntity.success(resultMap, "redis-set-获取全部成员");
+    }
+
+    @Override
+    public GlobalEntity redis_setGetRandom(String paramString)
+    {
+        // 1、获取前端参数
+        String key = Request_Utils.getParam(paramString, "key");
+
+        // 2、操作 redis set 获取随机成员
+        Object randomMember = redisTemplate.opsForSet().randomMember(key);
+
+        // 3、创建结果反参
+        HashMap<String, Object> resultMap = new HashMap<>();
+        resultMap.put("randomMember", randomMember);
+        resultMap.put("key", key);
+        return GlobalEntity.success(resultMap, "redis-set-获取随机成员");
+    }
+
+    @Override
+    public GlobalEntity redis_setIsMember(String paramString)
+    {
+        // 1、获取前端参数
+        String key   = Request_Utils.getParam(paramString, "key");
+        String value = Request_Utils.getParam(paramString, "value");
+
+        // 2、操作 redis set 判断元素是否存在
+        Boolean isMember = redisTemplate.opsForSet().isMember(key, value);
+
+        // 3、创建结果反参
+        HashMap<String, Object> resultMap = new HashMap<>();
+        resultMap.put("key",      key);
+        resultMap.put("value",    value);
+        resultMap.put("isMember", isMember);
+        return GlobalEntity.success(resultMap, "redis-set-判断元素是否存在");    }
+
+    @Override
+    public GlobalEntity redis_setRemove(String paramString)
+    {
+        // 1、获取前端参数
+        String key = Request_Utils.getParam(paramString, "key");
+        String value = Request_Utils.getParam(paramString, "value");
+
+        // 2、操作 redis set 移除元素
+        Long result = redisTemplate.opsForSet().remove(key, value);
+
+        // 3、创建结果反参
+        HashMap<String, Object> resultMap = new HashMap<>();
+        resultMap.put("key",    key);
+        resultMap.put("value",  value);
+        resultMap.put("result", result);
+        return GlobalEntity.success(resultMap, "redis-set-移除元素");
+    }
+
+    @Override
+    public GlobalEntity redis_setSize(String paramString)
+    {
+        // 1、获取前端参数
+        String key = Request_Utils.getParam(paramString, "key");
+
+        // 2、操作 redis set 获取集合大小
+        Long size = redisTemplate.opsForSet().size(key);
+
+        // 3、创建结果反参
+        HashMap<String, Object> resultMap = new HashMap<>();
+        resultMap.put("key",  key);
+        resultMap.put("size", size);
+        return GlobalEntity.success(resultMap, "redis-set-获取集合大小");
+    }
+
+    @Override
+    public GlobalEntity redis_zsetAdd(String paramString)
+    {
+        // 1、获取前端参数
+        String key = Request_Utils.getParam(paramString, "key");
+        String value = Request_Utils.getParam(paramString, "value");
+        double score = Double.parseDouble(Request_Utils.getParam(paramString, "score"));
+
+        // 2、操作 redis zset 添加元素
+        Boolean result = redisTemplate.opsForZSet().add(key, value, score);
+
+        // 3、创建结果反参
+        HashMap<String, Object> resultMap = new HashMap<>();
+        resultMap.put("key", key);
+        resultMap.put("value", value);
+        resultMap.put("score", score);
+        resultMap.put("result", result);
+        return GlobalEntity.success(resultMap, "redis-zset-添加元素");
+    }
+
+    @Override
+    public GlobalEntity redis_zsetGetByRange(String paramString)
+    {
+        // 1、获取前端参数
+        String key = Request_Utils.getParam(paramString, "key");
+        int start  = Integer.parseInt(Request_Utils.getParam(paramString, "start"));
+        int end    = Integer.parseInt(Request_Utils.getParam(paramString, "end"));
+
+        // 2、操作 redis zset 获取指定范围的元素
+        Set<String> result = redisTemplate.opsForZSet().range(key, start, end);
+
+        // 3、创建结果反参
+        HashMap<String, Object> resultMap = new HashMap<>();
+        resultMap.put("key",   key);
+        resultMap.put("range", result);
+        return GlobalEntity.success(resultMap, "redis-zset-获取指定范围元素");
+    }
+
+    @Override
+    public GlobalEntity redis_zsetGetByRangeReverse(String paramString)
+    {
+        // 1、获取前端参数
+        String key = Request_Utils.getParam(paramString, "key");
+        int start  = Integer.parseInt(Request_Utils.getParam(paramString, "start"));
+        int end    = Integer.parseInt(Request_Utils.getParam(paramString, "end"));
+
+        // 2、操作 redis zset 获取指定范围的元素（逆序）
+        Set<String> result = redisTemplate.opsForZSet().reverseRange(key, start, end);
+
+        // 3、创建结果反参
+        HashMap<String, Object> resultMap = new HashMap<>();
+        resultMap.put("key",   key);
+        resultMap.put("range", result);
+        return GlobalEntity.success(resultMap, "redis-zset-逆序获取指定范围元素");
+    }
+
+    @Override
+    public GlobalEntity redis_zsetGetByScoreRange(String paramString)
+    {
+        // 1、获取前端参数
+        String key = Request_Utils.getParam(paramString, "key");
+        double min = Double.parseDouble(Request_Utils.getParam(paramString, "min"));
+        double max = Double.parseDouble(Request_Utils.getParam(paramString, "max"));
+
+        // 2、操作 redis zset 获取指定分数范围的元素
+        Set<String> result = redisTemplate.opsForZSet().rangeByScore(key, min, max);
+
+        // 3、创建结果反参
+        HashMap<String, Object> resultMap = new HashMap<>();
+        resultMap.put("key", key);
+        resultMap.put("scoreRange", result);
+        return GlobalEntity.success(resultMap, "redis-zset-获取指定分数范围元素");
+    }
+
+    @Override
+    public GlobalEntity redis_zsetGetByScoreRangeReverse(String paramString)
+    {
+        // 1、获取前端参数
+        String key = Request_Utils.getParam(paramString, "key");
+        double min = Double.parseDouble(Request_Utils.getParam(paramString, "min"));
+        double max = Double.parseDouble(Request_Utils.getParam(paramString, "max"));
+
+        // 2、操作 redis zset 获取指定分数范围的元素（逆序）
+        Set<String> result = redisTemplate.opsForZSet().reverseRangeByScore(key, min, max);
+
+        // 3、创建结果反参
+        HashMap<String, Object> resultMap = new HashMap<>();
+        resultMap.put("key", key);
+        resultMap.put("scoreRange", result);
+        return GlobalEntity.success(resultMap,"redis-zset-逆序获取指定分数范围元素");
+    }
+
+    @Override
+    public GlobalEntity redis_zsetSize(String paramString)
+    {
+        // 1、获取前端参数
+        String key = Request_Utils.getParam(paramString, "key");
+
+        // 2、操作 redis zset 获取集合大小
+        Long size = redisTemplate.opsForZSet().size(key);
+
+        // 3、创建结果反参
+        HashMap<String, Object> resultMap = new HashMap<>();
+        resultMap.put("key",  key);
+        resultMap.put("size", size);
+        return GlobalEntity.success(resultMap, "redis-zset-获取集合大小");
+    }
+
+    @Override
+    public GlobalEntity redis_zsetRemove(String paramString)
+    {
+        // 1、获取前端参数
+        String key = Request_Utils.getParam(paramString, "key");
+        String value = Request_Utils.getParam(paramString, "value");
+
+        // 2、操作 redis zset 移除元素
+        Long result = redisTemplate.opsForZSet().remove(key, value);
+
+        // 3、创建结果反参
+        HashMap<String, Object> resultMap = new HashMap<>();
+        resultMap.put("key", key);
+        resultMap.put("value", value);
+        resultMap.put("result", result);
+        return GlobalEntity.success(resultMap, "redis-zset-移除元素");
+    }
+
+    @Override
+    public GlobalEntity redis_zsetRemoveByRange(String paramString)
+    {
+        // 1、获取前端参数
+        String key = Request_Utils.getParam(paramString, "key");
+        int start = Integer.parseInt(Request_Utils.getParam(paramString, "start"));
+        int end = Integer.parseInt(Request_Utils.getParam(paramString, "end"));
+
+        // 2、操作 redis zset 按照范围移除元素
+        Long result = redisTemplate.opsForZSet().removeRange(key, start, end);
+
+        // 3、创建结果反参
+        HashMap<String, Object> resultMap = new HashMap<>();
+        resultMap.put("key", key);
+        resultMap.put("rangeRemoved", result);
+        return GlobalEntity.success(resultMap, "redis-zset-按范围移除元素");
+    }
+
+    @Override
+    public GlobalEntity redis_zsetRemoveByScoreRange(String paramString)
+    {
+        // 1、获取前端参数
+        String key = Request_Utils.getParam(paramString, "key");
+        double min = Double.parseDouble(Request_Utils.getParam(paramString, "min"));
+        double max = Double.parseDouble(Request_Utils.getParam(paramString, "max"));
+
+        // 2、操作 redis zset 按照分数范围移除元素
+        Long result = redisTemplate.opsForZSet().removeRangeByScore(key, min, max);
+
+        // 3、创建结果反参
+        HashMap<String, Object> resultMap = new HashMap<>();
+        resultMap.put("key", key);
+        resultMap.put("scoreRangeRemoved", result);
+        return GlobalEntity.success(resultMap, "redis-zset-按分数范围移除元素");
+    }
+
+    @Override
+    public GlobalEntity redis_zsetGetScore(String paramString)
+    {
+        // 1、获取前端参数
+        String key = Request_Utils.getParam(paramString, "key");
+        String value = Request_Utils.getParam(paramString, "value");
+
+        // 2、操作 redis zset 获取元素分数
+        Double score = redisTemplate.opsForZSet().score(key, value);
+
+        // 3、创建结果反参
+        HashMap<String, Object> resultMap = new HashMap<>();
+        resultMap.put("key", key);
+        resultMap.put("value", value);
+        resultMap.put("score", score);
+        return GlobalEntity.success(resultMap, "redis-zset-获取元素分数");
+    }
+
+    @Override
+    public GlobalEntity redis_zsetIncrementScore(String paramString)
+    {
+        // 1、获取前端参数
+        String key = Request_Utils.getParam(paramString, "key");
+        String value = Request_Utils.getParam(paramString, "value");
+        double delta = Double.parseDouble(Request_Utils.getParam(paramString, "delta"));
+
+        // 2、操作 redis zset 增加元素分数
+        Double newScore = redisTemplate.opsForZSet().incrementScore(key, value, delta);
+
+        // 3、创建结果反参
+        HashMap<String, Object> resultMap = new HashMap<>();
+        resultMap.put("key", key);
+        resultMap.put("value", value);
+        resultMap.put("newScore", newScore);
+        return GlobalEntity.success(resultMap, "redis-zset-增加元素分数");
+    }
 
     @Override
     public GlobalEntity cookie_create(String paramString, HttpServletResponse response)
@@ -1215,216 +1542,348 @@ public class TechServiceImpl implements TechService
         return GlobalEntity.success(resultMap,"session-删除session信息成功");
     }
 
+
     @Override
     public GlobalEntity elasticsearch_createIndex(String paramString)
     {
-        HashMap<String, Object> resultMap = null;
-        try {
-            // 1、接收前端参数
-            String indexName = Request_Utils.getParam(paramString,"indexName");
-
-            // 2、客户端执行请求 IndicesClient,请求后获得响应
-            CreateIndexResponse indexCreateResult = esUtils.createIndex(indexName,null,null);
-
-            // 3、封装返回参数
-            resultMap = new HashMap<>();
-            resultMap.put("indexName",indexName);
-            resultMap.put("responseString",indexCreateResult.toString());
-        } catch (Exception e)
-        {
-            Exception_Utils.recursiveReversePrintStackCauseCommon(e);
-            return GlobalEntity.error("elasticsearch创建索引失败{}",e.getMessage());
-        }
-        return GlobalEntity.success(resultMap,"elasticsearch创建索引成功");
-    }
-
-    @Override
-    public GlobalEntity elasticsearch_deleteIndex(String paramString)
-    {
         HashMap<String, Object> resultMap = new HashMap<>();
-        try
-        {
+        try {
             // 1、接收前端参数
             String indexName = Request_Utils.getParam(paramString, "indexName");
 
-            // 2、删除索引
-            DeleteIndexResponse deleteIndexResult = esUtils.deleteIndex(indexName);
+            // 2、构建创建索引请求
+            CreateIndexRequest.Builder requestBuilder = new CreateIndexRequest.Builder().index(indexName);
 
-            // 3、封装结果参数
-            resultMap.put("responseString",deleteIndexResult.toString());
-            resultMap.put("indexName",indexName);
+
+            TypeMapping   mappings   = null;
+            IndexSettings settings   = null;
+            // 3、如果提供映射（mappings），设置映射
+            if (mappings != null)
+            {
+                // 这里你可能需要将 mappings 转为 Elasticsearch 支持的格式，例如使用 JSON 解析
+                requestBuilder.mappings(mappings);
+            }
+
+            // 4、如果提供设置（settings），设置索引配置
+            if (settings != null)
+            {
+                // 这里你也可能需要将 settings 转为 Elasticsearch 支持的格式
+                requestBuilder.settings(settings);
+            }
+
+            // 5、执行创建索引操作
+            CreateIndexResponse createIndexResponse = elasticsearchClient.indices().create(requestBuilder.build());
+
+            // 6、封装结果参数
+            resultMap.put("responseString", createIndexResponse.toString());
+            resultMap.put("indexName", indexName);
+
+        } catch (Exception e) {
+            Exception_Utils.recursiveReversePrintStackCauseCommon(e);
+            log.error("创建索引失败：{}", e.getMessage());
+            return GlobalEntity.error(resultMap, "elasticsearch-创建索引失败" + e.getMessage());
+        }
+        return GlobalEntity.success(resultMap, "elasticsearch-创建索引成功");
+    }
+
+    @Override
+    public GlobalEntity elasticsearch_deleteIndex(String paramString) {
+        HashMap<String, Object> resultMap = new HashMap<>();
+        try {
+            // 1、接收前端参数
+            String indexName = Request_Utils.getParam(paramString, "indexName");
+
+            // 2、构建删除索引请求
+            DeleteIndexRequest.Builder request = new DeleteIndexRequest.Builder().index(indexName);
+
+            // 3、执行删除索引操作
+            AcknowledgedResponse deleteIndexResult = elasticsearchClient.indices().delete(request.build());
+
+            // 4、封装结果参数
+            resultMap.put("responseString", deleteIndexResult.toString());
+            resultMap.put("indexName", indexName);
+
+        } catch (Exception e) {
+            Exception_Utils.recursiveReversePrintStackCauseCommon(e);
+            log.error("删除索引失败：{}", e.getMessage());
+            return GlobalEntity.error(resultMap, "elasticsearch-删除索引失败" + e.getMessage());
+        }
+        return GlobalEntity.success(resultMap, "elasticsearch-删除索引成功");
+    }
+
+    @Override
+    public GlobalEntity elasticsearch_existsIndex(String paramString)
+    {
+        HashMap<String, Object> resultMap = new HashMap<>();
+        try {
+            // 1、接收前端参数
+            String indexName = Request_Utils.getParam(paramString, "indexName");
+
+            // 2、构建检查索引是否存在请求
+            ExistsRequest request = new ExistsRequest.Builder().index(indexName).build();
+
+
+            // 3、执行检查索引是否存在操作
+            BooleanResponse exists = elasticsearchClient.indices().exists(request);
+
+            // 4、封装结果参数
+            resultMap.put("existsFlag", exists.value());
+            resultMap.put("indexName",  indexName);
 
         } catch (Exception e)
         {
             Exception_Utils.recursiveReversePrintStackCauseCommon(e);
-            log.error("删除索引失败：{}",e.getMessage());
-            return GlobalEntity.error(resultMap,"elasticsearch-删除索引失败"+e.getMessage());
+            log.error("检查索引是否存在失败：{}", e.getMessage());
+            return GlobalEntity.error(resultMap, "elasticsearch-检查索引是否存在失败" + e.getMessage());
         }
-        return GlobalEntity.success(resultMap,"elasticsearch-删除索引成功");
+        return GlobalEntity.success(resultMap, "elasticsearch-检查索引是否存在成功");
+    }
+
+    // 获取索引元数据
+    @Override
+    public GlobalEntity elasticsearch_getIndex(String paramString)
+    {
+        HashMap<String, Object> resultMap = new HashMap<>();
+        try {
+            // 1、接收前端参数
+            String indexName = Request_Utils.getParam(paramString, "indexName");
+
+            // 2、构建获取索引元数据请求
+            GetIndexRequest.Builder request = new GetIndexRequest.Builder().index(indexName);
+
+            // 3、执行获取索引元数据操作
+            GetIndexResponse response = elasticsearchClient.indices().get(request.build());
+
+            // 4、封装结果参数
+            resultMap.put("indexMetadata", response.toString());
+            resultMap.put("indexName", indexName);
+
+        } catch (Exception e) {
+            Exception_Utils.recursiveReversePrintStackCauseCommon(e);
+            log.error("获取索引元数据失败：{}", e.getMessage());
+            return GlobalEntity.error(resultMap, "elasticsearch-获取索引元数据失败" + e.getMessage());
+        }
+        return GlobalEntity.success(resultMap, "elasticsearch-获取索引元数据成功");
     }
 
     @Override
-    public GlobalEntity elasticsearch_insertDocument(String paramString)
+    public GlobalEntity elasticsearch_indexDocument(String paramString)
     {
-        // 1、接收前端参数
-        String indexName = Request_Utils.getParam(paramString, "indexName"); // 索引
-        String id        = Request_Utils.getParam(paramString, "id");        // 文档id（可选）
-
-        // 2、封装要插入的数据
-        HashMap<String, Object> insertEsMap = new HashMap<>();
-        insertEsMap.put("tittle","吕相赫学习es");
-        insertEsMap.put("content","一步一步努力精通es");
-        insertEsMap.put("author","吕相赫");
-        insertEsMap.put("createTime","2024-12-23");
-
-        // 3、插入数据
         HashMap<String, Object> resultMap = new HashMap<>();
         try
         {
-            IndexResponse insertDocumentResult = esUtils.insertDocument(indexName, id, insertEsMap);
-            resultMap.put("responseString",insertDocumentResult.toString());
-            resultMap.put("responseStringFlag",insertDocumentResult.result().name().equalsIgnoreCase("Created"));
+            // 1. 接收前端参数
+            String indexName = Request_Utils.getParam(paramString, "indexName");
+            String docId     = Request_Utils.getParam(paramString, "docId");
+            String document  = Request_Utils.getParam(paramString, "document");
+
+            Map map = JSON.parseObject(document, Map.class);
+
+            // 2. 构建 IndexRequest 请求
+            IndexRequest request = new IndexRequest.Builder<Map<String, Object>>()
+                    .index(indexName)
+                    .id(docId)
+                    .document(map)
+                    .build();
+
+            // 3. 执行插入操作
+            IndexResponse response = elasticsearchClient.index(request);
+
+            // 4. 返回结果
+            resultMap.put("docId", docId);
+            resultMap.put("indexName", indexName);
+            resultMap.put("response", response.toString());
+            return GlobalEntity.success(resultMap, "elasticsearch-插入文档成功");
         } catch (IOException e)
         {
             Exception_Utils.recursiveReversePrintStackCauseCommon(e);
-            log.error("elasticsearch-插入单条数据失败{}",e.getMessage());
+            log.error("插入文档失败：{}", e.getMessage());
+            return GlobalEntity.error(resultMap, "elasticsearch-插入文档失败：" + e.getMessage());
         }
-
-        // 4、封装返回结果
-        resultMap.put("insertEsMap",insertEsMap);
-        resultMap.put("indexName",indexName);
-        resultMap.put("id",id);
-        return GlobalEntity.success(resultMap,"elasticsearch，插入单条数据成功");
     }
 
     @Override
     public GlobalEntity elasticsearch_getDocument(String paramString)
     {
-        // 1、获取前端参数
-        String indexName = Request_Utils.getParam(paramString, "indexName");
-        String id = Request_Utils.getParam(paramString, "id");
-
-        // 2、根据索引和文档id查询指定单条数据
         HashMap<String, Object> resultMap = new HashMap<>();
         try
         {
-            Map<String, Object> document = esUtils.getDocument(indexName, id);
-            resultMap.put("responseString",document.toString());
+            // 1. 接收前端参数
+            String indexName = Request_Utils.getParam(paramString, "indexName");
+            String docId     = Request_Utils.getParam(paramString, "docId");
+
+            // 2. 构建 GetRequest 请求
+            GetRequest request = new GetRequest.Builder()
+                    .index(indexName)
+                    .id(docId)
+                    .build();
+
+            // 3. 执行查询操作
+            GetResponse<Map> response = elasticsearchClient.get(request, Map.class);
+
+            // 4. 返回结果
+            Map<String, Object> source = response.source();
+            resultMap.put("source", source);
+            resultMap.put("docId", docId);
+            resultMap.put("indexName", indexName);
+
+            return GlobalEntity.success(resultMap, "elasticsearch-获取文档成功");
         } catch (IOException e)
         {
             Exception_Utils.recursiveReversePrintStackCauseCommon(e);
-            log.error("elasticsearch-查询单条数据{}",e.getMessage());
+            log.error("获取文档失败：{}", e.getMessage());
+            return GlobalEntity.error(resultMap, "elasticsearch-获取文档失败：" + e.getMessage());
         }
+    }
 
-        // 3、封装结果
-        resultMap.put("indexName",indexName);
-        resultMap.put("id",id);
+    @Override
+    public GlobalEntity elasticsearch_existsDocument(String paramString)
+    {
+        HashMap<String, Object> resultMap = new HashMap<>();
+        try
+        {
+            // 1. 接收前端参数
+            String indexName = Request_Utils.getParam(paramString, "indexName");
+            String docId     = Request_Utils.getParam(paramString, "docId");
 
-        return GlobalEntity.success(resultMap,"elasticsearch-搜索单条数据成功");
+            // 2. 构建 ExistsRequest 请求
+            GetRequest request = new GetRequest.Builder()
+                    .index(indexName)
+                    .id(docId)
+                    .build();
+
+            // 3. 执行检查文档是否存在操作
+            GetResponse response = elasticsearchClient.get(request,Map.class);
+
+            // 4. 返回结果
+            resultMap.put("exists", response.found());
+            resultMap.put("docId", docId);
+            resultMap.put("indexName", indexName);
+
+            return GlobalEntity.success(resultMap, "elasticsearch-检查文档是否存在成功");
+        } catch (IOException e)
+        {
+            Exception_Utils.recursiveReversePrintStackCauseCommon(e);
+            log.error("检查文档是否存在失败：{}", e.getMessage());
+            return GlobalEntity.error(resultMap, "elasticsearch-检查文档是否存在失败：" + e.getMessage());
+        }
+    }
+
+    @Override
+    public GlobalEntity elasticsearch_updateDocument(String paramString)
+    {
+        HashMap<String, Object> resultMap = new HashMap<>();
+        try {
+            // 1. 接收前端参数
+            String indexName = Request_Utils.getParam(paramString, "indexName");
+            String docId     = Request_Utils.getParam(paramString, "docId");
+            String document  = Request_Utils.getParam(paramString, "document");
+
+            Map map = JSON.parseObject(document, Map.class);
+            // 2. 构建 UpdateRequest 请求
+            UpdateRequest<Map,Map> updateRequest = new UpdateRequest.Builder<Map,Map>()
+                    .index(indexName)
+                    .id(docId)
+                    .doc(map)  // 更新文档内容
+                    .build();
+
+            // 3. 执行更新操作
+            UpdateResponse response = elasticsearchClient.update(updateRequest, Map.class);
+
+            // 4. 返回结果
+            resultMap.put("docId",     docId);
+            resultMap.put("indexName", indexName);
+            resultMap.put("response",  response.toString());
+
+            return GlobalEntity.success(resultMap, "elasticsearch-更新文档成功");
+        } catch (IOException e) {
+            Exception_Utils.recursiveReversePrintStackCauseCommon(e);
+            log.error("更新文档失败：{}", e.getMessage());
+            return GlobalEntity.error(resultMap, "elasticsearch-更新文档失败：" + e.getMessage());
+        }
     }
 
     @Override
     public GlobalEntity elasticsearch_deleteDocument(String paramString)
     {
-        // 1、获取前端参数
-        String indexName = Request_Utils.getParam(paramString, "indexName");
-        String id = Request_Utils.getParam(paramString, "id");
-
-        // 2、删除单条数据
         HashMap<String, Object> resultMap = new HashMap<>();
         try
         {
-            DeleteResponse deleteResponse = esUtils.deleteDocument(indexName, id);
-            resultMap.put("responseString",deleteResponse.toString());
-        } catch (Exception e)
-        {
-            Exception_Utils.recursiveReversePrintStackCauseCommon(e);
-            log.error("elasticsearch-删除单条数据失败：{}",e.getMessage());
-        }
+            // 1. 接收前端参数
+            String indexName = Request_Utils.getParam(paramString, "indexName");
+            String docId     = Request_Utils.getParam(paramString, "docId");
 
-        // 3、封装结果
-        resultMap.put("indexName",indexName);
-        resultMap.put("id",id);
-        return GlobalEntity.success(resultMap,"elasticsearch-删除单条数据成功");
+            // 2. 构建 DeleteRequest 请求
+            DeleteRequest deleteRequest = new DeleteRequest.Builder()
+                    .index(indexName)
+                    .id(docId)
+                    .build();
 
-    }
-    
+            // 3. 执行删除操作
+            DeleteResponse deleteResponse = elasticsearchClient.delete(deleteRequest);
 
-    @Override
-    public GlobalEntity elasticsearch_updateDocument(String paramString)
-    {
-        // 1、接收前端参数
-        String indexName       = Request_Utils.getParam(paramString, "indexName");
-        String id              = Request_Utils.getParam(paramString, "id");
-        String updateMapString = Request_Utils.getParam(paramString, "updateMapString");
-        ObjectMapper objectMapper = new ObjectMapper();
-        HashMap<Object, Object> resultmap = new HashMap<>();
-        try
-        {
-            HashMap updateHashMap = objectMapper.readValue(updateMapString, HashMap.class);
-            UpdateResponse updateResponse = esUtils.updateDocument(indexName, id, updateHashMap);
-            resultmap.put("responseString",updateResponse.toString());
+            // 4. 返回结果
+            resultMap.put("docId", docId);
+            resultMap.put("indexName", indexName);
+            resultMap.put("response", deleteResponse.toString());
 
-        } catch (IOException e)
-        {
-
-            Exception_Utils.recursiveReversePrintStackCauseCommon(e);
-            log.error("elasticsearch-更新单条数据{}",e.getMessage());
-        }
-        resultmap.put("indexName",indexName);
-        resultmap.put("id",id);
-        return GlobalEntity.success(resultmap,"elasticsearch-更新单条数据成功");
-    }
-
-    @Override
-    public GlobalEntity elasticsearch_bulkInsertDocument(String paramString)
-    {
-        // 1、接收前端参数
-        String indexName            = Request_Utils.getParam(paramString, "indexName"); // 需要批量操作的索引
-        String docs                 = Request_Utils.getParam(paramString, "docs");      // 批量操作的文档
-        List<HashMap> docsMapList   = JSON.parseArray(docs, HashMap.class);
-
-        Map<String,Map<String,Object>> bulkInsertDocumentHashMap = new HashMap<>();
-
-        for (HashMap docMap : docsMapList)
-        {
-            String docId = UUID.randomUUID().toString();
-            bulkInsertDocumentHashMap.put(docId,docMap);
-        }
-
-        // 2、批量插入或更新文档
-        HashMap<Object, Object> resultMap = new HashMap<>();
-        try
-        {
-            BulkResponse bulkResponse = esUtils.bulkInsertDocument(indexName, bulkInsertDocumentHashMap);
-            resultMap.put("responseString",bulkResponse.toString());
+            return GlobalEntity.success(resultMap, "elasticsearch-删除文档成功");
         } catch (IOException e)
         {
             Exception_Utils.recursiveReversePrintStackCauseCommon(e);
-            log.error("elasticsearch-批量插入或更新文档失败{}",e.getMessage());
+            log.error("删除文档失败：{}", e.getMessage());
+            return GlobalEntity.error(resultMap, "elasticsearch-删除文档失败：" + e.getMessage());
         }
-        resultMap.put("indexName",indexName);
-        resultMap.put("id",docs);
-        return GlobalEntity.success(resultMap,"elasticsearch-批量插入数据或更新成功");
-
     }
 
     @Override
-    public GlobalEntity elasticsearch_batch(String paramString)
-    {
-        return null;
-    }
+    public GlobalEntity elasticsearch_bulkInsert(String paramString) {
+        HashMap<String, Object> resultMap = new HashMap<>();
+        try {
+            // 1. 接收前端参数
+            String indexName = Request_Utils.getParam(paramString, "indexName");
+            String document  = Request_Utils.getParam(paramString, "document");
 
-    @Override
-    public GlobalEntity elasticsearch_match(String paramString)
-    {
-        return null;
-    }
+            Map<String,Map<String,Object>> map = JSON.parseObject(document, Map.class);
+            // 2. 构建 BulkRequest 请求
+            // 创建 bulk 请求
+            BulkRequest.Builder br = new BulkRequest.Builder();
 
-    @Override
-    public GlobalEntity elasticsearch_term(String paramString)
-    {
-        return null;
+            // 遍历每个文档，构建插入或更新的操作
+            for (Map.Entry<String, Map<String, Object>> entry : map.entrySet())
+            {
+                String              docId = entry.getKey();   // id
+                Map<String, Object> doc   = entry.getValue(); // 文档
+
+                JsonData jsonData = JsonData.of(doc);
+                // 创建index请求
+                IndexRequest<JsonData> indexRequest = new IndexRequest.Builder<JsonData>()
+                        .index(indexName)
+                        .id(docId)
+                        .document(jsonData)
+                        .build();
+                // 添加到Bulk请求中
+                BulkOperation bulkOperation = new BulkOperation.Builder().index(op->op
+                        .index(indexRequest.index())
+                        .id(indexRequest.id())
+                        .document(indexRequest.document())
+                ).build();
+                br.operations(bulkOperation);
+            }
+
+            // 3. 执行批量插入操作
+            BulkResponse bulkResponse = elasticsearchClient.bulk(br.build());
+
+            // 4. 返回结果
+            resultMap.put("errors", bulkResponse.errors());
+
+            return GlobalEntity.success(resultMap, "elasticsearch-批量插入文档成功");
+        } catch (IOException e)
+        {
+            Exception_Utils.recursiveReversePrintStackCauseCommon(e);
+            log.error("批量插入文档失败：{}", e.getMessage());
+            return GlobalEntity.error(resultMap, "elasticsearch-批量插入文档失败：" + e.getMessage());
+        }
     }
 
     @Override

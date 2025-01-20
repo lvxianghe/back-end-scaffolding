@@ -379,6 +379,123 @@ public class TechController
         GlobalEntity ret = techService.redis_listSet(paramString);
         return ret;
     }
+    @Operation(summary = "redis学习接口", description = "list-set")
+    @RequestMapping(value = ApiConstant.Study.redis_setAdd,method = RequestMethod.POST)
+    public GlobalEntity redis_setAdd(@RequestBody String paramString)
+    {
+        GlobalEntity ret = techService.redis_setAdd(paramString);
+        return ret;
+    }
+
+    @Operation(summary = "redis学习接口", description = "list-set")
+    @RequestMapping(value = ApiConstant.Study.redis_setAddAll,method = RequestMethod.POST)
+    public GlobalEntity redis_setAddAll(@RequestBody String paramString)
+    {
+        GlobalEntity ret = techService.redis_setAddAll(paramString);
+        return ret;
+    }
+    @Operation(summary = "redis学习接口", description = "list-set")
+    @RequestMapping(value = ApiConstant.Study.redis_setGetAll,method = RequestMethod.POST)
+    public GlobalEntity redis_setGetAll(@RequestBody String paramString)
+    {
+        GlobalEntity ret = techService.redis_setGetAll(paramString);
+        return ret;
+    }@Operation(summary = "redis学习接口", description = "list-set")
+    @RequestMapping(value = ApiConstant.Study.redis_setGetRandom,method = RequestMethod.POST)
+    public GlobalEntity redis_setGetRandom(@RequestBody String paramString)
+    {
+        GlobalEntity ret = techService.redis_setGetRandom(paramString);
+        return ret;
+    }
+    @Operation(summary = "redis学习接口", description = "list-set")
+    @RequestMapping(value = ApiConstant.Study.redis_setIsMember,method = RequestMethod.POST)
+    public GlobalEntity redis_setIsMember(@RequestBody String paramString)
+    {
+        GlobalEntity ret = techService.redis_setIsMember(paramString);
+        return ret;
+    }
+    @Operation(summary = "redis学习接口", description = "list-set")
+    @RequestMapping(value = ApiConstant.Study.redis_setRemove,method = RequestMethod.POST)
+    public GlobalEntity redis_setRemove(@RequestBody String paramString)
+    {
+        GlobalEntity ret = techService.redis_setRemove(paramString);
+        return ret;
+    }@Operation(summary = "redis学习接口", description = "list-set")
+    @RequestMapping(value = ApiConstant.Study.redis_setSize,method = RequestMethod.POST)
+    public GlobalEntity redis_setSize(@RequestBody String paramString)
+    {
+        GlobalEntity ret = techService.redis_setSize(paramString);
+        return ret;
+    }
+
+    @Operation(summary = "redis学习接口", description = "list-zset")
+    @RequestMapping(value = ApiConstant.Study.redis_zsetAdd,method = RequestMethod.POST)
+    public GlobalEntity redis_zsetAdd(@RequestBody String paramString)
+    {
+        GlobalEntity ret = techService.redis_zsetAdd(paramString);
+        return ret;
+    }@Operation(summary = "redis学习接口", description = "list-zset")
+    @RequestMapping(value = ApiConstant.Study.redis_zsetGetByRange,method = RequestMethod.POST)
+    public GlobalEntity redis_zsetGetByRange(@RequestBody String paramString)
+    {
+        GlobalEntity ret = techService.redis_zsetGetByRange(paramString);
+        return ret;
+    }
+    @Operation(summary = "redis学习接口", description = "list-zset")
+    @RequestMapping(value = ApiConstant.Study.redis_zsetGetByRangeReverse,method = RequestMethod.POST)
+    public GlobalEntity redis_zsetGetByRangeReverse(@RequestBody String paramString)
+    {
+        GlobalEntity ret = techService.redis_zsetGetByRangeReverse(paramString);
+        return ret;
+    }@Operation(summary = "redis学习接口", description = "list-zset")
+    @RequestMapping(value = ApiConstant.Study.redis_zsetGetByScoreRange,method = RequestMethod.POST)
+    public GlobalEntity redis_zsetGetByScoreRange(@RequestBody String paramString)
+    {
+        GlobalEntity ret = techService.redis_zsetGetByScoreRange(paramString);
+        return ret;
+    }@Operation(summary = "redis学习接口", description = "list-zset")
+    @RequestMapping(value = ApiConstant.Study.redis_zsetGetByScoreRangeReverse,method = RequestMethod.POST)
+    public GlobalEntity redis_zsetGetByScoreRangeReverse(@RequestBody String paramString)
+    {
+        GlobalEntity ret = techService.redis_zsetGetByScoreRangeReverse(paramString);
+        return ret;
+    }@Operation(summary = "redis学习接口", description = "list-zset")
+    @RequestMapping(value = ApiConstant.Study.redis_zsetSize,method = RequestMethod.POST)
+    public GlobalEntity redis_zsetSize(@RequestBody String paramString)
+    {
+        GlobalEntity ret = techService.redis_zsetSize(paramString);
+        return ret;
+    }@Operation(summary = "redis学习接口", description = "list-zset")
+    @RequestMapping(value = ApiConstant.Study.redis_zsetRemove,method = RequestMethod.POST)
+    public GlobalEntity redis_zsetRemove(@RequestBody String paramString)
+    {
+        GlobalEntity ret = techService.redis_zsetRemove(paramString);
+        return ret;
+    }@Operation(summary = "redis学习接口", description = "list-zset")
+    @RequestMapping(value = ApiConstant.Study.redis_zsetRemoveByRange,method = RequestMethod.POST)
+    public GlobalEntity redis_zsetRemoveByRange(@RequestBody String paramString)
+    {
+        GlobalEntity ret = techService.redis_zsetRemoveByRange(paramString);
+        return ret;
+    }@Operation(summary = "redis学习接口", description = "list-zset")
+    @RequestMapping(value = ApiConstant.Study.redis_zsetRemoveByScoreRange,method = RequestMethod.POST)
+    public GlobalEntity redis_zsetRemoveByScoreRange(@RequestBody String paramString)
+    {
+        GlobalEntity ret = techService.redis_zsetRemoveByScoreRange(paramString);
+        return ret;
+    }@Operation(summary = "redis学习接口", description = "list-zset")
+    @RequestMapping(value = ApiConstant.Study.redis_zsetGetScore,method = RequestMethod.POST)
+    public GlobalEntity redis_zsetGetScore(@RequestBody String paramString)
+    {
+        GlobalEntity ret = techService.redis_zsetGetScore(paramString);
+        return ret;
+    }@Operation(summary = "redis学习接口", description = "list-zset")
+    @RequestMapping(value = ApiConstant.Study.redis_zsetIncrementScore,method = RequestMethod.POST)
+    public GlobalEntity redis_zsetIncrementScore(@RequestBody String paramString)
+    {
+        GlobalEntity ret = techService.redis_zsetIncrementScore(paramString);
+        return ret;
+    }
 
 
 
@@ -444,58 +561,78 @@ public class TechController
     }
 
     @Operation(summary = "elasticsearch学习接口", description = "elasticsearch-创建索引")
-    @RequestMapping(value = ApiConstant.Study.elasticsearch_createIndex,method = RequestMethod.POST)
+    @RequestMapping(value = ApiConstant.Study.elasticsearch_createIndex, method = RequestMethod.POST)
     public GlobalEntity elasticsearch_createIndex(@RequestBody String paramString)
     {
-        GlobalEntity ret = techService.elasticsearch_createIndex(paramString);
-        return ret;
+        return techService.elasticsearch_createIndex(paramString);
     }
 
     @Operation(summary = "elasticsearch学习接口", description = "elasticsearch-删除索引")
-    @RequestMapping(value = ApiConstant.Study.elasticsearch_deleteIndex,method = RequestMethod.POST)
+    @RequestMapping(value = ApiConstant.Study.elasticsearch_deleteIndex, method = RequestMethod.POST)
     public GlobalEntity elasticsearch_deleteIndex(@RequestBody String paramString)
     {
-        GlobalEntity ret = techService.elasticsearch_deleteIndex(paramString);
-        return ret;
+        return techService.elasticsearch_deleteIndex(paramString);
     }
 
-    @Operation(summary = "elasticsearch学习接口", description = "elasticsearch-插入单条文档")
-    @RequestMapping(value = ApiConstant.Study.elasticsearch_insertDocument,method = RequestMethod.POST)
-    public GlobalEntity elasticsearch_insertDocument(@RequestBody String paramString)
+    @Operation(summary = "elasticsearch学习接口", description = "elasticsearch-检查索引是否存在")
+    @RequestMapping(value = ApiConstant.Study.elasticsearch_existsIndex, method = RequestMethod.POST)
+    public GlobalEntity elasticsearch_existsIndex(@RequestBody String paramString)
     {
-        GlobalEntity ret = techService.elasticsearch_insertDocument(paramString);
+        return techService.elasticsearch_existsIndex(paramString);
+    }
+
+    @Operation(summary = "elasticsearch学习接口", description = "elasticsearch-获取索引元数据")
+    @RequestMapping(value = ApiConstant.Study.elasticsearch_getIndex, method = RequestMethod.POST)
+    public GlobalEntity elasticsearch_getIndex(@RequestBody String paramString)
+    {
+        return techService.elasticsearch_getIndex(paramString);
+    }
+
+    @Operation(summary = "elasticsearch-插入文档", description = "elasticsearch-插入文档")
+    @RequestMapping(value = ApiConstant.Study.elasticsearch_indexDocument, method = RequestMethod.POST)
+    public GlobalEntity elasticsearch_indexDocument(@RequestBody String paramString)
+    {
+        GlobalEntity ret = techService.elasticsearch_indexDocument(paramString);
         return ret;
     }
 
-    @Operation(summary = "elasticsearch学习接口", description = "elasticsearch-查询单条文档")
-    @RequestMapping(value = ApiConstant.Study.elasticsearch_getDocument,method = RequestMethod.POST)
+    @Operation(summary = "elasticsearch-获取文档", description = "elasticsearch-获取文档")
+    @RequestMapping(value = ApiConstant.Study.elasticsearch_getDocument, method = RequestMethod.POST)
     public GlobalEntity elasticsearch_getDocument(@RequestBody String paramString)
     {
         GlobalEntity ret = techService.elasticsearch_getDocument(paramString);
         return ret;
     }
 
-    @Operation(summary = "elasticsearch学习接口", description = "elasticsearch-删除单条文档")
-    @RequestMapping(value = ApiConstant.Study.elasticsearch_deleteDocument,method = RequestMethod.POST)
-    public GlobalEntity elasticsearch_deleteDocument(@RequestBody String paramString)
+    @Operation(summary = "elasticsearch-检查文档是否存在", description = "elasticsearch-检查文档是否存在")
+    @RequestMapping(value = ApiConstant.Study.elasticsearch_existsDocument, method = RequestMethod.POST)
+    public GlobalEntity elasticsearch_existsDocument(@RequestBody String paramString)
     {
-        GlobalEntity ret = techService.elasticsearch_deleteDocument(paramString);
+        GlobalEntity ret = techService.elasticsearch_existsDocument(paramString);
         return ret;
     }
 
-    @Operation(summary = "elasticsearch学习接口", description = "elasticsearch-更新单条文档")
-    @RequestMapping(value = ApiConstant.Study.elasticsearch_updateDocument,method = RequestMethod.POST)
+    @Operation(summary = "elasticsearch-更新文档", description = "elasticsearch-更新文档")
+    @RequestMapping(value = ApiConstant.Study.elasticsearch_updateDocument, method = RequestMethod.POST)
     public GlobalEntity elasticsearch_updateDocument(@RequestBody String paramString)
     {
         GlobalEntity ret = techService.elasticsearch_updateDocument(paramString);
         return ret;
     }
 
-    @Operation(summary = "elasticsearch学习接口", description = "elasticsearch-批量插入或者更新文档")
-    @RequestMapping(value = ApiConstant.Study.elasticsearch_bulkInsertDocument,method = RequestMethod.POST)
-    public GlobalEntity elasticsearch_bulkInsertDocument(@RequestBody String paramString)
+    @Operation(summary = "elasticsearch-删除文档", description = "elasticsearch-删除文档")
+    @RequestMapping(value = ApiConstant.Study.elasticsearch_deleteDocument, method = RequestMethod.POST)
+    public GlobalEntity elasticsearch_deleteDocument(@RequestBody String paramString)
     {
-        GlobalEntity ret = techService.elasticsearch_bulkInsertDocument(paramString);
+        GlobalEntity ret = techService.elasticsearch_deleteDocument(paramString);
+        return ret;
+    }
+
+    @Operation(summary = "elasticsearch-批量操作文档", description = "elasticsearch-批量操作文档")
+    @RequestMapping(value = ApiConstant.Study.elasticsearch_bulkInsert, method = RequestMethod.POST)
+    public GlobalEntity elasticsearch_bulkInsert(@RequestBody String paramString)
+    {
+        GlobalEntity ret = techService.elasticsearch_bulkInsert(paramString);
         return ret;
     }
 

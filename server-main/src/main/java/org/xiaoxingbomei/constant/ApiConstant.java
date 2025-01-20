@@ -275,6 +275,7 @@ public class ApiConstant
         public static final String redis_listSet                        = "/study/redis_listSet";                // redis-list-设置列表中指定索引的值
 
         public static final String redis_setAdd                         = "/study/redis_setAdd";                 // redis-set-添加一个元素
+        public static final String redis_setAddAll                      = "/study/redis_setAddAll";              // redis-set-添加多个元素
         public static final String redis_setGetAll                      = "/study/redis_setGetAll";              // redis-set-获取所有成员
         public static final String redis_setGetRandom                   = "/study/redis_setGetRandom";           // redis-set-获取指定数量的随机成员
         public static final String redis_setIsMember                    = "/study/redis_setIsMember";            // redis-set-检查某个元素是否是成员
@@ -304,19 +305,66 @@ public class ApiConstant
         public static final String session_search                       = "/study/session_search";               // session-查询
         public static final String session_delete                       = "/study/session_delete";               // session-删除
 
+        // 索引操作相关接口
         public static final String elasticsearch_createIndex            = "/study/elasticsearch_createIndex";         // elasticsearch-创建索引
         public static final String elasticsearch_deleteIndex            = "/study/elasticsearch_deleteIndex";         // elasticsearch-删除索引
-        public static final String elasticsearch_insertDocument         = "/study/elasticsearch_insertDocument";      // elasticsearch-插入单条数据
-        public static final String elasticsearch_getDocument            = "/study/elasticsearch_getDocument";         // elasticsearch-查询单条数据
-        public static final String elasticsearch_deleteDocument         = "/study/elasticsearch_deleteDocument";      // elasticsearch-删除单条数据
-        public static final String elasticsearch_updateDocument         = "/study/elasticsearch_updateDocument";      // elasticsearch-更新单条文档
-        public static final String elasticsearch_bulkInsertDocument     = "/study/elasticsearch_bulkInsertDocument";  // elasticsearch-更新文档
-        public static final String elasticsearch_batchDeleteDocument    = "/study/elasticsearch_batchDeleteDocument"; // elasticsearch-批量删除文档
-        public static final String elasticsearch_match                  = "/study/elasticsearch_match";               // elasticsearch-match查询
-        public static final String elasticsearch_term                   = "/study/elasticsearch_term";                // elasticsearch-term查询
-        public static final String elasticsearch_bool                   = "/study/elasticsearch_bool";                // elasticsearch-bool查询
-        public static final String elasticsearch_highlight              = "/study/elasticsearch_highlight";           // elasticsearch-高亮显示
-        public static final String elasticsearch_multimatch             = "/study/elasticsearch_multimatch";          // elasticsearch-multimatch
+        public static final String elasticsearch_existsIndex            = "/study/elasticsearch_existsIndex";         // elasticsearch-检查索引是否存在
+        public static final String elasticsearch_getIndex               = "/study/elasticsearch_getIndex";            // elasticsearch-获取索引的元数据
+        public static final String elasticsearch_createIndexMapping     = "/study/elasticsearch_createIndexMapping";  // elasticsearch-创建索引映射
+        public static final String elasticsearch_getIndexMapping        = "/study/elasticsearch_getIndexMapping";     // elasticsearch-获取索引映射
+        public static final String elasticsearch_updateIndexMapping     = "/study/elasticsearch_updateIndexMapping";  // elasticsearch-更新索引映射
+        public static final String elasticsearch_addIndexAlias          = "/study/elasticsearch_addIndexAlias";       // elasticsearch-给索引添加别名
+        public static final String elasticsearch_removeIndexAlias       = "/study/elasticsearch_removeIndexAlias";    // elasticsearch-从索引移除别名
+        public static final String elasticsearch_refreshIndex           = "/study/elasticsearch_refreshIndex";        // elasticsearch-刷新索引
+        public static final String elasticsearch_flushIndex             = "/study/elasticsearch_flushIndex";          // elasticsearch-刷新索引缓存
+        public static final String elasticsearch_updateByQuery          = "/study/elasticsearch_updateByQuery";       // elasticsearch-根据查询更新文档
+        public static final String elasticsearch_deleteByQuery          = "/study/elasticsearch_deleteByQuery";       // elasticsearch-根据查询删除文档
+        public static final String elasticsearch_reindex                = "/study/elasticsearch_reindex";             // elasticsearch-索引重建
+        public static final String elasticsearch_rolloverIndex          = "/study/elasticsearch_rolloverIndex";       // elasticsearch-索引翻滚
+        public static final String elasticsearch_getIndexSettings       = "/study/elasticsearch_getIndexSettings";    // elasticsearch-获取索引设置
+        public static final String elasticsearch_updateIndexSettings    = "/study/elasticsearch_updateIndexSettings"; // elasticsearch-更新索引设置
+        public static final String elasticsearch_getIndicesByAlias      = "/study/elasticsearch_getIndicesByAlias";   // elasticsearch-获取某个别名下的所有索引
+        public static final String elasticsearch_closeIndex             = "/study/elasticsearch_closeIndex";          // elasticsearch-关闭索引
+        public static final String elasticsearch_openIndex              = "/study/elasticsearch_openIndex";           // elasticsearch-打开索引
+        public static final String elasticsearch_segment                = "/study/elasticsearch_segmentXxx";          // elasticsearch-段-xxx
+
+        // 文档操作
+        public static final String elasticsearch_indexDocument          = "/study/elasticsearch_indexDocument";       // elasticsearch-插入文档
+        public static final String elasticsearch_getDocument            = "/study/elasticsearch_getDocument";         // elasticsearch-获取文档
+        public static final String elasticsearch_existsDocument         = "/study/elasticsearch_existsDocument";      // elasticsearch-检查文档是否存在
+        public static final String elasticsearch_updateDocument         = "/study/elasticsearch_updateDocument";      // elasticsearch-更新文档
+        public static final String elasticsearch_deleteDocument         = "/study/elasticsearch_deleteDocument";      // elasticsearch-删除文档
+        public static final String elasticsearch_bulkInsert             = "/study/elasticsearch_bulkInsert";          // elasticsearch-批量操作文档
+
+        // 搜索操作
+        public static final String elasticsearch_search                 = "/study/elasticsearch_search";              // elasticsearch-查询文档
+        public static final String elasticsearch_searchById             = "/study/elasticsearch_searchById";          // elasticsearch-根据ID查询文档
+        public static final String elasticsearch_searchByField          = "/study/elasticsearch_searchByField";       // elasticsearch-根据字段查询文档
+        public static final String elasticsearch_searchAggregations     = "/study/elasticsearch_searchAggregations";  // elasticsearch-聚合查询
+
+        // 批量操作
+        public static final String elasticsearch_bulkIndex              = "/study/elasticsearch_bulkIndex";           // elasticsearch-批量插入文档
+        public static final String elasticsearch_bulkUpdate             = "/study/elasticsearch_bulkUpdate";          // elasticsearch-批量更新文档
+
+        // 集群和节点操作相关接口
+        public static final String elasticsearch_clusterHealth          = "/study/elasticsearch_clusterHealth";       // elasticsearch-获取集群健康状态
+        public static final String elasticsearch_clusterStats           = "/study/elasticsearch_clusterStats";        // elasticsearch-获取集群统计信息
+        public static final String elasticsearch_nodeInfo               = "/study/elasticsearch_nodeInfo";            // elasticsearch-获取节点信息
+
+        // 快照操作相关接口
+        public static final String elasticsearch_createSnapshot         = "/study/elasticsearch_createSnapshot";      // elasticsearch-创建快照
+        public static final String elasticsearch_restoreSnapshot        = "/study/elasticsearch_restoreSnapshot";     // elasticsearch-恢复快照
+        public static final String elasticsearch_deleteSnapshot         = "/study/elasticsearch_deleteSnapshot";      // elasticsearch-删除快照
+        public static final String elasticsearch_getSnapshot            = "/study/elasticsearch_getSnapshot";         // elasticsearch-获取快照信息
+
+        // 额外的接口
+        public static final String elasticsearch_explainSearch          = "/study/elasticsearch_explainSearch";       // elasticsearch-解释查询结果
+        public static final String elasticsearch_searchWithHighlighting = "/study/elasticsearch_searchWithHighlighting"; // elasticsearch-带有高亮的查询
+        public static final String elasticsearch_getMappingByField      = "/study/elasticsearch_getMappingByField";   // elasticsearch-获取特定字段的映射
+        public static final String elasticsearch_multiTermSearch        = "/study/elasticsearch_multiTermSearch";     // elasticsearch-多字段查询
+        public static final String elasticsearch_getDocumentSource      = "/study/elasticsearch_getDocumentSource";   // elasticsearch-获取文档源数据
+        public static final String elasticsearch_termVector             = "/study/elasticsearch_termVector";          // elasticsearch-获取文档的词项向量
+
 
         public static final String xxljob_Xxx                           = "/study/xxljob_Xxx";         // xxljob-
 
