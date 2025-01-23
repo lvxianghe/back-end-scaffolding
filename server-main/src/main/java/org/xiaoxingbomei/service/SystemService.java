@@ -1,54 +1,14 @@
 package org.xiaoxingbomei.service;
 
+import org.apache.logging.log4j.core.impl.MutableLogEvent;
+import org.springframework.web.multipart.MultipartFile;
+import org.xiaoxingbomei.common.entity.GlobalEntity;
+
 public interface SystemService
 {
-    /**
-     * 获取系统时间
-     * @return
-     */
-    String getSystemTime();
+    GlobalEntity getSystemInfo(String paramString);
 
-    /**
-     * 获取系统名称
-     * @return
-     */
-    String getSystemName();
 
-    /**
-     * 获取系统版本
-     * @return
-     */
-    String getSystemVersion();
-
-    /**
-     * 获取系统描述
-     * @return
-     */
-    String getSystemDescription();
-
-    /**
-     * 获取系统状态
-     * @return
-     */
-    String getSystemStatus();
-
-    /**
-     * 获取系统状态描述
-     * @return
-     */
-    String getSystemStatusDescription();
-
-    /**
-     * 获取系统状态码
-     * @return
-     */
-    String getSystemStatusCode();
-
-    /**
-     * 获取系统状态码描述
-     * @return
-     */
-    String getSystemStatusCodeDescription();
-
+    GlobalEntity multiHandleSystem(MultipartFile file);
 
 }

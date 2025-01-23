@@ -2,23 +2,37 @@ package org.xiaoxingbomei.constant;
 
 /**
  * 全部Api常量
- * 1、系统
- * 2、用户
- * 3、机构
- * 4、角色
- * 5、权限
- * 6、业务-xxx
- * 7、业务-xxx
+ * 1、通用：系统
+ * 2、通用：用户
+ * 3、通用：机构
+ * 4、通用：角色
+ * 5、通用：权限
+ * 6、通用：日志
+ * 7、业务-大红书（小红书）
+ * 8、业务-悬赏金系统
+ * 8、业务-知识库（语雀）
+ * 9、业务：IM（微信）
+ * 10、业务：gpt（chatgpt）
+ * 11、业务：广告
+ * 12：业务：商城（淘宝）
+ * 13：业务：搜索推荐系统（大众点评）
+ * ##：《学习》
  */
 public class ApiConstant
 {
 
     /**
-     * 系统
+     * 通用：系统
      */
     public class System
     {
-        public static final String getSystemInfo            = "/system/getSystemInfo";       // 获取系统信息
+        public static final String getSystemInfo           = "/system/getSystemInfo";              // 系统信息搜索-（通用）
+        public static final String getSystemInfoByMysql    = "/system/getSystemInfoByMysql";       // 系统信息搜索-通过数据库
+        public static final String getSystemInfoByEs       = "/system/getSystemInfoByEs";          // 系统信息搜索-通过数据库
+        public static final String createSystem            = "/system/createSystem";               // 创建系统（落库+同步es）
+        public static final String updateSystem            = "/system/updateSystem";               // 更新系统（落库+同步es）
+        public static final String deleteSystem            = "/system/deleteSystem";               // 删除系统（落库+同步es）
+        public static final String multiHandleSystem       = "/system/multiHandleSystem";          // 批量操作系统信息（无则新增，有则修改）
     }
 
     /**
@@ -123,6 +137,9 @@ public class ApiConstant
 
     /**
      * 业务：大红书
+     * 1.
+     * 2.
+     * 3.
      */
     public class BigRedBook
     {
@@ -132,7 +149,31 @@ public class ApiConstant
     }
 
     /**
-     * 业务：知识库
+     * 业务：悬赏金系统
+     *
+     * 介绍：
+     * HungerGamesSystem 是一个基于悬赏机制的任务管理平台，致力于通过任务认领与执行、悬赏金激励等方式，鼓励个人主动承担责任和参与合作。
+     * 用户可以通过发布悬赏金任务，激励他人帮助解决问题；同时，用户也可以根据任务的悬赏金额认领并完成任务，获得相应的奖励。
+     * 系统以分布式微服务架构为基础，确保高效、可扩展且稳定的运行。
+     *
+     * 愿景：
+     * HungerGamesSystem 希望打破传统的管理模式，让每个成员都能根据兴趣与能力主动认领任务，并通过悬赏金机制促进团队协作与个人成长。
+     * 我们致力于构建一个透明、激励公平、充满活力的任务平台，在其中每个人都能找到价值，创造价值，实现自我发展。
+     *
+     * 业务&功能架构：
+     * 1. 用户服务：用户的信息管理、注册、登录、认证等（沿用系统本身）
+     * 2. 悬赏金服务：悬赏金管理
+     * 3. 任务服务：任务管理
+     * 4. 交易服务：悬赏金兑换、处理支付、奖励方法等财务交易相关
+     * 5. 通知服务：业务通知、任务进度提醒、奖励发放等通知
+     */
+
+
+    /**
+     * 业务：知识库（仿语雀）
+     * 1.
+     * 2.
+     * 3.
      */
     public class Wiki
     {
@@ -141,8 +182,12 @@ public class ApiConstant
         public static final String mine_knowledgeBase_create        = "/wiki/mine/knowledgeBase/create";      // 个人知识库创建
         public static final String mine_knowledgeBase_multiCreate   = "/wiki/mine/knowledgeBase/multiCreate"; // 个人知识库批量创建
     }
+
     /**
      * 业务：IM
+     * 1.
+     * 2.
+     * 3.
      */
     public class Chat
     {

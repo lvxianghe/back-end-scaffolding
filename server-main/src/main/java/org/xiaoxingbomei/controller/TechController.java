@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.xiaoxingbomei.constant.ApiConstant;
+import org.xiaoxingbomei.service.SystemService;
 import org.xiaoxingbomei.service.TechService;
 
 import org.xiaoxingbomei.common.entity.GlobalEntity;
@@ -20,6 +21,9 @@ public class TechController
 
     @Autowired
     private TechService techService;
+
+    @Autowired
+    private SystemService systemService;
 
     // =====================================================================================================
 

@@ -463,7 +463,7 @@ public class TechServiceImpl implements TechService
     public GlobalEntity fastJson_ObjectToJsonString(String paramString)
     {
         // 1、构建对象
-        User user = new User("吕相赫", "139xxxx", "777", "999", "浙江杭州");
+        User user = new User("吕相赫", "1","139xxxx", "777", "999", "浙江杭州");
         
         // 2、对象转JSONString
         String jsonString           = JSON.toJSONString(user);
@@ -500,7 +500,7 @@ public class TechServiceImpl implements TechService
     public GlobalEntity fastJson_PrettyPrint(String paramString)
     {
         // 1、构建对象
-        User user = new User("吕相赫", "139xxxx", "777", "999", "浙江杭州");
+        User user = new User("吕相赫","1", "139xxxx", "777", "999", "浙江杭州");
 
         // 2、对象转JSONString
         String jsonStringPrettified = JSONObject.toJSONString(user, SerializerFeature.PrettyFormat);
@@ -1137,7 +1137,8 @@ public class TechServiceImpl implements TechService
         resultMap.put("key",      key);
         resultMap.put("value",    value);
         resultMap.put("isMember", isMember);
-        return GlobalEntity.success(resultMap, "redis-set-判断元素是否存在");    }
+        return GlobalEntity.success(resultMap, "redis-set-判断元素是否存在");
+    }
 
     @Override
     public GlobalEntity redis_setRemove(String paramString)
@@ -1781,7 +1782,7 @@ public class TechServiceImpl implements TechService
 
             Map map = JSON.parseObject(document, Map.class);
             // 2. 构建 UpdateRequest 请求
-            UpdateRequest<Map,Map> updateRequest = new UpdateRequest.Builder<Map,Map>()
+            UpdateRequest updateRequest = new UpdateRequest.Builder()
                     .index(indexName)
                     .id(docId)
                     .doc(map)  // 更新文档内容
@@ -1837,7 +1838,8 @@ public class TechServiceImpl implements TechService
     }
 
     @Override
-    public GlobalEntity elasticsearch_bulkInsert(String paramString) {
+    public GlobalEntity elasticsearch_bulkInsert(String paramString)
+    {
         HashMap<String, Object> resultMap = new HashMap<>();
         try {
             // 1. 接收前端参数
