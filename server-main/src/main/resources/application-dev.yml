@@ -6,21 +6,20 @@ server:
 spring:
   application:
     name: server-main
-
 # apollo配置
 app:
   id: ysx
 apollo:
   cluster: app-dev
-#  meta: http://10.247.17.134:8080
-  meta: http://localhost:8080
-#  prefix: apollo
+  meta: http://10.247.17.134:8080
+  prefix: apollo
   autoUpdateInjectedSpringProperties: true
   bootstrap:
     enabled: true
     namespaces: application,configuration
     eagerLoad:
       enabled: false
+
 
     #   redis:
 #     host: 127.0.0.1
