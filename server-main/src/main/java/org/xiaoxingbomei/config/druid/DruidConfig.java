@@ -2,12 +2,15 @@ package org.xiaoxingbomei.config.druid;
 
 
 import com.alibaba.druid.pool.DruidDataSource;
+import com.alibaba.druid.support.http.StatViewServlet;
 import com.alibaba.druid.support.http.WebStatFilter;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
+import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 
 import javax.sql.DataSource;
 import java.sql.SQLException;
@@ -15,7 +18,7 @@ import java.sql.SQLException;
 @Configuration
 public class DruidConfig
 {
-    // 通过 Apollo 配置中心加载 Druid 相关配置
+
     @Value("${spring.datasource.url}")
     private String dbUrl;
 
@@ -39,9 +42,30 @@ public class DruidConfig
 
     @Value("${spring.datasource.druid.max-wait}")
     private long maxWait;
-    // =================================================================
 
+    @Value("${spring.datasource.druid.test-on-borrow}")
+    private boolean testOnBorrow;
+
+    @Value("${spring.datasource.druid.validation-query}")
+    private String validationQuery;
+
+    @Value("${spring.datasource.druid.stat-view-servlet.login-username}")
+    private String druidLoginUsername;
+
+    @Value("${spring.datasource.druid.stat-view-servlet.login-password}")
+    private String druidLoginPassword;
+
+    @Value("${spring.datasource.druid.stat-view-servlet.allow}")
+    private String druidAllowIp;
+
+    @Value("${spring.datasource.druid.web-stat-filter.exclusions}")
+    private String druidExclusions;
+
+    /**
+     * 配置 Druid 数据源
+     */
     @Bean
+    @Primary
     public DataSource dataSource() throws SQLException
     {
         DruidDataSource dataSource = new DruidDataSource();
@@ -53,42 +77,54 @@ public class DruidConfig
         dataSource.setMinIdle(minIdle);
         dataSource.setMaxActive(maxActive);
         dataSource.setMaxWait(maxWait);
-        // 其他常用配置项可以在此继续配置，例如SQL监控、连接池过滤器等
+        dataSource.setTestOnBorrow(testOnBorrow);
+        dataSource.setValidationQuery(validationQuery);
+
+        // 其他 Druid 连接池配置项
+        dataSource.setTimeBetweenEvictionRunsMillis(60000); // 配置间隔多久检测一次空闲连接
+        dataSource.setMinEvictableIdleTimeMillis(300000);   // 配置一个连接在池中最小生存的时间
+        dataSource.setPoolPreparedStatements(true);         // 开启 PSCache
+        dataSource.setMaxPoolPreparedStatementPerConnectionSize(20); // 设置 PSCache 大小
+
         return dataSource;
     }
 
-//    /**
-//     * 配置 Druid 监控页面 Servlet
-//     * 访问路径为 /druid/*，登录使用账号和密码
-//     */
-//    @Bean
-//    public ServletRegistrationBean<DruidStatViewServlet> druidStatViewServlet() {
-//        ServletRegistrationBean<DruidStatViewServlet> servletRegistrationBean =
-//                new ServletRegistrationBean<>(new DruidStatViewServlet(), "/druid/*");
-//
-//        // 配置登录账号和密码
-//        servletRegistrationBean.addInitParameter("loginUsername", "admin");
-//        servletRegistrationBean.addInitParameter("loginPassword", "admin");
-//
-//        // 配置允许查看的 IP，防止非授权的访问
-//        servletRegistrationBean.addInitParameter("allow", "127.0.0.1,0:0:0:0:0:0:0:1");
-//
-//        return servletRegistrationBean;
-//    }
-//
-//    /**
-//     * 配置 Druid 监控的 Filter
-//     * 用于对请求进行统计
-//     */
-//    @Bean
-//    public FilterRegistrationBean<StatFilter> statFilter() {
-//        FilterRegistrationBean<StatFilter> filterRegistrationBean =
-//                new FilterRegistrationBean<>(new StatFilter());
-//
-//        // 配置不需要监控的路径
-//        filterRegistrationBean.addInitParameter("exclusions", "*.js,*.css,/druid/*");
-//
-//        return filterRegistrationBean;
-//    }
+    /**
+     * 配置 Druid 监控页面 Servlet
+     * 访问路径为 /druid/*，登录使用账号和密码
+     */
+    @Bean
+    @ConditionalOnMissingBean(StatViewServlet.class) // 确保只有在没有其他 StatViewServlet 的情况下注册
+    public ServletRegistrationBean<StatViewServlet> druidStatViewServlet()
+    {
+        ServletRegistrationBean<StatViewServlet> servletRegistrationBean =
+                new ServletRegistrationBean<>(new StatViewServlet(), "/druid/*");
 
+        // 配置登录账号和密码
+        servletRegistrationBean.addInitParameter("loginUsername", druidLoginUsername);
+        servletRegistrationBean.addInitParameter("loginPassword", druidLoginPassword);
+
+        // 配置允许查看的 IP，防止非授权的访问
+        servletRegistrationBean.addInitParameter("allow", druidAllowIp);
+
+        return servletRegistrationBean;
+    }
+
+    /**
+     * 配置 Druid Web 统计过滤器
+     * 用于对请求进行统计
+     */
+    @Bean
+    public FilterRegistrationBean<WebStatFilter> webStatFilter() {
+        FilterRegistrationBean<WebStatFilter> filterRegistrationBean =
+                new FilterRegistrationBean<>(new WebStatFilter());
+
+        // 配置不需要监控的路径
+        filterRegistrationBean.addInitParameter("exclusions", druidExclusions);
+
+        // 配置需要监控的 URL 路径
+        filterRegistrationBean.addUrlPatterns("/*");
+
+        return filterRegistrationBean;
+    }
 }
