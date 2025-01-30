@@ -33,12 +33,12 @@
 <!--        <mybatis-spring-boot-starter.version>2.1.3</mybatis-spring-boot-starter.version>-->
         <mybatis-spring-boot-starter.version>2.1.4</mybatis-spring-boot-starter.version>
 <!--        <elasticsearch.version>7.17.15</elasticsearch.version>-->
-        <elasticsearch.version>8.16.1</elasticsearch.version>
+<!--        <elasticsearch.version>8.16.1</elasticsearch.version>-->
         <xxlJob.version>2.3.1</xxlJob.version>
         <apollo-client.version>1.7.0</apollo-client.version>
         <apollo-spring-boot-starter.version>1.6.7</apollo-spring-boot-starter.version>
         <elasticsearch-rest-high-level-client.version>7.17.15</elasticsearch-rest-high-level-client.version>
-        <druid.version>1.1.24</druid.version>
+        <druid.version>1.2.23</druid.version>
         <aliyun-sdk-oss.version>3.5.0</aliyun-sdk-oss.version>
         <minio-dsk.version>8.4.3</minio-dsk.version>
         <kafka.client.version>2.8.2</kafka.client.version>
@@ -287,27 +287,50 @@
         </dependency>
 
         <!-- elasticsearch  -->
-        <dependency>
-            <groupId>org.elasticsearch</groupId>
-            <artifactId>elasticsearch</artifactId> <!--es核心功能和实现，通常用于嵌入式环境，即在同一个jvm中运行es节点-->
-            <version>${elasticsearch.version}</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>org.elasticsearch</groupId>-->
+<!--            <artifactId>elasticsearch</artifactId> &lt;!&ndash;es核心功能和实现，通常用于嵌入式环境，即在同一个jvm中运行es节点&ndash;&gt;-->
+<!--            <version>${elasticsearch.version}</version>-->
+<!--        </dependency>-->
+
+<!--        <dependency>-->
+<!--            <groupId>org.elasticsearch.client</groupId>-->
+<!--            <artifactId>elasticsearch-rest-client</artifactId>&lt;!&ndash;低级别客户端，提供基础http请求功能，适合自定义、复杂场景&ndash;&gt;-->
+<!--            <version>${elasticsearch.version}</version>-->
+<!--        </dependency>-->
+
 
         <dependency>
+            <groupId>org.elasticsearch</groupId>
+            <artifactId>elasticsearch</artifactId>
+            <version>7.10.2</version>
+        </dependency>
+        <dependency>
             <groupId>org.elasticsearch.client</groupId>
-            <artifactId>elasticsearch-rest-client</artifactId><!--低级别客户端，提供基础http请求功能，适合自定义、复杂场景-->
-            <version>${elasticsearch.version}</version>
+            <artifactId>elasticsearch-rest-high-level-client</artifactId>
+            <version>7.10.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.elasticsearch.client</groupId>
+            <artifactId>elasticsearch-rest-client</artifactId>
+            <version>7.10.2</version>
+        </dependency>
+        <!-- Apache HTTP Client（Elasticsearch 依赖） -->
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>4.5.13</version>
         </dependency>
 <!--        <dependency>-->
 <!--            <groupId>org.elasticsearch.client</groupId>-->
 <!--            <artifactId>elasticsearch-rest-high-level-client</artifactId>&lt;!&ndash;高级别客户端，提供高级方便的api，适用于大多数使用场景&ndash;&gt;-->
 <!--            <version>7.17.15</version>-->
 <!--        </dependency>-->
-        <dependency>
-            <groupId>co.elastic.clients</groupId>
-            <artifactId>elasticsearch-java</artifactId>
-            <version>${elasticsearch.version}</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>co.elastic.clients</groupId>-->
+<!--            <artifactId>elasticsearch-java</artifactId>-->
+<!--            <version>${elasticsearch.version}</version>-->
+<!--        </dependency>-->
 
         <!-- mongodb -->
         <dependency>

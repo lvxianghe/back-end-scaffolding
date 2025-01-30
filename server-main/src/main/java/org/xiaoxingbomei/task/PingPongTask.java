@@ -7,6 +7,8 @@ import org.elasticsearch.client.Request;
 import org.elasticsearch.client.Response;
 import org.elasticsearch.client.RestClient;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -14,6 +16,9 @@ import org.springframework.stereotype.Component;
 import org.xiaoxingbomei.config.apollo.ApolloConfig;
 import org.xiaoxingbomei.utils.Exception_Utils;
 
+import javax.sql.DataSource;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
@@ -38,30 +43,45 @@ public class PingPongTask
     @Autowired
     private ApolloConfig apolloConfigService;
 
-    // 中间件连接状态
-    private final AtomicBoolean isRedisConnected    = new AtomicBoolean(false);
-    private final AtomicBoolean isMinioConnected    = new AtomicBoolean(false);
-    private final AtomicBoolean isElasticConnected  = new AtomicBoolean(false);
-    private final AtomicBoolean isKafkaConnected    = new AtomicBoolean(false);
-    private final AtomicBoolean isApolloConnected   = new AtomicBoolean(false);
+    @Autowired
+    @Qualifier("mongoTemplateOfLocal")
+    private MongoTemplate mongoTemplateOfLocal;
 
-    public boolean isRedisConnected()   {return isRedisConnected.get();}
-    public boolean isMinioConnected()   {return isMinioConnected.get();}
-    public boolean isElasticConnected() {return isElasticConnected.get();}
-    public boolean isKafkaConnected()   {return isKafkaConnected.get();}
-    public boolean isApolloConnected()  {return isApolloConnected.get();}
+    @Autowired
+    @Qualifier("localhostDataSource")
+    private DataSource localhostDataSource;
+
+    // 中间件连接状态
+    private final AtomicBoolean isRedisConnected        = new AtomicBoolean(false);
+    private final AtomicBoolean isMinioConnected        = new AtomicBoolean(false);
+    private final AtomicBoolean isElasticConnected      = new AtomicBoolean(false);
+    private final AtomicBoolean isKafkaConnected        = new AtomicBoolean(false);
+    private final AtomicBoolean isApolloConnected       = new AtomicBoolean(false);
+    private final AtomicBoolean isMysqlOfLocalConnected = new AtomicBoolean(false); // MySQL 连接状态
+    private final AtomicBoolean isMongoOfLocalConnected = new AtomicBoolean(false); // MongoDB 连接状态
+
+    public boolean isRedisConnected()        {return isRedisConnected.get();}
+    public boolean isMinioConnected()        {return isMinioConnected.get();}
+    public boolean isElasticConnected()      {return isElasticConnected.get();}
+    public boolean isKafkaConnected()        {return isKafkaConnected.get();}
+    public boolean isApolloConnected()       {return isApolloConnected.get();}
+    public boolean isMysqlOfLocalConnected() {return isMysqlOfLocalConnected.get();}
+    public boolean isMongoOfLocalConnected() {return isMongoOfLocalConnected.get();}
+
 
     // 定时搜集并打印中间件连接状态
     @Scheduled(fixedRate = 200000, initialDelay = 5000)
     public void checkMiddleWareAlive()
     {
-        log.info("\n------------------------------------------------\n\t{}{}{}{}{}{}{}",
+        log.info("\n------------------------------------------------\n\t{}{}{}{}{}{}{}{}{}",
                 "<<Checking middleware connection status>>",
-                "\n\tRedis          \tconnected:\t "+isRedisConnected(),
-                "\n\tMinio          \tconnected:\t "+isMinioConnected(),
-                "\n\tElasticsearch  \tconnected:\t "+isElasticConnected(),
-                "\n\tKafka          \tconnected:\t "+isKafkaConnected(),
-                "\n\tApollo         \tconnected:\t "+isApolloConnected(),
+                "\n\tredis-local    \tconnected:\t " + isRedisConnected(),
+                "\n\tminio-local    \tconnected:\t " + isMinioConnected(),
+                "\n\telasticsearch  \tconnected:\t " + isElasticConnected(),
+                "\n\tKafka          \tconnected:\t " + isKafkaConnected(),
+                "\n\tapollo         \tconnected:\t " + isApolloConnected(),
+                "\n\tmysql-local    \tconnected:\t " + isMysqlOfLocalConnected(),
+                "\n\tmongodb-local  \tconnected:\t " + isMongoOfLocalConnected(),
                 "\n------------------------------------------------\n"
                 );
     }
@@ -158,6 +178,32 @@ public class PingPongTask
         } catch (Exception e) {
             isApolloConnected.set(false);
             log.error("Apollo connection failed", e);
+        }
+    }
+
+    // 定时检查 MySQL 连接状态
+    @Scheduled(fixedDelay = 20000)
+    public void checkMysqlConnection() {
+        try (Connection connection = localhostDataSource.getConnection()) {
+            // 简单的 SQL 查询来测试 MySQL 连接
+            connection.createStatement().execute("SELECT 1");
+            isMysqlOfLocalConnected.set(true);
+        } catch (SQLException e) {
+            isMysqlOfLocalConnected.set(false);
+            log.error("MySQL connection failed", e);
+        }
+    }
+
+    // 定时检查 MongoDB 连接状态
+    @Scheduled(fixedDelay = 20000)
+    public void checkMongoConnection() {
+        try {
+            // 使用 MongoTemplate 检查 MongoDB 连接
+            mongoTemplateOfLocal.getDb().listCollectionNames().first();
+            isMongoOfLocalConnected.set(true);
+        } catch (Exception e) {
+            isMongoOfLocalConnected.set(false);
+            log.error("MongoDB connection failed", e);
         }
     }
 
