@@ -450,8 +450,9 @@ public class TechServiceImpl implements TechService
     public GlobalEntity fastJson_ObjectToJsonString(String paramString)
     {
         // 1、构建对象
-        User user = new User("吕相赫", "1","139xxxx", "777", "999", "浙江杭州");
-        
+//        User user = new User("吕相赫", "1","139xxxx", "777", "999", "浙江杭州");
+        User user = new User();
+
         // 2、对象转JSONString
         String jsonString           = JSON.toJSONString(user);
         String jsonStringPrettified = JSON.toJSONString(user, SerializerFeature.PrettyFormat);
@@ -487,7 +488,8 @@ public class TechServiceImpl implements TechService
     public GlobalEntity fastJson_PrettyPrint(String paramString)
     {
         // 1、构建对象
-        User user = new User("吕相赫","1", "139xxxx", "777", "999", "浙江杭州");
+//        User user = new User("吕相赫","1", "139xxxx", "777", "999", "浙江杭州");
+        User user = new User();
 
         // 2、对象转JSONString
         String jsonStringPrettified = JSONObject.toJSONString(user, SerializerFeature.PrettyFormat);

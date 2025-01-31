@@ -65,9 +65,12 @@ public class ApiConstant
      */
     public class User
     {
-        public static final String getUserInfo              = "/user/getUserInfo";           //
-        public static final String getUserCacheInfo         = "/user/getUserCacheInfo";      //
-        public static final String removeUserCacheInfo      = "/user/removeUserCacheInfo";   //
+        public static final String getAllUserInfo           = "/user/getAllUserInfo";           // 获取全部用户信息
+        public static final String searchUserInfo           = "/user/searchUserInfo";           // 查询用户信息（数据库+redis+es）
+        public static final String searchUserInfoById       = "/user/searchUserInfoById";       // 查询用户信息（精确查询）
+        public static final String exportUserInfo           = "/user/exportUserInfo";           // 导出全部用户信息到excel
+        public static final String exportUserInfoTemplate   = "/user/exportUserInfoTemplate";   // 获取用户excel模板
+        public static final String updateUserInfoByTemplate = "/user/updateUserInfoByTemplate"; // 通过excel导入批量更新用户信息，无则新增，有则更新
     }
 
     /**

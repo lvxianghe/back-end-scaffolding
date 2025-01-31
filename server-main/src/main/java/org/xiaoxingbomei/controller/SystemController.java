@@ -14,7 +14,7 @@ import org.xiaoxingbomei.service.TechService;
 import java.util.HashMap;
 
 /**
- * 系统级别controller
+ * 系统 controller
  */
 
 @Tag(name="系统controller",description = "系统controller")

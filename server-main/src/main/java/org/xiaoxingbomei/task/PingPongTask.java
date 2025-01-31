@@ -3,6 +3,7 @@ package org.xiaoxingbomei.task;
 
 import io.minio.MinioClient;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.rocketmq.spring.core.RocketMQTemplate;
 import org.elasticsearch.client.Request;
 import org.elasticsearch.client.Response;
 import org.elasticsearch.client.RestClient;
@@ -41,6 +42,9 @@ public class PingPongTask
     private KafkaTemplate<String, String> kafkaTemplate;
 
     @Autowired
+    private RocketMQTemplate rocketMQTemplate;
+
+    @Autowired
     private ApolloConfig apolloConfigService;
 
     @Autowired
@@ -56,6 +60,7 @@ public class PingPongTask
     private final AtomicBoolean isMinioConnected        = new AtomicBoolean(false);
     private final AtomicBoolean isElasticConnected      = new AtomicBoolean(false);
     private final AtomicBoolean isKafkaConnected        = new AtomicBoolean(false);
+    private final AtomicBoolean isRocketMQConnected     = new AtomicBoolean(false);
     private final AtomicBoolean isApolloConnected       = new AtomicBoolean(false);
     private final AtomicBoolean isMysqlOfLocalConnected = new AtomicBoolean(false); // MySQL 连接状态
     private final AtomicBoolean isMongoOfLocalConnected = new AtomicBoolean(false); // MongoDB 连接状态
@@ -64,6 +69,7 @@ public class PingPongTask
     public boolean isMinioConnected()        {return isMinioConnected.get();}
     public boolean isElasticConnected()      {return isElasticConnected.get();}
     public boolean isKafkaConnected()        {return isKafkaConnected.get();}
+    public boolean isRocketMQConnected()     {return isRocketMQConnected.get();}
     public boolean isApolloConnected()       {return isApolloConnected.get();}
     public boolean isMysqlOfLocalConnected() {return isMysqlOfLocalConnected.get();}
     public boolean isMongoOfLocalConnected() {return isMongoOfLocalConnected.get();}
@@ -73,12 +79,13 @@ public class PingPongTask
     @Scheduled(fixedRate = 200000, initialDelay = 5000)
     public void checkMiddleWareAlive()
     {
-        log.info("\n------------------------------------------------\n\t{}{}{}{}{}{}{}{}{}",
+        log.info("\n------------------------------------------------\n\t{}{}{}{}{}{}{}{}{}{}",
                 "<<Checking middleware connection status>>",
                 "\n\tredis-local    \tconnected:\t " + isRedisConnected(),
                 "\n\tminio-local    \tconnected:\t " + isMinioConnected(),
                 "\n\telasticsearch  \tconnected:\t " + isElasticConnected(),
                 "\n\tKafka          \tconnected:\t " + isKafkaConnected(),
+                "\n\tRocketMQ       \tconnected:\t " + isRocketMQConnected(),
                 "\n\tapollo         \tconnected:\t " + isApolloConnected(),
                 "\n\tmysql-local    \tconnected:\t " + isMysqlOfLocalConnected(),
                 "\n\tmongodb-local  \tconnected:\t " + isMongoOfLocalConnected(),
@@ -204,6 +211,21 @@ public class PingPongTask
         } catch (Exception e) {
             isMongoOfLocalConnected.set(false);
             log.error("MongoDB connection failed", e);
+        }
+    }
+
+    // 定时检查 RocketMQ 连接状态
+    @Scheduled(fixedDelay = 20000)
+    public void checkRocketMQConnection() {
+        try {
+            // 通过发送一条消息检查 RocketMQ 连接
+            rocketMQTemplate.convertAndSend("ping-topic", "ping-message");
+
+            // 如果没有抛出异常，则表示连接成功
+            isRocketMQConnected.set(true);
+        } catch (Exception e) {
+            isRocketMQConnected.set(false);
+            log.error("RocketMQ connection failed", e);
         }
     }
 
