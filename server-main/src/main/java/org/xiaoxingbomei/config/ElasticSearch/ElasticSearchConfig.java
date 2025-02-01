@@ -16,7 +16,8 @@ import org.springframework.context.annotation.Configuration;
  * elasticsearch 7.10.2 配置类
  */
 @Configuration
-public class ElasticSearchConfig {
+public class ElasticSearchConfig
+{
 
     @Value("${apollo.elasticsearch.hostname}")
     private String hostName;

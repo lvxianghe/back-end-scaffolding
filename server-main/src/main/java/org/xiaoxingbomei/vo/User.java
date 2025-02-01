@@ -30,6 +30,9 @@ public class User implements Serializable
     @Schema(description = "证件号码")
     private String idCard;
 
+    @Schema(description = "头像")
+    private String avatar;
+
     @Schema(description = "电话号码")
     private String phoneNumber;
 
@@ -61,7 +64,7 @@ public class User implements Serializable
     @Schema(description = "公司名称")
     private String companyName;
 
-    @Schema(description = "婚姻状况")
+    @Schema(description = "婚姻状况 1-未婚 2-已婚 3-未知")
     private String maritalStatus;
 
 

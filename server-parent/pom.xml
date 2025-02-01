@@ -339,6 +339,13 @@
             <artifactId>httpclient</artifactId>
             <version>4.5.13</version>
         </dependency>
+
+        <!--HanLP 提取新词-->
+        <dependency>
+            <groupId>com.hankcs</groupId>
+            <artifactId>hanlp</artifactId>
+            <version>portable-1.8.4</version>
+        </dependency>
 <!--        <dependency>-->
 <!--            <groupId>org.elasticsearch.client</groupId>-->
 <!--            <artifactId>elasticsearch-rest-high-level-client</artifactId>&lt;!&ndash;高级别客户端，提供高级方便的api，适用于大多数使用场景&ndash;&gt;-->
