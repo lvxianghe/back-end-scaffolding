@@ -6,8 +6,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.xiaoxingbomei.common.entity.GlobalEntity;
 import org.xiaoxingbomei.common.entity.SystemEntity;
+import org.xiaoxingbomei.vo.User;
 
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -26,6 +28,8 @@ public interface ServerEsFeignClient
     /**
      * 用户
      */
+    @RequestMapping(value ="/es/user/es_saveUserInfoToEs",method = RequestMethod.POST)
+    GlobalEntity saveUserInfoToEs(List<Map<String, Object>> userListMap);
 
 
     /**

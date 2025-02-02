@@ -71,6 +71,8 @@ public class ApiConstant
         public static final String exportUserInfo           = "/user/exportUserInfo";           // 导出全部用户信息到excel
         public static final String exportUserInfoTemplate   = "/user/exportUserInfoTemplate";   // 获取用户excel模板
         public static final String updateUserInfoByTemplate = "/user/updateUserInfoByTemplate"; // 通过excel导入批量更新用户信息，无则新增，有则更新
+
+        public static final String createUserIndex           = "/user/createUserIndex";         // 构建用户索引（es）
     }
 
     /**

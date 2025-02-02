@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 import org.xiaoxingbomei.annotation.ServiceSwitch;
 import org.xiaoxingbomei.common.entity.GlobalEntity;
 import org.xiaoxingbomei.constant.ApiConstant;
@@ -56,6 +57,21 @@ public class UserController
     public void exportUserInfoTemplate(HttpServletResponse response) throws Exception
     {
         userService.exportUserInfoTemplate(response);
+    }
+
+    @Operation(summary = "通过excel导入批量更新用户信息，无则新增，有则更新",description = "通过excel导入批量更新用户信息，无则新增，有则更新")
+    @RequestMapping(value = ApiConstant.User.updateUserInfoByTemplate, method = RequestMethod.POST)
+    public GlobalEntity updateUserInfoByTemplate(MultipartFile file) throws Exception
+    {
+        GlobalEntity ret = userService.updateUserInfoByTemplate(file);
+        return ret;
+    }
+
+    @Operation(summary = "构建用户索引（es）",description = "构建用户索引（es）")
+    @RequestMapping(value = ApiConstant.User.createUserIndex, method = RequestMethod.POST)
+    public void createUserIndex(@RequestBody String paramString) throws Exception
+    {
+        userService.createUserIndex();
     }
 
 

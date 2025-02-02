@@ -39,6 +39,8 @@ import java.util.Arrays;
 public class ControllerLogAspectByPath
 {
 
+    // 如果是需要子线程集成父线程的上下文 可以直接使用 InheritableThreadLocal
+//    private static final InheritableThreadLocal<GlobalRequestContext> requestContext = new InheritableThreadLocal<>();
     private static final ThreadLocal<GlobalRequestContext> requestContext = new ThreadLocal<>();
 
     /**
@@ -131,6 +133,16 @@ public class ControllerLogAspectByPath
     public static GlobalRequestContext getGlobalRequestContext()
     {
         return requestContext.get();
+    }
+
+    public static void setGlobalRequestContext(GlobalRequestContext context)
+    {
+        requestContext.set(context);
+    }
+
+    public static void clearGlobalRequestContext()
+    {
+        requestContext.remove();
     }
 
 }

@@ -30,5 +30,70 @@
         FROM user
     </select>
 
+<!--    &lt;!&ndash; 批量插入 &ndash;&gt;-->
+<!--    <insert id="createUserInfo" parameterType="java.util.List">-->
+<!--        INSERT INTO user-->
+<!--            (-->
+<!--        name, gender, idCard, phoneNumber, mobileNumber, address, nationality,-->
+<!--        country, state, city, bankCard, occupation, companyName, maritalStatus,-->
+<!--        userType, createTime, updateTime, status-->
+<!--            )-->
+<!--        VALUES-->
+<!--        <foreach collection="list" item="user" separator=",">-->
+<!--            (#{user.name, jdbcType=VARCHAR},-->
+<!--            #{user.gender, jdbcType=VARCHAR},-->
+<!--            #{user.idCard, jdbcType=VARCHAR},-->
+<!--            #{user.phoneNumber, jdbcType=VARCHAR},-->
+<!--            #{user.mobileNumber, jdbcType=VARCHAR},-->
+<!--            #{user.address, jdbcType=VARCHAR},-->
+<!--            #{user.nationality, jdbcType=VARCHAR},-->
+<!--            #{user.country, jdbcType=VARCHAR},-->
+<!--            #{user.state, jdbcType=VARCHAR},-->
+<!--            #{user.city, jdbcType=VARCHAR},-->
+<!--            #{user.bankCard, jdbcType=VARCHAR},-->
+<!--            #{user.occupation, jdbcType=VARCHAR},-->
+<!--            #{user.companyName, jdbcType=VARCHAR},-->
+<!--            #{user.maritalStatus, jdbcType=VARCHAR},-->
+<!--            #{user.userType, jdbcType=VARCHAR},-->
+<!--            #{user.createTime, jdbcType=TIMESTAMP},-->
+<!--            #{user.updateTime, jdbcType=TIMESTAMP},-->
+<!--            #{user.status, jdbcType=VARCHAR})-->
+<!--        </foreach>-->
+<!--    </insert>-->
+
+    <!-- 批量插入用户信息 -->
+    <insert id="createUserInfo" parameterType="java.util.List">
+        INSERT INTO user (
+                          id,
+        name, gender, idCard, phoneNumber, mobileNumber, address, nationality,
+        country, state, city, bankCard, occupation, companyName, maritalStatus,
+        userType, createTime, updateTime, status
+        )
+        VALUES
+        <foreach collection="list" item="user" separator=",">
+            (
+             #{user.id,jdbcType=VARCHAR},
+            COALESCE(#{user.name, jdbcType=VARCHAR}, ''),
+            COALESCE(#{user.gender, jdbcType=VARCHAR}, ''),
+            COALESCE(#{user.idCard, jdbcType=VARCHAR}, ''),
+            COALESCE(#{user.phoneNumber, jdbcType=VARCHAR}, ''),
+            COALESCE(#{user.mobileNumber, jdbcType=VARCHAR}, ''),
+            COALESCE(#{user.address, jdbcType=VARCHAR}, ''),
+            COALESCE(#{user.nationality, jdbcType=VARCHAR}, ''),
+            COALESCE(#{user.country, jdbcType=VARCHAR}, ''),
+            COALESCE(#{user.state, jdbcType=VARCHAR}, ''),
+            COALESCE(#{user.city, jdbcType=VARCHAR}, ''),
+            COALESCE(#{user.bankCard, jdbcType=VARCHAR}, ''),
+            COALESCE(#{user.occupation, jdbcType=VARCHAR}, ''),
+            COALESCE(#{user.companyName, jdbcType=VARCHAR}, ''),
+            COALESCE(#{user.maritalStatus, jdbcType=VARCHAR}, ''),
+            COALESCE(#{user.userType, jdbcType=VARCHAR}, ''),
+            COALESCE(#{user.createTime, jdbcType=VARCHAR}, ''),
+            COALESCE(#{user.updateTime, jdbcType=VARCHAR}, ''),
+            COALESCE(#{user.status, jdbcType=VARCHAR}, '')
+            )
+        </foreach>
+    </insert>
+
 
 </mapper>

@@ -25,8 +25,8 @@ public class ElasticsearchTask
 
     // =======================================================
 
-    // 每天凌晨 2 点执行
-    @Scheduled(fixedDelay = 30000)
+    // 每小时的第0分钟执行一次
+    @Scheduled(cron = "0 0 * * * ?")
     public void updateLocalDictionary() throws IOException
     {
         log.info("开始执行词典更新任务");
