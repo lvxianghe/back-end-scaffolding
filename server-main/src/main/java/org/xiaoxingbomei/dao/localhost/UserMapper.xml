@@ -30,6 +30,13 @@
         FROM user
     </select>
 
+    <select id="findByIdCards" resultMap="UserResultMap">
+        SELECT * FROM user WHERE idCard IN
+        <foreach collection="idCards" item="idCard" open="(" separator="," close=")">
+            #{idCard}
+        </foreach>
+    </select>
+
 <!--    &lt;!&ndash; 批量插入 &ndash;&gt;-->
 <!--    <insert id="createUserInfo" parameterType="java.util.List">-->
 <!--        INSERT INTO user-->
@@ -94,6 +101,106 @@
             )
         </foreach>
     </insert>
+
+    <update id="updateUserInfo" parameterType="java.util.List">
+        UPDATE user
+        <set>
+            name = CASE id
+            <foreach collection="list" item="user">
+                WHEN #{user.id} THEN #{user.name}
+            </foreach> END,
+
+            gender = CASE id
+            <foreach collection="list" item="user">
+                WHEN #{user.id} THEN #{user.gender}
+            </foreach> END,
+
+            idCard = CASE id
+            <foreach collection="list" item="user">
+                WHEN #{user.id} THEN #{user.idCard}
+            </foreach> END,
+
+            phoneNumber = CASE id
+            <foreach collection="list" item="user">
+                WHEN #{user.id} THEN #{user.phoneNumber}
+            </foreach> END,
+
+            mobileNumber = CASE id
+            <foreach collection="list" item="user">
+                WHEN #{user.id} THEN #{user.mobileNumber}
+            </foreach> END,
+
+            address = CASE id
+            <foreach collection="list" item="user">
+                WHEN #{user.id} THEN #{user.address}
+            </foreach> END,
+
+            nationality = CASE id
+            <foreach collection="list" item="user">
+                WHEN #{user.id} THEN #{user.nationality}
+            </foreach> END,
+
+            country = CASE id
+            <foreach collection="list" item="user">
+                WHEN #{user.id} THEN #{user.country}
+            </foreach> END,
+
+            state = CASE id
+            <foreach collection="list" item="user">
+                WHEN #{user.id} THEN #{user.state}
+            </foreach> END,
+
+            city = CASE id
+            <foreach collection="list" item="user">
+                WHEN #{user.id} THEN #{user.city}
+            </foreach> END,
+
+            bankCard = CASE id
+            <foreach collection="list" item="user">
+                WHEN #{user.id} THEN #{user.bankCard}
+            </foreach> END,
+
+            occupation = CASE id
+            <foreach collection="list" item="user">
+                WHEN #{user.id} THEN #{user.occupation}
+            </foreach> END,
+
+            companyName = CASE id
+            <foreach collection="list" item="user">
+                WHEN #{user.id} THEN #{user.companyName}
+            </foreach> END,
+
+            maritalStatus = CASE id
+            <foreach collection="list" item="user">
+                WHEN #{user.id} THEN #{user.maritalStatus}
+            </foreach> END,
+
+            userType = CASE id
+            <foreach collection="list" item="user">
+                WHEN #{user.id} THEN #{user.userType}
+            </foreach> END,
+
+            createTime = CASE id
+            <foreach collection="list" item="user">
+                WHEN #{user.id} THEN #{user.createTime}
+            </foreach> END,
+
+            updateTime = CASE id
+            <foreach collection="list" item="user">
+                WHEN #{user.id} THEN #{user.updateTime}
+            </foreach> END,
+
+            status = CASE id
+            <foreach collection="list" item="user">
+                WHEN #{user.id} THEN #{user.status}
+            </foreach> END
+        </set>
+        WHERE id IN
+        <foreach collection="list" item="user" open="(" separator="," close=")">
+            #{user.id}
+        </foreach>
+    </update>
+
 
 
 </mapper>

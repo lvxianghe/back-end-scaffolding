@@ -194,7 +194,8 @@ public class UserServiceImpl implements UserService
     }
 
     @Override
-public void exportUserInfoTemplate(HttpServletResponse response) throws Exception {
+public void exportUserInfoTemplate(HttpServletResponse response) throws Exception
+    {
     // 设置响应头
     response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
     response.setCharacterEncoding("utf-8");
@@ -234,24 +235,62 @@ public void exportUserInfoTemplate(HttpServletResponse response) throws Exceptio
         try
         {
             userList = parseExcelToUsers(file);
-            log.info("读取excel成功，UserList");
+            log.info("使用fastexcel读取excel成功");
         } catch (Exception e)
         {
             Exception_Utils.recursiveReversePrintStackCauseCommon(e);
-            log.info("使用multipartfile接收excel文件失败:{}",e.getMessage());
+            log.info("使用fastexcel接收excel文件失败:{}",e.getMessage());
         }
         stopWatch.stop();
 
         // 2、数据校验
+        // 2-1. 提取所有身份证号
+        Set<String> importIdCardSet = userList.stream()
+                .map(User::getIdCard)
+                .collect(Collectors.toSet());
 
-        // 3、落库
+        // 2-2. 批量查询已存在的身份证号
+        List<User> existingUsers = userMapper.findByIdCards(new ArrayList<>(importIdCardSet));
+
+        // 将 existingUsers 转换为 Map，键是 idCard，值是 User 对象
+        Map<String, User> existingUserMap = existingUsers.stream()
+                .collect(Collectors.toMap(User::getIdCard, user -> user));
+
+        Set<String> existingIdCards = existingUsers.stream()
+                .map(User::getIdCard)
+                .collect(Collectors.toSet());
+
+        // 2-3. 区分 createUserList 和 updateUserList
+        List<User> createUserList = new ArrayList<>();
+        List<User> updateUserList = new ArrayList<>();
+
+        for (User user : userList)
+        {
+            if (existingIdCards.contains(user.getIdCard()))
+            {
+                // 如果用户已存在，设置原先的 id
+                User existingUser = existingUserMap.get(user.getIdCard());
+                user.setId(existingUser.getId()); // 设置原先的 id
+                updateUserList.add(user); // 添加到更新列表
+            } else
+            {
+                // 如果用户不存在，生成新的 id
+                user.setId(UUID.randomUUID().toString()); // 生成新的 id
+                createUserList.add(user); // 添加到新增列表
+            }
+        }
+        log.info("要新增的用户数量：{}，\n要更新的用户数量：{}",createUserList.size(),updateUserList.size());
+
+        // 3、落库(存量更新、新增插入)
         stopWatch.start("Database Insert");
-        batchInsertUsers(userList,50);
+        batchInsertUsers(createUserList,50);
+        batchUpdateUsers(updateUserList,50);
         stopWatch.stop();
 
         // 4、同步es
         stopWatch.start("Elasticsearch Insert");
-        syncUserInfoToEsAsync(userList);
+        syncUserInfoToEsAsync(createUserList);
+        syncUserInfoToEsAsync(updateUserList);
         stopWatch.stop();
 
         // 5、创建结果体
@@ -260,7 +299,6 @@ public void exportUserInfoTemplate(HttpServletResponse response) throws Exceptio
         resultMap.put("success", true);
         return GlobalEntity.success(resultMap,"批量更新用户成功");
     }
-
 
     public void batchInsertUsers(List<User> userList, int batchSize) {
         int totalSize = userList.size();
@@ -273,7 +311,8 @@ public void exportUserInfoTemplate(HttpServletResponse response) throws Exceptio
 
         CountDownLatch latch = new CountDownLatch(batchCount); // 用于等待所有批次完成
 
-        for (int i = 0; i < batchCount; i++) {
+        for (int i = 0; i < batchCount; i++)
+        {
             int fromIndex = i * batchSize;
             int toIndex = Math.min(fromIndex + batchSize, totalSize);
             List<User> batchList = userList.subList(fromIndex, toIndex); // 获取当前批次的数据
@@ -299,7 +338,53 @@ public void exportUserInfoTemplate(HttpServletResponse response) throws Exceptio
                 }
             });
         }
+        try
+        {
+            latch.await(); // 等待所有批次完成
+        } catch (InterruptedException e)
+        {
+            Thread.currentThread().interrupt();
+            throw new RuntimeException("多线程插入数据被中断", e);
+        }
+    }
+    public void batchUpdateUsers(List<User> userList, int batchSize) {
+        int totalSize = userList.size();
+        int batchCount = (totalSize + batchSize - 1) / batchSize; // 计算批次数量
+        log.info("计算批次数量：{}", batchCount);
 
+        // 获取主线程的 requestContext
+        GlobalRequestContext requestContext = ControllerLogAspectByPath.getGlobalRequestContext();
+        log.info("requestContext:{}", requestContext);
+
+        CountDownLatch latch = new CountDownLatch(batchCount); // 用于等待所有批次完成
+
+        for (int i = 0; i < batchCount; i++)
+        {
+            int fromIndex = i * batchSize;
+            int toIndex = Math.min(fromIndex + batchSize, totalSize);
+            List<User> batchList = userList.subList(fromIndex, toIndex); // 获取当前批次的数据
+
+            log.info("batchList: {}", batchList);
+
+            // 提交任务到线程池
+            dynamicThreadPool.execute(() ->
+            {
+                // 将主线程的 requestContext 设置到子线程中
+                ControllerLogAspectByPath.setGlobalRequestContext(requestContext);
+                try
+                {
+                    userMapper.updateUserInfo(batchList); // 执行插入操作
+                } catch (Exception e)
+                {
+                    log.error("插入数据失败，异常信息: {}", e.getMessage(), e);
+                } finally
+                {
+                    latch.countDown(); // 任务完成，计数器减一
+                    // 清除子线程的 requestContext
+                    ControllerLogAspectByPath.clearGlobalRequestContext();
+                }
+            });
+        }
         try
         {
             latch.await(); // 等待所有批次完成
@@ -321,12 +406,6 @@ public void exportUserInfoTemplate(HttpServletResponse response) throws Exceptio
                     .head(User.class)
                     .sheet()
                     .doReadSync();
-
-            // 遍历每个User对象，生成UUID并设置到id字段
-            for (User user : users)
-            {
-                user.setId(UUID.randomUUID().toString()); // 假设User类有一个setId方法
-            }
 
             return users;
         }

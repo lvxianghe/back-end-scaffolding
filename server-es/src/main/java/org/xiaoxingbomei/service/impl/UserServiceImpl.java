@@ -4,15 +4,12 @@ import com.alibaba.fastjson.JSON;
 import org.elasticsearch.action.bulk.BulkRequest;
 import org.elasticsearch.action.bulk.BulkResponse;
 import org.elasticsearch.action.index.IndexRequest;
-import org.elasticsearch.client.ElasticsearchClient;
 import org.elasticsearch.client.RequestOptions;
-import org.elasticsearch.client.RestClient;
 import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.common.xcontent.XContentType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.xiaoxingbomei.common.entity.GlobalEntity;
-import org.xiaoxingbomei.service.SystemService;
 import org.xiaoxingbomei.service.UserService;
 
 import java.io.IOException;
@@ -33,6 +30,11 @@ public class UserServiceImpl implements UserService
     public GlobalEntity saveUserInfoToEs(List<Map<String, Object>> userListMap)
     {
 
+        if (userListMap == null || userListMap.size() == 0)
+        {
+            return GlobalEntity.success("用户数据为空，无需es同步");
+        }
+
         String index = "user_info"; // 根据需要选择合适的索引名称
         BulkRequest bulkRequest = new BulkRequest();
 
@@ -40,8 +42,7 @@ public class UserServiceImpl implements UserService
         for (Map<String, Object> userDoc : userListMap)
         {
             IndexRequest indexRequest = new IndexRequest(index)
-                    .id((String) userDoc.get("id")) // 假设使用 id 作为 Elasticsearch 的文档 ID
-
+                    .id((String) userDoc.get("id")) // 使用 id 作为 Elasticsearch 的文档 ID
                     .source(JSON.toJSONString(userDoc), XContentType.JSON);
             bulkRequest.add(indexRequest);
         }

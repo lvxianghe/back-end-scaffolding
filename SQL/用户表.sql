@@ -1,21 +1,23 @@
-CREATE TABLE User (
-                      id BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '用户ID',
-                      name          VARCHAR(50)  NOT NULL COMMENT '名字',
-                      gender        VARCHAR(10)  COMMENT '性别',
-                      idCard        VARCHAR(20)  COMMENT '证件号码',
-                      phoneNumber   VARCHAR(20)  COMMENT '电话号码',
-                      mobileNumber  VARCHAR(20)  COMMENT '手机号码',
-                      address       VARCHAR(255) COMMENT '地址',
-                      nationality   VARCHAR(100) COMMENT '国籍',
-                      country       VARCHAR(100) COMMENT '国家',
-                      state         VARCHAR(100) COMMENT '省份',
-                      city          VARCHAR(100) COMMENT '市',
-                      bankCard      VARCHAR(20)  COMMENT '银行卡',
-                      occupation    VARCHAR(100) COMMENT '职业',
-                      companyName   VARCHAR(100) COMMENT '公司名称',
-                      maritalStatus VARCHAR(20)  COMMENT '婚姻状况',
-                      userType      VARCHAR(20)  COMMENT '用户类型:1-内部用户 2-对私客户 3-对公客户',
-                      createTime    VARCHAR(20)  COMMENT '创建时间', -- 使用 VARCHAR 存储时间
-                      updateTime    VARCHAR(20)  COMMENT '更新时间', -- 使用 VARCHAR 存储时间
-                      status        VARCHAR(10)  COMMENT '状态:0-失效 1-有效'
-) COMMENT='用户表';
+create table user
+(
+    id            varchar(36)  not null comment '用户ID' primary key, -- 改为 VARCHAR 类型，长度为 36（UUID 的标准长度）
+    name          varchar(50)  not null comment '名字',
+    gender        varchar(10)  null comment '性别',
+    idCard        varchar(20)  null comment '证件号码',
+    phoneNumber   varchar(20)  null comment '电话号码',
+    mobileNumber  varchar(20)  null comment '手机号码',
+    address       varchar(255) null comment '地址',
+    nationality   varchar(100) null comment '国籍',
+    country       varchar(100) null comment '国家',
+    state         varchar(100) null comment '省份',
+    city          varchar(100) null comment '市',
+    bankCard      varchar(20)  null comment '银行卡',
+    occupation    varchar(100) null comment '职业',
+    companyName   varchar(100) null comment '公司名称',
+    maritalStatus varchar(20)  null comment '婚姻状况',
+    userType      varchar(20)  null comment '用户类型:1-内部用户 2-对私客户 3-对公客户',
+    createTime    varchar(20)  null comment '创建时间',
+    updateTime    varchar(20)  null comment '更新时间',
+    status        varchar(10)  null comment '状态:0-失效 1-有效'
+)
+    comment '用户表';
