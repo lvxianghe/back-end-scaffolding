@@ -482,24 +482,24 @@ public void exportUserInfoTemplate(HttpServletResponse response) throws Exceptio
             .distinct()
             // 收集最终的去重词语列表
             .collect(Collectors.toList());
-}
+    }
 
 
-// 内存中的词典缓存
-private Set<String> dictionaryCache = new HashSet<>();
+    // 内存中的词典缓存
+    private Set<String> dictionaryCache = new HashSet<>();
 
-// 加载词典内容到缓存
-private void loadDictionaryCache() throws IOException {
-    log.info("apollo.elasticsearch.local.dictionary.path:{}", localDictionaryPath);
-    Path path = Paths.get(localDictionaryPath);
-    if (Files.exists(path)) {
-        dictionaryCache = new HashSet<>(Files.readAllLines(path));
+    // 加载词典内容到缓存
+    private void loadDictionaryCache() throws IOException {
+        log.info("apollo.elasticsearch.local.dictionary.path:{}", localDictionaryPath);
+        Path path = Paths.get(localDictionaryPath);
+        if (Files.exists(path)) {
+            dictionaryCache = new HashSet<>(Files.readAllLines(path));
     }
 }
 
-@Override
-public void updateLocalDictionary(List<String> newWords) {
-    log.info("开始更新词典，新词数量：{}", newWords.size());
+    @Override
+    public void updateLocalDictionary(List<String> newWords) {
+        log.info("开始更新词典，新词数量：{}", newWords.size());
 
     // 去重：只添加词典中不存在的新词
     Set<String> uniqueNewWords = new HashSet<>(newWords);
