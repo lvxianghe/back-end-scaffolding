@@ -25,6 +25,7 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import org.xiaoxingbomei.common.entity.ProgressBar;
 import org.xiaoxingbomei.config.Thread.DynamicThreadPool;
 import org.xiaoxingbomei.config.fastexcel.CommonLogUploadDataListener;
 import org.xiaoxingbomei.config.minio.MinioConfig;
@@ -2253,5 +2254,25 @@ public class TechServiceImpl implements TechService
             return GlobalEntity.error("文件上传失败:{}",e.getMessage());
         }
 
+    }
+
+    @Override
+    public GlobalEntity showProgress()
+    {
+        ProgressBar progressBar = new ProgressBar(500, 60, 2);
+        progressBar.start();
+
+        for (int i = 0; i < 500; i++) {
+            doSth();
+            progressBar.update(i + 1);
+        }
+        return GlobalEntity.success("测试进度条，任务执行完毕");
+    }
+    private void doSth() {
+        try {
+            Thread.sleep(10);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
     }
 }

@@ -127,4 +127,7 @@ public interface TechService
     GlobalEntity fastexcel_uploadExcel  (MultipartFile paramString);
 
 
+    GlobalEntity showProgress  ();
+
+
 }

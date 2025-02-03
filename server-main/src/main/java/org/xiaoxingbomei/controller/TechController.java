@@ -723,4 +723,13 @@ public class TechController
     }
 
 
+    @Operation(summary = "小玩意-进度条", description = "小玩意-进度条")
+    @RequestMapping(value = ApiConstant.Study.showProgress,method = RequestMethod.POST)
+    public GlobalEntity showProgress(@RequestBody String paramString)
+    {
+        GlobalEntity ret = techService.showProgress();
+        return ret;
+    }
+
+
 }

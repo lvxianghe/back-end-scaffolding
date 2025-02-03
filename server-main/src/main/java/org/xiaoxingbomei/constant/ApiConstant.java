@@ -447,6 +447,10 @@ public class ApiConstant
         public static final String fastexcel_uploadExcel                = "/study/fastexcel_uploadExcel";   // fastexcel-上传文件 读取excel中日志并落库
         public static final String fastexcel_ReadExcel                  = "/study/fastexcel_ReadExcel";     // fastexcel-读取excel文件
         public static final String fastexcel_CreateExcel                = "/study/fastexcel_CreateExcel";   // fastexcel-创建excel文件
+
+        public static final String showProgress                         = "/study/showProgress";
+
+
      }
 
 
