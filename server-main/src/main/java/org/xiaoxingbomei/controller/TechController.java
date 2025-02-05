@@ -502,6 +502,232 @@ public class TechController
     }
 
 
+    @Operation(summary = "redis学习接口", description = "redis-通用-获取所有匹配的key")
+    @RequestMapping(value = ApiConstant.Study.redis_keys, method = RequestMethod.POST)
+    public GlobalEntity redis_keys(@RequestBody String paramString) {
+        return techService.redis_keys(paramString);
+    }
+
+    @Operation(summary = "redis学习接口", description = "redis-通用-获取key的数据类型")
+    @RequestMapping(value = ApiConstant.Study.redis_type, method = RequestMethod.POST)
+    public GlobalEntity redis_type(@RequestBody String paramString) {
+        return techService.redis_type(paramString);
+    }
+
+    @Operation(summary = "redis学习接口", description = "redis-通用-重命名key")
+    @RequestMapping(value = ApiConstant.Study.redis_rename, method = RequestMethod.POST)
+    public GlobalEntity redis_rename(@RequestBody String paramString) {
+        return techService.redis_rename(paramString);
+    }
+
+    @Operation(summary = "redis学习接口", description = "redis-通用-将key移动到其他数据库")
+    @RequestMapping(value = ApiConstant.Study.redis_move, method = RequestMethod.POST)
+    public GlobalEntity redis_move(@RequestBody String paramString) {
+        return techService.redis_move(paramString);
+    }
+
+    @Operation(summary = "redis学习接口", description = "redis-通用-随机获取一个key")
+    @RequestMapping(value = ApiConstant.Study.redis_randomKey, method = RequestMethod.POST)
+    public GlobalEntity redis_randomKey(@RequestBody String paramString) {
+        return techService.redis_randomKey(paramString);
+    }
+
+    @Operation(summary = "redis学习接口", description = "redis-通用-扫描key")
+    @RequestMapping(value = ApiConstant.Study.redis_scan, method = RequestMethod.POST)
+    public GlobalEntity redis_scan(@RequestBody String paramString) {
+        return techService.redis_scan(paramString);
+    }
+
+    @Operation(summary = "redis学习接口", description = "redis-通用-获取key剩余过期时间")
+    @RequestMapping(value = ApiConstant.Study.redis_ttl, method = RequestMethod.POST)
+    public GlobalEntity redis_ttl(@RequestBody String paramString) {
+        return techService.redis_ttl(paramString);
+    }
+
+    @Operation(summary = "redis学习接口", description = "redis-bitmap-设置位图的某一位")
+    @RequestMapping(value = ApiConstant.Study.redis_bitSet, method = RequestMethod.POST)
+    public GlobalEntity redis_bitSet(@RequestBody String paramString) {
+        return techService.redis_bitSet(paramString);
+    }
+
+    @Operation(summary = "redis学习接口", description = "redis-bitmap-获取位图的某一位")
+    @RequestMapping(value = ApiConstant.Study.redis_bitGet, method = RequestMethod.POST)
+    public GlobalEntity redis_bitGet(@RequestBody String paramString) {
+        return techService.redis_bitGet(paramString);
+    }
+
+    @Operation(summary = "redis学习接口", description = "redis-bitmap-统计位图中1的数量")
+    @RequestMapping(value = ApiConstant.Study.redis_bitCount, method = RequestMethod.POST)
+    public GlobalEntity redis_bitCount(@RequestBody String paramString) {
+        return techService.redis_bitCount(paramString);
+    }
+
+    @Operation(summary = "redis学习接口", description = "redis-bitmap-查找位图中第一个0或1")
+    @RequestMapping(value = ApiConstant.Study.redis_bitPos, method = RequestMethod.POST)
+    public GlobalEntity redis_bitPos(@RequestBody String paramString) {
+        return techService.redis_bitPos(paramString);
+    }
+
+    @Operation(summary = "redis学习接口", description = "redis-bitmap-对多个位图进行位运算")
+    @RequestMapping(value = ApiConstant.Study.redis_bitOp, method = RequestMethod.POST)
+    public GlobalEntity redis_bitOp(@RequestBody String paramString) {
+        return techService.redis_bitOp(paramString);
+    }
+
+    @Operation(summary = "redis学习接口", description = "redis-hyperloglog-添加元素")
+    @RequestMapping(value = ApiConstant.Study.redis_pfAdd, method = RequestMethod.POST)
+    public GlobalEntity redis_pfAdd(@RequestBody String paramString) {
+        return techService.redis_pfAdd(paramString);
+    }
+
+    @Operation(summary = "redis学习接口", description = "redis-hyperloglog-获取基数估算值")
+    @RequestMapping(value = ApiConstant.Study.redis_pfCount, method = RequestMethod.POST)
+    public GlobalEntity redis_pfCount(@RequestBody String paramString) {
+        return techService.redis_pfCount(paramString);
+    }
+
+    @Operation(summary = "redis学习接口", description = "redis-hyperloglog-合并多个HyperLogLog")
+    @RequestMapping(value = ApiConstant.Study.redis_pfMerge, method = RequestMethod.POST)
+    public GlobalEntity redis_pfMerge(@RequestBody String paramString) {
+        return techService.redis_pfMerge(paramString);
+    }
+
+    // GEO操作
+    @Operation(summary = "redis学习接口", description = "redis-geo-添加地理位置")
+    @RequestMapping(value = ApiConstant.Study.redis_geoAdd, method = RequestMethod.POST)
+    public GlobalEntity redis_geoAdd(@RequestBody String paramString) {
+        return techService.redis_geoAdd(paramString);
+    }
+
+    @Operation(summary = "redis学习接口", description = "redis-geo-获取地理位置")
+    @RequestMapping(value = ApiConstant.Study.redis_geoPos, method = RequestMethod.POST)
+    public GlobalEntity redis_geoPos(@RequestBody String paramString) {
+        return techService.redis_geoPos(paramString);
+    }
+
+    @Operation(summary = "redis学习接口", description = "redis-geo-计算两个位置之间的距离")
+    @RequestMapping(value = ApiConstant.Study.redis_geoDist, method = RequestMethod.POST)
+    public GlobalEntity redis_geoDist(@RequestBody String paramString) {
+        return techService.redis_geoDist(paramString);
+    }
+
+    @Operation(summary = "redis学习接口", description = "redis-geo-查找指定范围内的地理位置")
+    @RequestMapping(value = ApiConstant.Study.redis_geoRadius, method = RequestMethod.POST)
+    public GlobalEntity redis_geoRadius(@RequestBody String paramString) {
+        return techService.redis_geoRadius(paramString);
+    }
+
+    @Operation(summary = "redis学习接口", description = "redis-geo-获取地理位置的geohash值")
+    @RequestMapping(value = ApiConstant.Study.redis_geoHash, method = RequestMethod.POST)
+    public GlobalEntity redis_geoHash(@RequestBody String paramString) {
+        return techService.redis_geoHash(paramString);
+    }
+
+    // Stream操作
+    @Operation(summary = "redis学习接口", description = "redis-stream-添加消息")
+    @RequestMapping(value = ApiConstant.Study.redis_streamAdd, method = RequestMethod.POST)
+    public GlobalEntity redis_streamAdd(@RequestBody String paramString) {
+        return techService.redis_streamAdd(paramString);
+    }
+
+    @Operation(summary = "redis学习接口", description = "redis-stream-读取消息")
+    @RequestMapping(value = ApiConstant.Study.redis_streamRead, method = RequestMethod.POST)
+    public GlobalEntity redis_streamRead(@RequestBody String paramString) {
+        return techService.redis_streamRead(paramString);
+    }
+
+    @Operation(summary = "redis学习接口", description = "redis-stream-获取消息范围")
+    @RequestMapping(value = ApiConstant.Study.redis_streamRange, method = RequestMethod.POST)
+    public GlobalEntity redis_streamRange(@RequestBody String paramString) {
+        return techService.redis_streamRange(paramString);
+    }
+
+    @Operation(summary = "redis学习接口", description = "redis-stream-获取Stream长度")
+    @RequestMapping(value = ApiConstant.Study.redis_streamLen, method = RequestMethod.POST)
+    public GlobalEntity redis_streamLen(@RequestBody String paramString) {
+        return techService.redis_streamLen(paramString);
+    }
+
+    @Operation(summary = "redis学习接口", description = "redis-stream-裁剪Stream")
+    @RequestMapping(value = ApiConstant.Study.redis_streamTrim, method = RequestMethod.POST)
+    public GlobalEntity redis_streamTrim(@RequestBody String paramString) {
+        return techService.redis_streamTrim(paramString);
+    }
+
+    @Operation(summary = "redis学习接口", description = "redis-stream-获取消费者组")
+    @RequestMapping(value = ApiConstant.Study.redis_streamGroups, method = RequestMethod.POST)
+    public GlobalEntity redis_streamGroups(@RequestBody String paramString) {
+        return techService.redis_streamGroups(paramString);
+    }
+
+    @Operation(summary = "redis学习接口", description = "redis-stream-创建消费者组")
+    @RequestMapping(value = ApiConstant.Study.redis_streamCreateGroup, method = RequestMethod.POST)
+    public GlobalEntity redis_streamCreateGroup(@RequestBody String paramString) {
+        return techService.redis_streamCreateGroup(paramString);
+    }
+
+    // 事务操作
+    @Operation(summary = "redis学习接口", description = "redis-事务-开启事务")
+    @RequestMapping(value = ApiConstant.Study.redis_multi, method = RequestMethod.POST)
+    public GlobalEntity redis_multi(@RequestBody String paramString) {
+        return techService.redis_multi(paramString);
+    }
+
+    @Operation(summary = "redis学习接口", description = "redis-事务-执行事务")
+    @RequestMapping(value = ApiConstant.Study.redis_exec, method = RequestMethod.POST)
+    public GlobalEntity redis_exec(@RequestBody String paramString) {
+        return techService.redis_exec(paramString);
+    }
+
+    @Operation(summary = "redis学习接口", description = "redis-事务-丢弃事务")
+    @RequestMapping(value = ApiConstant.Study.redis_discard, method = RequestMethod.POST)
+    public GlobalEntity redis_discard(@RequestBody String paramString) {
+        return techService.redis_discard(paramString);
+    }
+
+    @Operation(summary = "redis学习接口", description = "redis-事务-监视key")
+    @RequestMapping(value = ApiConstant.Study.redis_watch, method = RequestMethod.POST)
+    public GlobalEntity redis_watch(@RequestBody String paramString) {
+        return techService.redis_watch(paramString);
+    }
+
+    @Operation(summary = "redis学习接口", description = "redis-事务-取消监视")
+    @RequestMapping(value = ApiConstant.Study.redis_unwatch, method = RequestMethod.POST)
+    public GlobalEntity redis_unwatch(@RequestBody String paramString) {
+        return techService.redis_unwatch(paramString);
+    }
+
+    // 发布订阅操作
+    @Operation(summary = "redis学习接口", description = "redis-发布订阅-发布消息")
+    @RequestMapping(value = ApiConstant.Study.redis_publish, method = RequestMethod.POST)
+    public GlobalEntity redis_publish(@RequestBody String paramString) {
+        return techService.redis_publish(paramString);
+    }
+
+    @Operation(summary = "redis学习接口", description = "redis-发布订阅-订阅频道")
+    @RequestMapping(value = ApiConstant.Study.redis_subscribe, method = RequestMethod.POST)
+    public GlobalEntity redis_subscribe(@RequestBody String paramString) {
+        return techService.redis_subscribe(paramString);
+    }
+
+    @Operation(summary = "redis学习接口", description = "redis-发布订阅-模式订阅")
+    @RequestMapping(value = ApiConstant.Study.redis_psubscribe, method = RequestMethod.POST)
+    public GlobalEntity redis_psubscribe(@RequestBody String paramString) {
+        return techService.redis_psubscribe(paramString);
+    }
+
+    @Operation(summary = "redis学习接口", description = "redis-发布订阅-查看活跃频道")
+    @RequestMapping(value = ApiConstant.Study.redis_pubsubChannels, method = RequestMethod.POST)
+    public GlobalEntity redis_pubsubChannels(@RequestBody String paramString) {
+        return techService.redis_pubsubChannels(paramString);
+    }
+
+    @Operation(summary = "redis学习接口", description = "redis-发布订阅-查看订阅数")
+    @RequestMapping(value = ApiConstant.Study.redis_pubsubNumsub, method = RequestMethod.POST)
+    public GlobalEntity redis_pubsubNumsub(@RequestBody String paramString) {
+        return techService.redis_pubsubNumsub(paramString);
+    }
+
 
     @Operation(summary = "cookie学习接口", description = "cookie-创建")
     @RequestMapping(value = ApiConstant.Study.cookie_create,method = RequestMethod.POST)
@@ -730,6 +956,5 @@ public class TechController
         GlobalEntity ret = techService.showProgress();
         return ret;
     }
-
 
 }

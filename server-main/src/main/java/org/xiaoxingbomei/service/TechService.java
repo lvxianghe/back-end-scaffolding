@@ -89,6 +89,57 @@ public interface TechService
     GlobalEntity redis_zsetGetScore              (String paramString);
     GlobalEntity redis_zsetIncrementScore        (String paramString);
 
+    // Redis Key 通用操作
+    GlobalEntity redis_keys(String paramString);              // 获取所有匹配的key
+    GlobalEntity redis_type(String paramString);             // 获取key的数据类型
+    GlobalEntity redis_rename(String paramString);           // 重命名key
+    GlobalEntity redis_move(String paramString);             // 将key移动到其他数据库
+    GlobalEntity redis_randomKey(String paramString);        // 随机获取一个key
+    GlobalEntity redis_scan(String paramString);             // 扫描key
+    GlobalEntity redis_ttl(String paramString);              // 获取key剩余过期时间
+
+    // Redis Bitmap 操作
+    GlobalEntity redis_bitSet(String paramString);              // 设置位图的某一位
+    GlobalEntity redis_bitGet(String paramString);              // 获取位图的某一位
+    GlobalEntity redis_bitCount(String paramString);            // 统计位图中1的数量
+    GlobalEntity redis_bitPos(String paramString);              // 查找位图中第一个0或1
+    GlobalEntity redis_bitOp(String paramString);               // 对多个位图进行位运算
+
+    // Redis HyperLogLog 操作
+    GlobalEntity redis_pfAdd(String paramString);               // 添加元素
+    GlobalEntity redis_pfCount(String paramString);             // 获取基数估算值
+    GlobalEntity redis_pfMerge(String paramString);             // 合并多个HyperLogLog
+
+    // Redis GEO 操作
+    GlobalEntity redis_geoAdd(String paramString);              // 添加地理位置
+    GlobalEntity redis_geoPos(String paramString);              // 获取地理位置
+    GlobalEntity redis_geoDist(String paramString);             // 计算两个位置之间的距离
+    GlobalEntity redis_geoRadius(String paramString);           // 查找指定范围内的地理位置
+    GlobalEntity redis_geoHash(String paramString);             // 获取地理位置的geohash值
+
+    // Redis Stream 操作
+    GlobalEntity redis_streamAdd(String paramString);           // 添加消息
+    GlobalEntity redis_streamRead(String paramString);          // 读取消息
+    GlobalEntity redis_streamRange(String paramString);         // 获取消息范围
+    GlobalEntity redis_streamLen(String paramString);           // 获取Stream长度
+    GlobalEntity redis_streamTrim(String paramString);          // 裁剪Stream
+    GlobalEntity redis_streamGroups(String paramString);        // 获取消费者组
+    GlobalEntity redis_streamCreateGroup(String paramString);   // 创建消费者组
+
+    // Redis 事务操作
+    GlobalEntity redis_multi(String paramString);               // 开启事务
+    GlobalEntity redis_exec(String paramString);                // 执行事务
+    GlobalEntity redis_discard(String paramString);             // 丢弃事务
+    GlobalEntity redis_watch(String paramString);               // 监视key
+    GlobalEntity redis_unwatch(String paramString);             // 取消监视
+
+    // Redis 发布订阅操作
+    GlobalEntity redis_publish(String paramString);             // 发布消息
+    GlobalEntity redis_subscribe(String paramString);           // 订阅频道
+    GlobalEntity redis_psubscribe(String paramString);          // 模式订阅
+    GlobalEntity redis_pubsubChannels(String paramString);      // 查看活跃频道
+    GlobalEntity redis_pubsubNumsub(String paramString);        // 查看订阅数
+
 
     GlobalEntity cookie_create(String paramString, HttpServletResponse response);
     GlobalEntity cookie_update(String paramString);
