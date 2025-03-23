@@ -96,6 +96,7 @@
 ## 三、权限体系架构
 
 ### 1、整体架构
+![80a000019c58aabc55569fa7cb8e6b7](https://github.com/user-attachments/assets/3ec27fd7-8edc-434d-b53e-4dc66be9aca9)
 
 > ```
 > 角色：
