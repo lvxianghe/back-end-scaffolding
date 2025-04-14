@@ -1,4 +1,4 @@
-//package org.xiaoxingbomei.config.doc;
+package org.xiaoxingbomei.config.doc;//package org.xiaoxingbomei.config.doc;
 //
 //import com.google.common.collect.Maps;
 //import io.swagger.v3.oas.models.Components;

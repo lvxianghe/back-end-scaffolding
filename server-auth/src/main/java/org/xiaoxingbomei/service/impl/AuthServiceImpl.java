@@ -4,6 +4,8 @@ import cn.dev33.satoken.stp.SaTokenInfo;
 import cn.dev33.satoken.stp.StpInterface;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.system.UserInfo;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.TypeReference;
 import com.mysql.cj.CacheAdapter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -14,13 +16,18 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.xiaoxingbomei.common.Enum.GlobalCodeEnum;
 import org.xiaoxingbomei.common.entity.LoginInfo;
+import org.xiaoxingbomei.common.entity.request.GlobalRequest;
 import org.xiaoxingbomei.common.entity.response.GlobalResponse;
+import org.xiaoxingbomei.common.utils.Date_Utils;
 import org.xiaoxingbomei.common.utils.Request_Utils;
+import org.xiaoxingbomei.config.bloomFilter.LoginUserBloomFilter;
 import org.xiaoxingbomei.dao.localhost.AuthMapper;
 import org.xiaoxingbomei.entity.SysPermission;
 import org.xiaoxingbomei.entity.SysRole;
+import org.xiaoxingbomei.entity.SysUser;
 import org.xiaoxingbomei.service.AuthService;
 
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -42,13 +49,87 @@ public class AuthServiceImpl implements AuthService
     @Autowired
     private AuthService authService;
 
+    @Autowired
+    private LoginUserBloomFilter loginUserBloomFilter;
+
     // ========================================================================
 
 
     @Override
+    public GlobalResponse registerCheck(String paramString)
+    {
+        // 1、获取前端参数
+        String loginId     = Request_Utils.getParam(paramString, "loginId");
+        if(StringUtils.isEmpty(loginId))
+        {
+            return GlobalResponse.error("账号不能为空");
+        }
+
+        // 2、先查询布隆过滤器
+        if(!loginUserBloomFilter.mightContainLoginUser(loginId))
+        {
+            log.info("账号{}一定不存在布隆过滤器中",loginId);
+            return GlobalResponse.error("账号已被注册");
+        }
+
+        // 3、如果布隆过滤器存在，则查询数据库进行二次查询
+        if(loginUserBloomFilter.mightContainLoginUser(loginId))
+        {
+            SysUser sysUser = authMapper.getUserByLoginId(loginId);
+            if(sysUser != null)
+            {
+                return GlobalResponse.error("账号已被注册");
+            }
+        }
+
+        return GlobalResponse.success("账号未被注册");
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
     public GlobalResponse register(String paramString)
     {
-        return null;
+        // 1、获取前端参数
+        String loginId     = Request_Utils.getParam(paramString, "loginId");    // 登录账号
+        String name        = Request_Utils.getParam(paramString, "name");       // 姓名
+        String password    = Request_Utils.getParam(paramString, "password");   // 密码
+        String gender      = Request_Utils.getParam(paramString, "gender");     // 性别
+        String phoneNumber = Request_Utils.getParam(paramString, "phoneNumber");// 电话号码
+        String idCard      = Request_Utils.getParam(paramString, "idCard");     // 证件号
+
+        // 2、防重判断
+        authService.registerCheck(paramString);
+
+        // 3、组装注册信息
+        SysUser newSysUser = new SysUser();
+        newSysUser.setLoginId(loginId);
+        newSysUser.setName(name);
+        newSysUser.setPassword(password);
+        newSysUser.setGender(gender);
+        newSysUser.setPhoneNumber(phoneNumber);
+        newSysUser.setIdCard(idCard);
+        newSysUser.setUserType("1");
+        newSysUser.setStatus("1");
+
+        String currentTime = Date_Utils.getCurrentTime();
+        newSysUser.setCreateTime(currentTime);
+        newSysUser.setUpdateTime(currentTime);
+
+        // 3、注册信息落库
+        authMapper.insertNewSysUser(newSysUser);
+
+        // 4、布隆过滤器添加账号
+        loginUserBloomFilter.addLoginUser(loginId);
+
+        // 4、新用户授予默认角色  todo 这里应该从角色列表去获取类型为默认的角色
+        List<String> defaultRoleList = new ArrayList<>();
+        defaultRoleList.add("tourist");
+        authMapper.insertUserRoles(loginId,defaultRoleList);
+
+        // 5、封装结果
+        HashMap<String, Object> resultMap = new HashMap<>();
+        resultMap.put("newSysUserInfo",newSysUser);
+        return GlobalResponse.success(resultMap,"新用户注册成功");
     }
 
     @Override
@@ -91,7 +172,20 @@ public class AuthServiceImpl implements AuthService
             LoginInfo loginInfo = new LoginInfo();
             loginInfo.setLoginId(userId);
             loginInfo.setPassword(password);
-//            loginInfo.setRoleList((List<String>) authService.getRole(paramString).getData());
+            List<String> roleKeyList = authService.getRole(paramString);
+            loginInfo.setRoleList(roleKeyList);
+            StpUtil.getSession().set(userId,loginInfo);
+            return GlobalResponse.success(GlobalCodeEnum.SUCCESS.getCode(), GlobalCodeEnum.SUCCESS.getMessage(),"登录成功","",null);
+        }
+
+        if(StringUtils.equals("lhx",userId) & StringUtils.equals("lhx123",password))
+        {
+            StpUtil.login(userId);
+            LoginInfo loginInfo = new LoginInfo();
+            loginInfo.setLoginId(userId);
+            loginInfo.setPassword(password);
+            List<String> roleKeyList = authService.getRole(paramString);
+            loginInfo.setRoleList(roleKeyList);
             StpUtil.getSession().set(userId,loginInfo);
             return GlobalResponse.success(GlobalCodeEnum.SUCCESS.getCode(), GlobalCodeEnum.SUCCESS.getMessage(),"登录成功","",null);
         }
@@ -145,10 +239,10 @@ public class AuthServiceImpl implements AuthService
     }
 
     @Override
-    public GlobalResponse getLoginId(String paramString)
+    public GlobalResponse getUserId(String paramString)
     {
-        Object loginId = StpUtil.getLoginId();
-        return GlobalResponse.success(loginId,"获取登录用户id");
+        Object userId = StpUtil.getLoginId();
+        return GlobalResponse.success(userId,"获取登录用户id");
     }
 
 
@@ -192,27 +286,33 @@ public class AuthServiceImpl implements AuthService
     }
 
     @Override
-    public GlobalResponse getRole(String paramString)
+    public List<String> getRole(String paramString)
     {
         // 1、获取前端参数
-        String userId = Request_Utils.getParam(paramString, "LoginId");
+        String userId = Request_Utils.getParam(paramString, "userId");
+
+        List<String> roleKeyList = new ArrayList<>();
 
         // 2、如果是获取指定用户的角色信息
         if(StringUtils.isNotEmpty(userId))
         {
             List<SysRole> roleList = authMapper.getRolesByUserId(userId);
-            HashMap<String, Object> resultMap = new HashMap<>();
-            resultMap.put("userId",userId);
-            resultMap.put("roleList",roleList);
-            return GlobalResponse.success(resultMap,"用户的所有角色");
+            roleKeyList = roleList.stream()
+                    .filter(role -> role != null) // 过滤 null SysRole
+                    .map(SysRole::getRoleKey)
+                    .filter(rolekey -> rolekey != null) // 过滤 null roleKey
+                    .collect(Collectors.toList());
+            return roleKeyList;
         }
 
         // 3、如果是获取全部角色信息
         List<SysRole> allRoles = authMapper.getAllRoles();
-        HashMap<String, Object> resultMap = new HashMap<>();
-        resultMap.put("roleList",allRoles);
-
-        return GlobalResponse.success(resultMap,"全部的角色");
+        roleKeyList = allRoles.stream()
+                .filter(role -> role != null)       // 过滤 null SysRole
+                .map(SysRole::getRoleKey)
+                .filter(rolekey -> rolekey != null) // 过滤 null roleKey
+                .collect(Collectors.toList());
+        return roleKeyList;
     }
 
     @Override
@@ -267,7 +367,7 @@ public class AuthServiceImpl implements AuthService
 
         // 6、封装结果
         HashMap<String, Object> resultMap = new HashMap<>();
-        resultMap.put("userId",   loginId);
+        resultMap.put("loginId",   loginId);
         resultMap.put("roleList", roleList);
         return GlobalResponse.success(resultMap,"用户角色分配成功");
     }

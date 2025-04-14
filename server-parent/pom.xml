@@ -544,6 +544,14 @@
             <artifactId>easy-rules-mvel</artifactId>
             <version>4.1.0</version>
         </dependency>
+
+        <!-- binlog 监听与解析: https://github.com/shyiko/mysql-binlog-connector-java -->
+        <dependency>
+            <groupId>com.github.shyiko</groupId>
+            <artifactId>mysql-binlog-connector-java</artifactId>
+            <version>0.13.0</version>
+        </dependency>
+
     </dependencies>
 
 

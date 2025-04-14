@@ -1,4 +1,4 @@
-//package org.xiaoxingbomei.wrapper;
+package org.xiaoxingbomei.wrapper;//package org.xiaoxingbomei.wrapper;
 //
 //
 //

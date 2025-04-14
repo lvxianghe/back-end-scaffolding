@@ -8,12 +8,14 @@ public class ApiConstant
      */
     public class Auth
     {
+        public static final String registerCheck     = "/registerCheck";
+        public static final String register          = "/register";          // 注册
         public static final String login             = "/login";             // 登录入口（密码登录、验证码、单点登录）
         public static final String isLogin           = "/isLogin";           // 是否登录 boolean
         public static final String checkLogin        = "/checkLogin";        // 检测登录，未登录抛出异常
         public static final String logout            = "/logout";            // 登出
         public static final String getSaTokenInfo    = "/getSaTokenInfo";    // 获取sa-token的信息
-        public static final String getLoginId        = "/getLoginId";        // 获取当前登录用户id
+        public static final String getUserId         = "/getUserId";        // 获取当前登录用户id
 
         public static final String createRole         = "/createRole";        // 创建角色（单个）
         public static final String getRole            = "/getRole";           // 查询角色(指定或全部)

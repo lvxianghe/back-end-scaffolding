@@ -1,4 +1,4 @@
-//package org.xiaoxingbomei.Enum;
+package org.xiaoxingbomei.Enum;//package org.xiaoxingbomei.Enum;
 //
 //import lombok.AllArgsConstructor;
 //import lombok.Getter;

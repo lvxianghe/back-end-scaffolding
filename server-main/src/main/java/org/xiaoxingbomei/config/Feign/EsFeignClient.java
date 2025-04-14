@@ -1,4 +1,4 @@
-//package org.xiaoxingbomei.feign.client;
+package org.xiaoxingbomei.config.Feign;//package org.xiaoxingbomei.feign.client;
 //
 //
 //import org.springframework.cloud.netflix.feign.FeignClient;

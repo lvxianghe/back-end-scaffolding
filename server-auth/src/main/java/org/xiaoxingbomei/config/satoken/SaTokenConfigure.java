@@ -36,7 +36,7 @@ public class SaTokenConfigure implements WebMvcConfigurer, StpInterface
      * 返回一个账号所拥有的权限码集合
      */
     @Override
-    public List<String> getPermissionList(Object loginId, String loginType)
+    public List<String> getPermissionList(Object userId, String loginType)
     {
         ArrayList<String> permissionList = new ArrayList<String>();
         permissionList.add("main");
@@ -49,9 +49,9 @@ public class SaTokenConfigure implements WebMvcConfigurer, StpInterface
      * 返回一个账号所拥有的角色集合
      */
     @Override
-    public List<String> getRoleList(Object loginId, String loginType)
+    public List<String> getRoleList(Object userId, String loginType)
     {
-        LoginInfo loginInfo = (LoginInfo) StpUtil.getSessionByLoginId(loginId).get((String) loginId);
+        LoginInfo loginInfo = (LoginInfo) StpUtil.getSessionByLoginId(userId).get((String) userId);
         List<String> roleList = loginInfo.getRoleList();
         return roleList;
     }

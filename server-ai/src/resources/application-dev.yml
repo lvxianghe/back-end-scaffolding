@@ -1,0 +1,14 @@
+server:
+  port: 28928
+  servlet:
+    context-path: /
+spring:
+  application:
+    name: ai
+  ai:
+    ollama:
+      base-url: http://10.244.22.55:11434
+      chat:
+        model: deepseek-r1:7b
+
+

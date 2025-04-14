@@ -28,6 +28,23 @@ public class AuthController
      *  - 验证码登录
      *  - 单点登录
      */
+
+    @Operation(summary = "注册",description = "注册用户")
+    @RequestMapping(value = ApiConstant.Auth.registerCheck, method = RequestMethod.POST)
+    public GlobalResponse registerCheck(@RequestBody String paramString)
+    {
+        GlobalResponse ret = authService.registerCheck(paramString);
+        return ret;
+    }
+
+    @Operation(summary = "注册",description = "注册用户")
+    @RequestMapping(value = ApiConstant.Auth.register, method = RequestMethod.POST)
+    public GlobalResponse register(@RequestBody String paramString)
+    {
+        GlobalResponse ret = authService.register(paramString);
+        return ret;
+    }
+
     @Operation(summary = "登录",description = "集成sa-token，登录")
     @RequestMapping(value = ApiConstant.Auth.login, method = RequestMethod.POST)
     public GlobalResponse login(@RequestBody String paramString)
@@ -70,10 +87,10 @@ public class AuthController
     }
 
     @Operation(summary = "获取登录id",description = "集成sa-token,获取登录的用户id")
-    @RequestMapping(value = ApiConstant.Auth.getLoginId, method = RequestMethod.POST)
-    public GlobalResponse getLoginId(@RequestBody String paramString)
+    @RequestMapping(value = ApiConstant.Auth.getUserId, method = RequestMethod.POST)
+    public GlobalResponse getUserId(@RequestBody String paramString)
     {
-        GlobalResponse ret = authService.getLoginId(paramString);
+        GlobalResponse ret = authService.getUserId(paramString);
         return ret;
     }
 
@@ -90,8 +107,9 @@ public class AuthController
     @RequestMapping(value = ApiConstant.Auth.getRole, method = RequestMethod.POST)
     public GlobalResponse getRole(@RequestBody String paramString)
     {
-        GlobalResponse ret = authService.getRole(paramString);
-        return ret;
+        List<String> role = authService.getRole(paramString);
+
+        return GlobalResponse.success(role,"获取角色集合成功");
     }
 
     @Operation(summary = "角色-授予用户角色",description = "集成sa-token,授予用户角色")
@@ -105,41 +123,41 @@ public class AuthController
 
     @Operation(summary = "权限-",description = "XXX")
     @RequestMapping(value = ApiConstant.Auth.createPermission, method = RequestMethod.POST)
-    public GlobalResponse createPermission(@RequestBody String loginId)
+    public GlobalResponse createPermission(@RequestBody String userId)
     {
-        GlobalResponse ret = authService.createPermission(loginId);
+        GlobalResponse ret = authService.createPermission(userId);
         return ret;
     }
 
     @Operation(summary = "权限-",description = "XXX")
     @RequestMapping(value = ApiConstant.Auth.getAllPermission, method = RequestMethod.POST)
-    public GlobalResponse getAllPermission(@RequestBody String loginId)
+    public GlobalResponse getAllPermission(@RequestBody String userId)
     {
-        GlobalResponse ret = authService.getAllPermission(loginId);
+        GlobalResponse ret = authService.getAllPermission(userId);
         return ret;
     }
 
     @Operation(summary = "权限-",description = "XXX")
     @RequestMapping(value = ApiConstant.Auth.assignRolePermissions, method = RequestMethod.POST)
-    public GlobalResponse assignRolePermissions(@RequestBody String loginId)
+    public GlobalResponse assignRolePermissions(@RequestBody String userId)
     {
-        GlobalResponse ret = authService.assignRolePermissions(loginId);
+        GlobalResponse ret = authService.assignRolePermissions(userId);
         return ret;
     }
 
     @Operation(summary = "权限-",description = "XXX")
     @RequestMapping(value = ApiConstant.Auth.getRolePermissions, method = RequestMethod.POST)
-    public GlobalResponse getRolePermissions(@RequestBody String loginId)
+    public GlobalResponse getRolePermissions(@RequestBody String userId)
     {
-        GlobalResponse ret = authService.getRolePermissions(loginId);
+        GlobalResponse ret = authService.getRolePermissions(userId);
         return ret;
     }
 
     @Operation(summary = "权限-",description = "XXX")
     @RequestMapping(value = ApiConstant.Auth.getUserPermissions, method = RequestMethod.POST)
-    public GlobalResponse getUserPermissions(@RequestBody String loginId)
+    public GlobalResponse getUserPermissions(@RequestBody String userId)
     {
-        GlobalResponse ret = authService.getUserPermissions(loginId);
+        GlobalResponse ret = authService.getUserPermissions(userId);
         return ret;
     }
 

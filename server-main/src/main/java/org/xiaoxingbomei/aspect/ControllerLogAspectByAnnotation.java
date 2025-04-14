@@ -1,4 +1,4 @@
-//package org.xiaoxingbomei.aspect;
+package org.xiaoxingbomei.aspect;//package org.xiaoxingbomei.aspect;
 //
 //import org.aspectj.lang.ProceedingJoinPoint;
 //import org.aspectj.lang.annotation.Around;

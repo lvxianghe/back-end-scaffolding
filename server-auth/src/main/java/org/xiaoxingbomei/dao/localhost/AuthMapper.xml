@@ -3,6 +3,69 @@
 <mapper namespace="org.xiaoxingbomei.dao.localhost.AuthMapper" >
 
 
+    <select id="getAllUser" resultType="org.xiaoxingbomei.entity.SysUser">
+        SELECT
+            login_id     as loginId,
+            name         as name,
+            password     as password,
+            gender       as gender,
+            id_card      as idCard,
+            phone_number as phoneNumber,
+            user_type    as userType,
+            create_time  as createTime,
+            update_time  as updateTime,
+            description  as description,
+            status       as status
+        FROM sys_user
+    </select>
+
+    <select id="getUserByLoginId" resultType="org.xiaoxingbomei.entity.SysUser">
+        SELECT
+            login_id     as loginId,
+            name         as name,
+            password     as password,
+            gender       as gender,
+            id_card      as idCard,
+            phone_number as phoneNumber,
+            user_type    as userType,
+            create_time  as createTime,
+            update_time  as updateTime,
+            description  as description,
+            status       as status
+        FROM sys_user
+        WHERE login_id = #{loginId}
+    </select>
+
+    <select id="insertNewSysUser" parameterType="org.xiaoxingbomei.entity.SysUser">
+        INSERT INTO sys_user
+            (
+             login_Id     ,
+             name        ,
+             password    ,
+             gender      ,
+             id_card     ,
+             phone_number,
+             user_type   ,
+             create_time ,
+             update_time ,
+             description ,
+             status
+            )
+        VALUES(
+               #{newSysUser.loginId},
+               #{newSysUser.name},
+               #{newSysUser.password},
+               #{newSysUser.gender},
+               #{newSysUser.idCard},
+               #{newSysUser.phoneNumber},
+               #{newSysUser.userType},
+               #{newSysUser.createTime},
+               #{newSysUser.updateTime},
+               #{newSysUser.description},
+               #{newSysUser.status}
+              )
+    </select>
+
     <select id="insertRole" parameterType="org.xiaoxingbomei.entity.SysRole">
         INSERT INTO sys_role
             (
@@ -40,7 +103,7 @@
     <insert id="insertUserRoles">
         INSERT INTO sys_user_role
         (
-        user_id,
+        login_id,
         role_key
         )
         VALUES
@@ -57,7 +120,7 @@
         DELETE
         FROM  sys_user_role
         WHERE
-        user_id = #{loginId}
+        user_id = #{userId}
     </delete>
 
 <!--    <delete id="deleteUserRoles">-->

@@ -4,6 +4,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.xiaoxingbomei.entity.SysPermission;
 import org.xiaoxingbomei.entity.SysRole;
+import org.xiaoxingbomei.entity.SysUser;
 
 import java.util.List;
 
@@ -15,6 +16,9 @@ public interface AuthMapper
     /**
      * 用户
      */
+    List<SysUser> getAllUser();
+    SysUser getUserByLoginId(@Param("loginId") String loginId);
+    void insertNewSysUser(@Param("newSysUser") SysUser sysUser);
 
     /**
      * 角色
@@ -24,7 +28,7 @@ public interface AuthMapper
     /**
      * 权限
      */
-    int  insertPermission(@Param("sysPermission") SysPermission sysPermission);
+    void insertPermission(@Param("sysPermission") SysPermission sysPermission);
     List<SysPermission>  getAllPermission();
 
     /**
@@ -33,7 +37,7 @@ public interface AuthMapper
     List<SysRole> getRolesByUserId(@Param("userId") String userId);
     List<SysRole> getAllRoles();
     int insertUserRoles(@Param("loginId") String loginId, @Param("roleIds") List<String> roleIds);
-    int deleteUserRoles(@Param("loginId") String loginId);
+    int deleteUserRoles(@Param("userId") String userId);
 
     /**
      * 角色 & 权限

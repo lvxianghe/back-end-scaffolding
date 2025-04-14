@@ -1,4 +1,4 @@
-//package org.xiaoxingbomei.factory;
+package org.xiaoxingbomei.factory;//package org.xiaoxingbomei.factory;
 //
 //import feign.hystrix.FallbackFactory;
 //import lombok.extern.log4j.Log4j2;

@@ -1,15 +1,14 @@
 package org.xiaoxingbomei.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.xiaoxingbomei.common.entity.GlobalEntity;
 import org.xiaoxingbomei.constant.ApiConstant;
 import org.xiaoxingbomei.service.WikiService;
 
-/**
- * 知识库
- */
+@Tag(name="wiki",description = "wiki知识库controller")
 @RestController
 public class WikiController
 {
