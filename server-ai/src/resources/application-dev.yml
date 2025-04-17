@@ -5,10 +5,31 @@ server:
 spring:
   application:
     name: ai
-  ai:
-    ollama:
-      base-url: http://10.244.22.55:11434
-      chat:
-        model: deepseek-r1:7b
+  datasource:
+    url: jdbc:mysql://localhost:3306/ysx
+    username: root
+    password: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
 
+  ai:
+#    openai:
+#      api-key: xai-FvQf1qoWyI5FMkTPKRiEHdQ5gNHWu13gC9d0WFcuOWgrwFkrGQIvY4i6iUrY2E6kjuUWByr0Pk3HGIhS
+#      base-url: https://api.x.ai/v1
+#      chat:
+#        model: deepseek-r1
+#      connectTimeout: 60s
+#      readTimeout: 60s
+    ollama:
+      base-url: http://localhost:11434
+#      base-url: http://10.244.22.55:11434
+      chat:
+        model: deepseek-r1:14b
+#        model: deepseek-r1:7b
+
+datasource:
+  localhost:
+    jdbc-url: jdbc:mysql://localhost:3306/ysx
+    username: root
+    password: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
 

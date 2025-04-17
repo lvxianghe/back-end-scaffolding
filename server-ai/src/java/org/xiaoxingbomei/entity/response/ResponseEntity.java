@@ -1,10 +1,15 @@
 package org.xiaoxingbomei.entity.response;
 
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import org.checkerframework.checker.units.qual.N;
 import org.xiaoxingbomei.Enum.CommonCodeEnum;
+import org.xiaoxingbomei.annotation.NoGlobalEntity;
 
 import java.io.Serializable;
 
+@Data
 public class ResponseEntity<T> implements Serializable
 {
     private static final long serialVersionUID  = 1L;

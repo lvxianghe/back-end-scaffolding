@@ -3,17 +3,21 @@ package org.xiaoxingbomei;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.core.env.Environment;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
 @SpringBootApplication(exclude = { DataSourceAutoConfiguration.class })
+@EnableAspectJAutoProxy
 @Slf4j
+@MapperScan(basePackages = "org.xiaoxingbomei.dao.localhost")
 public class Server_Ai
 {
     public static void main(String[] args) throws UnknownHostException

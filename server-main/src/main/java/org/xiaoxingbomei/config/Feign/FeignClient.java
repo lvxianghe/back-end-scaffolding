@@ -1,4 +1,4 @@
-package org.xiaoxingbomei.config.Feign;//package org.xiaoxingbomei.config.Feign;
+//package org.xiaoxingbomei.config.Feign;
 //
 //import com.alibaba.fastjson.JSON;
 //import com.alibaba.fastjson.TypeReference;

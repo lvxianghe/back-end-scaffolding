@@ -3,6 +3,7 @@ package org.xiaoxingbomei.service.impl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.xiaoxingbomei.entity.response.ResponseEntity;
 import org.xiaoxingbomei.service.AiService;
@@ -16,8 +17,21 @@ import java.util.HashMap;
 public class AiServiceImpl implements AiService
 {
 
+
+//    private final ChatClient chatClient;
+//
+//    public AiServiceImpl(ChatClient chatClient) {
+//        this.chatClient = chatClient;
+//    }
+
+//    @Autowired
+//    @Qualifier("openAiChatClient")
+//    private ChatClient openAiChatClient;
+
     @Autowired
-    private ChatClient chatClient;
+    @Qualifier("ollamaChatClient")
+    private ChatClient ollamaChatClient;
+
 
     // ===================================================================
 
@@ -29,7 +43,7 @@ public class AiServiceImpl implements AiService
         String prompt = Request_Utils.getParam(paramString, "prompt");
 
         // 2、普通模式
-        String resultContent = chatClient
+        String resultContent = ollamaChatClient
                 .prompt()
                 .user(prompt)
                 .call()
@@ -44,9 +58,9 @@ public class AiServiceImpl implements AiService
     @Override
     public Flux<String> chat_for_stream(String prompt)
     {
-        log.info("chat_for_stream");
-        // 流式模式
-        return  chatClient
+        log.info("chat_for_stream with prompt: {}", prompt);
+        // 使用OpenAI进行流式响应
+        return ollamaChatClient
                 .prompt()
                 .user(prompt)
                 .stream()

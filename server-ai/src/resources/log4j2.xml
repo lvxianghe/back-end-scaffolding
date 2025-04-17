@@ -77,6 +77,18 @@
             <DefaultRolloverStrategy max="20"/><!-- 表示日志文件最大保留数 -->   <!-- DefaultRolloverStrategy属性如不设置，则默认为最多同一文件夹下7个文件，这里设置了20 -->
         </RollingFile>
 
+        <!-- spring AI -->
+        <RollingFile name="RollingAIFile"
+                     fileName="${LOG_DIR}/ai.log"
+                     filePattern="${LOG_DIR}/error-%d{yyyy-MM-dd}-%i.log"><!--如想自动压缩滚动文件，可以写成 .log.gz 就自动生成压缩文件了--><!-- 每次大小超过size或到时间间隔，则这日志会自动存入按年份-月份建立的文件夹下面并进行压缩，作为存档-->
+            <PatternLayout pattern="[%-level] [%highlight{%d{HH:mm:ss.SSS}] [%t] [%logger{36}] - %msg%n}{FATAL=red, ERROR=red, WARN=yellow, INFO=green, DEBUG=cyan, TRACE=blue}"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1" modulate="true" />
+                <SizeBasedTriggeringPolicy size="100 MB"/><!--指定当文件体积大于size指定的值时，触发Rolling-->
+            </Policies>
+            <DefaultRolloverStrategy max="20"/><!-- 表示日志文件最大保留数 -->   <!-- DefaultRolloverStrategy属性如不设置，则默认为最多同一文件夹下7个文件，这里设置了20 -->
+        </RollingFile>
+
         <!-- mybatis -->
         <RollingFile name="RollingMybatisFile"
                      fileName="${LOG_DIR}/mybatis.log"
@@ -101,6 +113,18 @@
             <AppenderRef ref="RollingErrorFile"/>
             <AppenderRef ref="Console"/>
         </Root>
+
+        <!-- spring ai 日志记录器 -->
+        <logger name="org.springframework.ai.chat.client.advisor" level="DEBUG" additivity="false">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="RollingAIFile"/>
+        </logger>
+
+        <!-- dao层sql 记录器 -->
+        <logger name="org.xiaoxingbomei.dao" level="DEBUG" additivity="false">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="RollingMybatisFile"/>
+        </logger>
 
     </Loggers>
 
