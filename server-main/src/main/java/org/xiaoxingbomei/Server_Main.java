@@ -20,7 +20,9 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Arrays;
 
-@SpringBootApplication(exclude = { DataSourceAutoConfiguration.class })
+@SpringBootApplication(exclude = { 
+    DataSourceAutoConfiguration.class
+})
 //@EnableEurekaClient
 @EnableDiscoveryClient
 @EnableFeignClients

@@ -6,6 +6,8 @@ server:
 spring:
   application:
     name: main
+  main:
+    allow-bean-definition-overriding: true
 
 
 
