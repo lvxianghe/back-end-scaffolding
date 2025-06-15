@@ -1,6 +1,6 @@
 # spring 配置
 server:
-  port: 28920
+  port: 28921
   servlet:
     context-path: /main
 spring:

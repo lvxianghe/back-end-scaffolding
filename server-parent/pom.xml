@@ -74,6 +74,8 @@
     <modules>
         <module>../server-main</module>
         <module>../server-common</module>
+        <module>../server-api</module>
+        <module>../server-auth</module>
     </modules>
 
     <!-- 依赖 -->
