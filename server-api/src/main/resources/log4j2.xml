@@ -3,7 +3,7 @@
 
     <!-- Properties: 全局属性 -->
     <Properties>
-        <Property name="LOG_DIR">./logs/server-main/</Property>
+        <Property name="LOG_DIR">./logs/server-api/</Property>
         <property name="FILE_NAME_DEFAULT">default.log</property>
         <property name="FILE_NAME_INFO">info.log</property>
         <property name="FILE_NAME_ERROR">error.log</property>
