@@ -9,12 +9,15 @@ spring:
   main:
     allow-bean-definition-overriding: true
   ai:
+    chat:
+      client:
+        enabled: false # false的情况下禁止自动装配，就可以创建多个ChatClient了
     # 基于ollama去拉取模型
-#    ollama:
-#      base-url: http://localhost:11434
-#      chat:
-#        model: deepseek-r1:14b
-    # 基于openai去拉取模型
+    ollama:
+      base-url: http://localhost:11434
+      chat:
+        model: deepseek-r1:14b
+#     基于openai去拉取模型
     openai:
       base-url: https://chatapi.littlewheat.com
       api-key: sk-YiB76FYEBysWcTUw69FEGVfwqMzf1iKMILvobZg3ALVHFl63

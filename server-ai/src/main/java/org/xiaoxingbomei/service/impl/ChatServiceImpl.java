@@ -21,12 +21,12 @@ public class ChatServiceImpl implements ChatService
     ChatMemory chatMemory;
 
     @Autowired
-//    @Qualifier("openAiChatClient")
+    @Qualifier("openAiChatClient")
     ChatClient openAiChatClient;
 
-//    @Autowired
-//    @Qualifier("ollamaChatClient")
-//    ChatClient ollamaChatClient;
+    @Autowired
+    @Qualifier("ollamaChatClient")
+    ChatClient ollamaChatClient;
 
     // ==============================================================
 
@@ -36,7 +36,7 @@ public class ChatServiceImpl implements ChatService
     {
         log.info("chat_for_string");
 
-        String resultContent = openAiChatClient
+        String resultContent = ollamaChatClient
                 .prompt()
                 .user(prompt)
                 .call()
