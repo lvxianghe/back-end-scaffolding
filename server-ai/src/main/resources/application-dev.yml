@@ -1,11 +1,11 @@
 # spring 配置
 server:
-  port: 28927
+  port: 28922
   servlet:
-    context-path: /ai
+    context-path: /auth
 spring:
   application:
-    name: ai
+    name: main
   main:
     allow-bean-definition-overriding: true
 

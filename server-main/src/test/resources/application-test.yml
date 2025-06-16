@@ -1,0 +1,15 @@
+# 测试环境配置
+server:
+  port: 0  # 随机端口，避免冲突
+
+spring:
+  application:
+    name: main-test
+  main:
+    allow-bean-definition-overriding: true
+
+# 日志配置
+logging:
+  level:
+    org.xiaoxingbomei: DEBUG
+    org.springframework: INFO 

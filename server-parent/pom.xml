@@ -76,6 +76,7 @@
         <module>../server-common</module>
         <module>../server-api</module>
         <module>../server-auth</module>
+        <module>../server-ai</module>
     </modules>
 
     <!-- 依赖 -->

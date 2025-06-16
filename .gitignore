@@ -18,5 +18,5 @@ logs/
 *.ipr
 out/
 !**/src/main/**/out/
-!**/src/test/**/out/
+#!**/src/test/**/out/
 /apollo-quick-start-master/
