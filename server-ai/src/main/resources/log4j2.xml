@@ -95,7 +95,12 @@
     <!-- 日志记录器 -->
     <Loggers>
 
-
+        <!-- 根 记录器 -->
+        <Root level="INFO">
+            <AppenderRef ref="RollingDefaultFile"/>
+            <AppenderRef ref="RollingErrorFile"/>
+            <AppenderRef ref="Console"/>
+        </Root>
 
     </Loggers>
 

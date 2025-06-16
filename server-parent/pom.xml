@@ -57,6 +57,11 @@
         <log4j2.version>2.23.1</log4j2.version>
         <hutool.version>5.8.22</hutool.version>
         <pagehelper.version>1.3.0</pagehelper.version>
+        <easy-rules.version>4.1.0</easy-rules.version>
+        <mysql-binlog-connector-java.version>0.13.0</mysql-binlog-connector-java.version>
+
+
+        <spring-ai.version>1.0.0</spring-ai.version>
 
     </properties>
 
@@ -441,18 +446,45 @@
             <dependency>
                 <groupId>org.jeasy</groupId>
                 <artifactId>easy-rules-core</artifactId>
-                <version>4.1.0</version>
+                <version>${easy-rules.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.jeasy</groupId>
                 <artifactId>easy-rules-mvel</artifactId>
-                <version>4.1.0</version>
+                <version>${easy-rules.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>com.github.shyiko</groupId>
                 <artifactId>mysql-binlog-connector-java</artifactId>
-                <version>0.13.0</version>
+                <version>${mysql-binlog-connector-java.version}</version>
+            </dependency>
+
+            <!-- 大模型应用开发相关 -->
+            <dependency>
+                <groupId>org.springframework.ai</groupId>
+                <artifactId>spring-ai-bom</artifactId>
+                <version>${spring-ai.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.springframework.ai</groupId>
+                <artifactId>spring-ai-starter-model-ollama</artifactId>
+                <version>${spring-ai.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.springframework.ai</groupId>
+                <artifactId>spring-ai-starter-model-openai</artifactId>
+                <version>${spring-ai.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.springframework.ai</groupId>
+                <artifactId>spring-ai-pdf-document-reader</artifactId>
+                <version>${spring-ai.version}</version>
             </dependency>
 
         </dependencies>

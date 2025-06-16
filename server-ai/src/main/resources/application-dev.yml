@@ -1,13 +1,31 @@
 # spring 配置
 server:
-  port: 28922
+  port: 28927
   servlet:
-    context-path: /auth
+    context-path: /ai
 spring:
   application:
     name: main
   main:
     allow-bean-definition-overriding: true
-
+  ai:
+    # 基于ollama去拉取模型
+#    ollama:
+#      base-url: http://localhost:11434
+#      chat:
+#        model: deepseek-r1:14b
+    # 基于openai去拉取模型
+    openai:
+      base-url: https://chatapi.littlewheat.com
+      api-key: sk-YiB76FYEBysWcTUw69FEGVfwqMzf1iKMILvobZg3ALVHFl63
+      chat:
+        options:
+          model: gpt-4o
+      embedding:
+        options:
+          model:
+          dimensions:
+        base-url:
+        api-key:
 
 
