@@ -26,30 +26,30 @@ public class LlmChatClientConfiguration
      */
 
 
-
-    /**
-     * 配置ollama的chatClient
-     */
-    @Bean
-    public ChatClient ollamaChatClient(@Qualifier("ollamaChatModel") OllamaChatModel model)
-    {
-        return ChatClient
-                .builder(model)
-                .defaultSystem(SystemPromptConstant.XIAOXINGBOMEI_SYSTEM_PROMPT)
-                .defaultAdvisors(new SimpleLoggerAdvisor())
-                .build();
-    }
-
-    /**
-     * 配置openai的chatClient
-     */
-    @Bean
-    public ChatClient openAiChatClient(@Qualifier("openAiChatModel") OpenAiChatModel model)
-    {
-        return ChatClient
-                .builder(model)
-                .defaultSystem(SystemPromptConstant.GAME_SYSTEM_PROMPT)
-                .defaultAdvisors(new SimpleLoggerAdvisor())
-                .build();
-    }
+//
+//    /**
+//     * 配置ollama的chatClient
+//     */
+//    @Bean
+//    public ChatClient ollamaChatClient(@Qualifier("ollamaChatModel") OllamaChatModel model)
+//    {
+//        return ChatClient
+//                .builder(model)
+//                .defaultSystem(SystemPromptConstant.XIAOXINGBOMEI_SYSTEM_PROMPT)
+//                .defaultAdvisors(new SimpleLoggerAdvisor())
+//                .build();
+//    }
+//
+//    /**
+//     * 配置openai的chatClient
+//     */
+//    @Bean
+//    public ChatClient openAiChatClient(@Qualifier("openAiChatModel") OpenAiChatModel model)
+//    {
+//        return ChatClient
+//                .builder(model)
+//                .defaultSystem(SystemPromptConstant.GAME_SYSTEM_PROMPT)
+//                .defaultAdvisors(new SimpleLoggerAdvisor())
+//                .build();
+//    }
 }
