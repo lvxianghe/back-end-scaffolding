@@ -37,8 +37,7 @@ public class AiChatClientAutoConfiguration
             .build();
 
     @Bean("openaiChatClientMap")
-    public Map<String, ChatClient> openAiChatClientMap(AiModelProperties properties
-                                                       )
+    public Map<String, ChatClient> openAiChatClientMap(AiModelProperties properties)
     {
         Map<String, ChatClient> map = new HashMap<>();
         properties.getOpenai().forEach((name, config) ->
