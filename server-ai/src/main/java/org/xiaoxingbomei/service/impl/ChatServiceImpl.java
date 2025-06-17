@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.xiaoxingbomei.common.entity.response.GlobalResponse;
+import org.xiaoxingbomei.config.llm.ChatClientFactory;
 import org.xiaoxingbomei.service.ChatService;
 import reactor.core.publisher.Flux;
 
@@ -28,6 +29,9 @@ public class ChatServiceImpl implements ChatService
     @Qualifier("ollamaChatClient")
     ChatClient ollamaChatClient;
 
+    @Autowired
+    private ChatClientFactory chatClientFactory;
+
     // ==============================================================
 
 
@@ -36,7 +40,9 @@ public class ChatServiceImpl implements ChatService
     {
         log.info("chat_for_string");
 
-        String resultContent = ollamaChatClient
+        ChatClient chatClient = chatClientFactory.getClient("ollama", "qwen3:14b");
+
+        String resultContent = chatClient
                 .prompt()
                 .user(prompt)
                 .call()

@@ -1,10 +1,13 @@
 package org.xiaoxingbomei.config.llm;
 
+import org.checkerframework.checker.units.qual.A;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.SimpleLoggerAdvisor;
+import org.springframework.ai.chat.memory.ChatMemory;
 import org.springframework.ai.chat.model.ChatModel;
 import org.springframework.ai.ollama.OllamaChatModel;
 import org.springframework.ai.openai.OpenAiChatModel;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,6 +24,7 @@ public class LlmChatClientConfiguration
     /**
      * 设置OpenAI作为主要的ChatModel，解决Bean冲突问题  SpringAI1.0版本 不需要再显示定义 chatmemory了
      */
+
 
 
     /**

@@ -31,4 +31,38 @@ spring:
         base-url:
         api-key:
 
+ai:
+  openai:
+    grok-3:
+      base-url: https://chatapi.littlewheat.com
+      api-key: sk-YiB76FYEBysWcTUw69FEGVfwqMzf1iKMILvobZg3ALVHFl63
+      model: grok-3
+      temperature: 0.7
+      embeddingModelName: text-embedding-v3
+      embeddingDimensions: 1024
+    gpt-4o:
+      base-url: https://chatapi.littlewheat.com
+      api-key: sk-YiB76FYEBysWcTUw69FEGVfwqMzf1iKMILvobZg3ALVHFl63
+      model: gpt-4o
+      temperature: 0.5
+      embeddingModelName: text-embedding-v3
+      embeddingDimensions: 1024
+
+  ollama:
+    deepseek:
+      base-url: http://localhost:11434
+      model: deepseek-r1:14B
+      temperature: 0.7
+    qwen3:
+      base-url: http://localhost:11434
+      model: qwen3:14b
+      temperature: 0.5
+    deepseek-v3_Q4:latest:
+      base-url: http://10.244.51.171:8000
+      model: deepseek-v3_Q4:latest
+      temperature: 0.7
+    deepseek-r1:7b:
+      base-url: http://10.244.22.55:11434
+      model: deepseek-r1:7b
+      temperature: 0.9
 
