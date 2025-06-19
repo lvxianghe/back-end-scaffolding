@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="org.xiaoxingbomei1.dao.localhost.ModelMapper" >
+<mapper namespace="org.xiaoxingbomei.dao.localhost.ModelMapper" >
 
     <!-- 获取所有模型 -->
-    <select id="getAllModels" resultType="org.xiaoxingbomei1.vo.LlmModel">
+    <select id="getAllModels" resultType="org.xiaoxingbomei.vo.LlmModel">
         SELECT 
             model_provider as modelProvider,
             model_name as modelName,
@@ -13,7 +13,7 @@
     </select>
     
     <!-- 根据提供者获取模型 -->
-    <select id="getModelsByProvider" resultType="org.xiaoxingbomei1.vo.LlmModel">
+    <select id="getModelsByProvider" resultType="org.xiaoxingbomei.vo.LlmModel">
         SELECT
             model_provider,
             model_name,
@@ -24,7 +24,7 @@
     </select>
     
     <!-- 添加模型 -->
-    <insert id="addModel" parameterType="org.xiaoxingbomei1.vo.LlmModel">
+    <insert id="addModel" parameterType="org.xiaoxingbomei.vo.LlmModel">
         INSERT INTO llm_model_resource (
             model_provider,
             model_name,
@@ -39,7 +39,7 @@
     </insert>
     
     <!-- 更新模型 -->
-    <update id="updateModel" parameterType="org.xiaoxingbomei1.vo.LlmModel">
+    <update id="updateModel" parameterType="org.xiaoxingbomei.vo.LlmModel">
         UPDATE llm_model_resource
         SET 
             model_description = #{modelDescription},

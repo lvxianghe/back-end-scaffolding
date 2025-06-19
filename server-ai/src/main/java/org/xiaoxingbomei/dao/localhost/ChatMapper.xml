@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="org.xiaoxingbomei1.dao.localhost.ChatMapper" >
+<mapper namespace="org.xiaoxingbomei.dao.localhost.ChatMapper" >
 
-    <insert id="insertChatHistoryList" parameterType="org.xiaoxingbomei1.vo.LlmChatHistoryList">
+    <insert id="insertChatHistoryList" parameterType="org.xiaoxingbomei.vo.LlmChatHistoryList">
         INSERT INTO llm_chat_history_list
         (
          chat_id,
@@ -21,7 +21,7 @@
             )
     </insert>
 
-    <select id="getAllChatHistoryList" resultType="org.xiaoxingbomei1.vo.LlmChatHistoryList">
+    <select id="getAllChatHistoryList" resultType="org.xiaoxingbomei.vo.LlmChatHistoryList">
             SELECT
                 chat_id as chatId,
                 chat_tittle as chatTittle,
@@ -37,7 +37,7 @@
     </delete>
 
 
-    <update id="updateChatHistoryList" parameterType="org.xiaoxingbomei1.vo.LlmChatHistoryList">
+    <update id="updateChatHistoryList" parameterType="org.xiaoxingbomei.vo.LlmChatHistoryList">
         update llm_chat_history_list
         set
             chat_tittle = #{chatTittle},
@@ -47,7 +47,7 @@
     </update>
 
 
-    <select id="getAllChatHistory" resultType="org.xiaoxingbomei1.vo.LlmChatHistory">
+    <select id="getAllChatHistory" resultType="org.xiaoxingbomei.vo.LlmChatHistory">
             SELECT
                 chat_id      as chatId,
                 chat_role    as chatRole,
@@ -55,7 +55,7 @@
                 FROM llm_chat_history
     </select>
 
-    <select id="getChatHistoryById" parameterType="string" resultType="org.xiaoxingbomei1.vo.LlmChatHistory">
+    <select id="getChatHistoryById" parameterType="string" resultType="org.xiaoxingbomei.vo.LlmChatHistory">
             SELECT
                 chat_id as chatId,
                 chat_role as chatRole,

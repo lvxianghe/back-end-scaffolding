@@ -1,11 +1,11 @@
 # spring 配置
 server:
-  port: 28927
+  port: 28928
   servlet:
-    context-path: /ai
+    context-path: /
 spring:
   application:
-    name: main
+    name: ai
   main:
     allow-bean-definition-overriding: true
   ai:
@@ -66,3 +66,18 @@ ai:
       model: deepseek-r1:7b
       temperature: 0.9
 
+
+datasource:
+  localhost:
+    jdbc-url: jdbc:mysql://localhost:3306/ysx
+    username: root
+    password: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
+logging:
+  level:
+    org:
+      springframework:
+        ai:
+          chat:
+            client:
+              advisor: debug

@@ -34,15 +34,26 @@ public class ChatServiceImpl implements ChatService
     {
         List<Advisor> advisors = List.of
                 (
-                        new SimpleLoggerAdvisor(),
-                        MessageChatMemoryAdvisor.builder(chatMemory).build()
+//                        new SimpleLoggerAdvisor(),
+//                        MessageChatMemoryAdvisor.builder(chatMemory).build()
                 );
 
         ChatClient chatClient      = chatClientFactory.getClient(modelProvider, modelName);
         Boolean    isStreamBoolean = Boolean.valueOf(isStream);
 
-        // 如果是普通对话，路由是否流式响应
-        return null;
+        // 执行对话
+        Object result;
+
+        // 构建prompt builder
+        var promptBuilder = chatClient
+                .prompt()
+                .user(prompt)
+                .advisors(advisors)
+                .advisors(a -> a.param(ChatMemory.CONVERSATION_ID, chatId));
+
+        result = promptBuilder.stream().content();
+
+        return (Flux<String>)result;
 
     }
 

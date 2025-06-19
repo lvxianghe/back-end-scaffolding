@@ -18,16 +18,7 @@ public class ApiConstant
         public static final String getChatHistoryById    = "/ai/chat/getChatHistoryById";    // 根据id获取会话的历史记录详情
     }
 
-    public class Game
-    {
-        public static final String chat_for_game       = "/ai/game/chat";
-    }
 
-
-    public class Service
-    {
-        public static final String chat_for_service    = "/ai/service/chat";
-    }
 
     public class Prompt
     {
@@ -45,10 +36,6 @@ public class ApiConstant
         public static final String deleteModel        = "/ai/model/deleteModel";            // 删除模型
     }
 
-    public class File
-    {
-        public static final String uploadFile         = "/ai/file/uploadFile";
-        public static final String downloadFile       = "/ai/file/downloadFile";
-    }
+
 
 }
