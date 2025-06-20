@@ -21,7 +21,8 @@ public class ChatClientFactory
 
     public ChatClient getClient(String provider, String name)
     {
-        return switch (provider.toLowerCase()) {
+        return switch (provider.toLowerCase())
+        {
             case "openai" -> openaiClients.get(name);
             case "ollama" -> ollamaClients.get(name);
             default -> throw new IllegalArgumentException("不支持的 provider: " + provider);
@@ -57,4 +58,6 @@ public class ChatClientFactory
 
         log.info("==============================================");
     }
+
+
 }

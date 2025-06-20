@@ -29,7 +29,6 @@ import java.util.Map;
 public class AiChatClientAutoConfiguration
 {
 
-
     @Autowired
     ChatMemory chatMemory = MessageWindowChatMemory
             .builder()
@@ -56,18 +55,34 @@ public class AiChatClientAutoConfiguration
                     .defaultOptions(options)
                     .build();
             
-            log.info("创建OpenAI ChatClient: {}, 添加ProgrammerTools支持", name);
+            log.info("创建OpenAI ChatClient: {}, 配置Advisors链", name);
             map.put(name, ChatClient.builder(model)
-                    .defaultAdvisors
-                            (
+                    .defaultAdvisors(
+                            // Advisor执行顺序说明（按getOrder()值，越小越优先）：
+                            // 1. 日志记录 - 最高优先级，记录完整的请求和响应
                             new SimpleLoggerAdvisor(),
+                            
+                            // 2. 聊天记忆 - 在处理请求前添加历史对话上下文
                             MessageChatMemoryAdvisor.builder(chatMemory).build()
-                            )
+                            
+                            // 📋 可选的高级Advisors（按需启用）：
+                            
+                            // 3. RAG检索增强 - 如果有向量数据库可启用
+                            // QuestionAnswerAdvisor.builder(vectorStore).build(),
+                            
+                            // 4. 内容安全检查 - 推荐在生产环境启用
+                            // SafeGuardAdvisor.builder().build(),
+                            
+                            // 5. 向量存储记忆 - 用于大规模对话历史检索
+                            // VectorStoreChatMemoryAdvisor.builder(vectorStore).build(),
+                            
+                            // 6. 自定义业务逻辑 - 敏感词过滤、统计记录等
+                            // new CustomBusinessAdvisor()
+                    )
                     .build());
         });
         return map;
     }
-
 
     @Bean("ollamaChatClientMap")
     public Map<String, ChatClient> ollamaChatClientMap(AiModelProperties properties)
@@ -88,19 +103,21 @@ public class AiChatClientAutoConfiguration
                     .defaultOptions(options)
                     .build();
             
-            log.info("创建Ollama ChatClient: {}, 添加ProgrammerTools支持", name);
+            log.info("创建Ollama ChatClient: {}, 配置Advisors链", name);
             map.put(name, ChatClient.builder(model)
-                    .defaultAdvisors
-                            (
-                                    new SimpleLoggerAdvisor(),
-                                    MessageChatMemoryAdvisor.builder(chatMemory).build()
-                            )
+                    .defaultAdvisors(
+                            // Advisor执行顺序说明（按getOrder()值，越小越优先）：
+                            // 1. 日志记录 - 最高优先级，记录完整的请求和响应
+                            new SimpleLoggerAdvisor(),
+                            
+                            // 2. 聊天记忆 - 在处理请求前添加历史对话上下文
+                            MessageChatMemoryAdvisor.builder(chatMemory).build()
+                            
+                            // 📋 可选的高级Advisors（同OpenAI配置）：
+                            // 3-6. 其他Advisors配置与OpenAI相同，按需启用
+                    )
                     .build());
         });
         return map;
     }
-
-
-
-
 }
