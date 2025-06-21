@@ -12,24 +12,12 @@ spring:
     chat:
       client:
         enabled: false # false的情况下禁止自动装配，就可以创建多个ChatClient了
-    # 基于ollama去拉取模型
-    ollama:
-      base-url: http://localhost:11434
-      chat:
-        model: deepseek-r1:14b
-#     基于openai去拉取模型
+    # 添加占位符，防止Spring AI自动配置报错
     openai:
-      base-url: https://chatapi.littlewheat.com
-      api-key: sk-YiB76FYEBysWcTUw69FEGVfwqMzf1iKMILvobZg3ALVHFl63
-      chat:
-        options:
-          model: gpt-4o
-      embedding:
-        options:
-          model:
-          dimensions:
-        base-url:
-        api-key:
+      api-key: "sk-disabled-placeholder" 
+      base-url: "https://disabled-placeholder.com"
+    ollama:
+      base-url: "http://disabled-placeholder:11434"
 
 ai:
   openai:
@@ -40,6 +28,8 @@ ai:
       temperature: 0.7
       embeddingModelName: text-embedding-v3
       embeddingDimensions: 1024
+      modelDescription: "Grok-3是xAI开发的最新一代大语言模型，具有强大的推理和创作能力"
+      modelTag: "推理,创作,多模态"
     gpt-4o:
       base-url: https://chatapi.littlewheat.com
       api-key: sk-YiB76FYEBysWcTUw69FEGVfwqMzf1iKMILvobZg3ALVHFl63
@@ -47,24 +37,34 @@ ai:
       temperature: 0.5
       embeddingModelName: text-embedding-v3
       embeddingDimensions: 1024
+      modelDescription: "OpenAI GPT-4o是最新的多模态大语言模型，支持文本、图像和音频处理"
+      modelTag: "多模态,文本生成,图像理解,音频处理"
 
   ollama:
     deepseek:
       base-url: http://localhost:11434
       model: deepseek-r1:14B
       temperature: 0.7
+      modelDescription: "DeepSeek-R1是一个专注于推理的大语言模型，在数学和逻辑推理方面表现优异"
+      modelTag: "推理,数学,逻辑,编程"
     qwen3:
       base-url: http://localhost:11434
       model: qwen3:14b
       temperature: 0.5
+      modelDescription: "通义千问3是阿里云开发的大语言模型，在中文理解和生成方面表现出色"
+      modelTag: "中文,对话,文本生成,知识问答"
     deepseek-v3_Q4:latest:
       base-url: http://10.244.51.171:8000
       model: deepseek-v3_Q4:latest
       temperature: 0.7
+      modelDescription: "DeepSeek-V3量化版本，在保持性能的同时降低了资源消耗"
+      modelTag: "量化,高效,编程,推理"
     deepseek-r1:7b:
       base-url: http://10.244.22.55:11434
       model: deepseek-r1:7b
       temperature: 0.9
+      modelDescription: "DeepSeek-R1轻量版，适合资源受限环境下的推理任务"
+      modelTag: "轻量,推理,数学,编程"
 
 
 datasource:

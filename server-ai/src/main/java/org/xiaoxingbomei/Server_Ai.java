@@ -20,8 +20,6 @@ import java.util.Arrays;
 
 @SpringBootApplication(exclude = { 
     DataSourceAutoConfiguration.class
-//        ,
-//    org.springframework.ai.model.chat.client.autoconfigure.ChatClientAutoConfiguration.class
 })
 @ServletComponentScan
 @EnableAspectJAutoProxy

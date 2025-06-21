@@ -62,48 +62,4 @@ public class ChatController
     }
 
 
-    /**
-     * 添加模型
-     * @param model 模型信息
-     * @return 添加结果
-     */
-    @RequestMapping(value = ApiConstant.Model.addModel, method = RequestMethod.POST)
-    public GlobalResponse addModel(@RequestBody LlmModel model)
-    {
-        GlobalResponse ret = null;
-
-        ret = llmModelService.addModel(model);
-
-        return ret;
-    }
-
-    /**
-     * 更新模型
-     * @param model 模型信息
-     * @return 更新结果
-     */
-    @RequestMapping(value = ApiConstant.Model.updateModel, method = RequestMethod.POST)
-    public GlobalResponse updateModel(@RequestBody LlmModel model)
-    {
-        GlobalResponse ret = null;
-
-        ret = llmModelService.updateModel(model);
-
-        return ret;
-    }
-
-    /**
-     * 删除模型
-     * @param modelProvider 模型提供者
-     * @param modelName 模型名称
-     * @return 删除结果
-     */
-    @RequestMapping(value = ApiConstant.Model.deleteModel, method = RequestMethod.POST)
-    public GlobalResponse deleteModel(@RequestBody String paramString)
-    {
-        GlobalResponse ret = llmModelService.deleteModel(paramString);
-
-        return ret;
-    }
-
 }

@@ -26,8 +26,10 @@ import java.util.Objects;
 @Service
 public class LlmModelServiceImpl implements LlmModelService
 {
-    @Autowired
-    private OpenAiEmbeddingModel embeddingModel;
+    // 暂时注释掉，因为会触发OpenAI自动配置
+    // @Autowired
+    // private OpenAiEmbeddingModel embeddingModel;
+    
     @Autowired
     private ModelMapper modelMapper;
 
@@ -41,9 +43,27 @@ public class LlmModelServiceImpl implements LlmModelService
     {
         try
         {
+            log.info("开始查询数据库中的所有模型...");
             List<LlmModel> modelList = modelMapper.getAllModels();
+            log.info("数据库查询完成，返回模型数量: {}", modelList != null ? modelList.size() : "null");
+            
+            if (modelList != null && !modelList.isEmpty()) {
+                log.info("查询到的模型列表:");
+                for (int i = 0; i < modelList.size(); i++) {
+                    LlmModel model = modelList.get(i);
+                    log.info("  模型 {}: {}/{} - {}", 
+                        i + 1, 
+                        model.getModelProvider(), 
+                        model.getModelName(), 
+                        model.getModelDescription());
+                }
+            } else {
+                log.warn("数据库查询结果为空或null");
+            }
+            
             return GlobalResponse.success(modelList,"获取模型列表成功");
         } catch (Exception e) {
+            log.error("获取模型列表失败", e);
             return GlobalResponse.error("获取模型列表失败：" + e.getMessage());
         }
     }
