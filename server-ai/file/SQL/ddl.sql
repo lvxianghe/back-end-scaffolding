@@ -1,21 +1,29 @@
-create table llm_chat_history_list
+-- 重新创建会话历史列表表
+CREATE TABLE llm_chat_history_list
 (
-    chat_id             varchar(64)   primary key comment '会话id',
-    chat_tittle      varchar(100) not null           comment '会话标题',
-    chat_tag         varchar(40) not null           comment '会话标签',
-    create_time  varchar(20) not null           comment '创建时间',
-    update_time varchar(20) not null           comment '更新时间'
-)
-    comment '大模型会话历史列表';
+    chat_id      VARCHAR(64)  PRIMARY KEY COMMENT '会话id',
+    chat_tittle  VARCHAR(100) NOT NULL COMMENT '会话标题',
+    chat_tag     VARCHAR(40)  NOT NULL COMMENT '会话标签',
+    create_time  VARCHAR(50)  DEFAULT '今天' COMMENT '创建时间（支持中文描述）',
+    update_time  VARCHAR(50)  DEFAULT '今天' COMMENT '更新时间（支持中文描述）'
+) COMMENT '大模型会话历史列表';
 
-
-create table llm_chat_history
+-- 重新创建会话历史详情表（修复主键问题）
+CREATE TABLE llm_chat_history
 (
-    chat_id                varchar(64)   primary key comment '会话id',
-    chat_role           varchar(20) not null           comment '会话角色（枚举）',
-    chat_content   blob              comment '会话详情'
-)
-    comment '大模型会话历史详情表';
+    id           BIGINT       AUTO_INCREMENT PRIMARY KEY COMMENT '自增主键',
+    chat_id      VARCHAR(64)  NOT NULL COMMENT '会话id',
+    chat_role    VARCHAR(20)  NOT NULL COMMENT '会话角色（user/assistant/system）',
+    chat_content TEXT         NOT NULL COMMENT '会话内容',
+    create_time  VARCHAR(50)  DEFAULT '刚刚' COMMENT '创建时间（支持中文描述）',
+
+    -- 添加索引
+    INDEX idx_chat_id (chat_id),
+    INDEX idx_create_time (create_time),
+
+    -- 外键约束（可选）
+    FOREIGN KEY (chat_id) REFERENCES llm_chat_history_list(chat_id) ON DELETE CASCADE
+) COMMENT '大模型会话历史详情表';
 
 create table llm_functioncalling_programmer
 (

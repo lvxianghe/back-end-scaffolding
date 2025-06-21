@@ -7,17 +7,13 @@
         (
          chat_id,
          chat_tittle,
-         chat_tag,
-         create_time,
-         update_time
+         chat_tag
         )
         values
             (
              #{chatId},
              #{chatTittle},
-             #{chatTag},
-             #{createTime},
-             #{updateTime}
+             #{chatTag}
             )
     </insert>
 
