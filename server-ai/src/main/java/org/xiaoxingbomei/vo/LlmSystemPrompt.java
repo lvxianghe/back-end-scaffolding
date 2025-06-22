@@ -11,5 +11,6 @@ public class LlmSystemPrompt
     private String promptDescription; // 提示词描述
     private String promptTag;         // 提示词标签（A,B,C）
     private String promptContent;     // 提示词内容
+    private String functionToolId;    // 关联的工具ID，为空则不使用工具调用
     private String status;            // 状态 0-删除 1-生效
 }

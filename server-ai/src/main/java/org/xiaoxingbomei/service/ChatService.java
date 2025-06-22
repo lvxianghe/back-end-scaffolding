@@ -16,7 +16,7 @@ public interface ChatService
                     String isStream,        // 是否流式打印
                     String modelProvider,   // 模型提供商
                     String modelName,       // 模型名称
-                    String systemPrompt     // 系统提示词
+                    String systemPromptId   // 系统提示词ID（可选，为空使用默认，会自动获取对应的工具配置）
             );
 
     GlobalResponse chat_for_string(String paramString);

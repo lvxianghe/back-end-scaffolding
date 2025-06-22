@@ -29,6 +29,13 @@ public interface PromptService
     GlobalResponse addSystemPrompt(LlmSystemPrompt prompt);
     
     /**
+     * 更新系统提示词
+     * @param prompt 提示词信息
+     * @return 更新结果
+     */
+    GlobalResponse updateSystemPrompt(LlmSystemPrompt prompt);
+    
+    /**
      * 删除系统提示词
      * @param promptId 提示词ID
      * @return 删除结果

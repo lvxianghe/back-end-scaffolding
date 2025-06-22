@@ -8,7 +8,6 @@ import org.xiaoxingbomei.service.ChatService;
 import org.xiaoxingbomei.service.LlmModelService;
 import org.xiaoxingbomei.service.PromptService;
 import org.xiaoxingbomei.vo.LlmChatHistory;
-import org.xiaoxingbomei.vo.LlmModel;
 import org.xiaoxingbomei.vo.LlmSystemPrompt;
 import reactor.core.publisher.Flux;
 
@@ -29,6 +28,11 @@ public class ChatController
 
     // =========================================================
 
+    /**
+     * 统一的智能对话接口
+     * 支持工具调用功能，通过systemPromptId动态配置
+     * 注意：不需要传functionToolId，系统会根据systemPromptId自动获取对应的工具配置
+     */
     @RequestMapping(value = ApiConstant.Chat.chat,method = RequestMethod.GET,produces ="text/html;charset=utf-8")
     public Flux<String> chat
             (
@@ -37,11 +41,11 @@ public class ChatController
                     @RequestParam(value = "isStream") String isStream,
                     @RequestParam(value = "modelName") String modelName,
                     @RequestParam(value = "modelProvider") String modelProvider,
-                    @RequestParam(value = "systemPrompt",required = false) String systemPrompt
+                    @RequestParam(value = "systemPromptId",required = false) String systemPromptId
             )
     {
 
-        Flux<String> ret = chatService.chat(prompt,chatId,isStream,modelProvider,modelName,systemPrompt);
+        Flux<String> ret = chatService.chat(prompt,chatId,isStream,modelProvider,modelName,systemPromptId);
 
         return ret;
     }
@@ -144,6 +148,21 @@ public class ChatController
         GlobalResponse ret = null;
 
         ret = promptService.addSystemPrompt(prompt);
+
+        return ret;
+    }
+
+    /**
+     * 更新系统提示词
+     * @param prompt 提示词信息
+     * @return 更新结果
+     */
+    @RequestMapping(value = ApiConstant.Prompt.updateSystemPrompt, method = RequestMethod.POST)
+    public GlobalResponse updateSystemPrompt(@RequestBody LlmSystemPrompt prompt)
+    {
+        GlobalResponse ret = null;
+
+        ret = promptService.updateSystemPrompt(prompt);
 
         return ret;
     }

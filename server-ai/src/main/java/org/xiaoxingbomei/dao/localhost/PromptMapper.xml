@@ -11,6 +11,7 @@
             prompt_description as promptDescription,
             prompt_tag as promptTag,
             prompt_content as promptContent,
+            function_tool_id as functionToolId,
             status
         FROM llm_system_prompt
         WHERE status = '1'
@@ -25,6 +26,7 @@
             prompt_description as promptDescription,
             prompt_tag as promptTag,
             prompt_content as promptContent,
+            function_tool_id as functionToolId,
             status
         FROM llm_system_prompt
         WHERE prompt_id = #{promptId}
@@ -40,6 +42,7 @@
             prompt_description,
             prompt_tag,
             prompt_content,
+            function_tool_id,
             status
         ) VALUES (
             #{promptId},
@@ -48,9 +51,24 @@
             #{promptDescription},
             #{promptTag},
             #{promptContent},
+            #{functionToolId},
             #{status}
         )
     </insert>
+    
+    <!-- 更新提示词 -->
+    <update id="updatePrompt" parameterType="org.xiaoxingbomei.vo.LlmSystemPrompt">
+        UPDATE llm_system_prompt
+        SET 
+            prompt_name = #{promptName},
+            prompt_type = #{promptType},
+            prompt_description = #{promptDescription},
+            prompt_tag = #{promptTag},
+            prompt_content = #{promptContent},
+            function_tool_id = #{functionToolId},
+            status = #{status}
+        WHERE prompt_id = #{promptId}
+    </update>
     
     <!-- 删除提示词（逻辑删除，将状态改为0） -->
     <update id="deletePrompt">

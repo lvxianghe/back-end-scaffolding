@@ -3,6 +3,11 @@ server:
   port: 28928
   servlet:
     context-path: /
+  tomcat:
+    # 解决请求头过大问题
+    max-http-header-size: 8MB
+    max-http-form-post-size: 8MB
+    max-swallow-size: 8MB
 spring:
   application:
     name: ai
@@ -77,7 +82,8 @@ logging:
   level:
     org:
       springframework:
-        ai:
-          chat:
-            client:
-              advisor: debug
+        ai: debug  # 启用Spring AI的DEBUG日志
+      xiaoxingbomei:
+        config:
+          tools: debug  # 启用我们工具类的DEBUG日志
+    root: info

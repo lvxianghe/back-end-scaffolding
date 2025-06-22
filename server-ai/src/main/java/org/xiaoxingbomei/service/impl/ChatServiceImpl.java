@@ -1,31 +1,31 @@
 package org.xiaoxingbomei.service.impl;
 
-import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.ai.chat.client.ChatClient;
-import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
 import org.springframework.ai.chat.client.advisor.SimpleLoggerAdvisor;
 import org.springframework.ai.chat.client.advisor.api.Advisor;
 import org.springframework.ai.chat.memory.ChatMemory;
-import org.springframework.ai.chat.messages.Message;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.xiaoxingbomei.common.entity.response.GlobalResponse;
 import org.xiaoxingbomei.common.utils.Request_Utils;
 import org.xiaoxingbomei.config.llm.ChatClientFactory;
+import org.xiaoxingbomei.config.llm.FunctionToolManager;
+import org.xiaoxingbomei.config.tools.CoffeeTools;
 import org.xiaoxingbomei.constant.SystemPromptConstant;
 import org.xiaoxingbomei.dao.localhost.ChatMapper;
 import org.xiaoxingbomei.service.ChatService;
+import org.xiaoxingbomei.service.PromptService;
 import org.xiaoxingbomei.vo.LlmChatHistory;
 import org.xiaoxingbomei.vo.LlmChatHistoryList;
+import org.xiaoxingbomei.vo.LlmSystemPrompt;
 import reactor.core.publisher.Flux;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -37,48 +37,89 @@ public class ChatServiceImpl implements ChatService
     @Autowired
     private ChatMapper chatMapper;
 
-
     @Autowired
     private ChatClientFactory chatClientFactory;
 
+    @Autowired
+    private FunctionToolManager toolManager;
+
+    @Autowired
+    private PromptService promptService;
+
     // ==============================================================
 
-
     @Override
-    public Flux<String> chat(String prompt, String chatId, String isStream, String modelProvider, String modelName, String systemPrompt)
+    public Flux<String> chat(String prompt, String chatId, String isStream, String modelProvider, String modelName, String systemPromptId)
     {
         // 1.根据模型选择获取对应的 ChatClient
         ChatClient chatClient      = chatClientFactory.getClient(modelProvider, modelName);
         Boolean    isStreamBoolean = Boolean.valueOf(isStream);
 
-        // 2.系统提示词
-        if(StringUtils.isEmpty(systemPrompt))
+        // 2.获取系统提示词和工具配置
+        String systemPromptContent = SystemPromptConstant.XIAOXINGBOMEI_SYSTEM_PROMPT; // 默认提示词
+        String functionToolId = null; // 工具ID，从系统提示词中自动获取
+        
+        if (StringUtils.isNotEmpty(systemPromptId))
         {
-            systemPrompt = SystemPromptConstant.XIAOXINGBOMEI_SYSTEM_PROMPT;
+            try
+            {
+                // 根据ID获取系统提示词详情，同时自动获取对应的工具配置
+                GlobalResponse systemPromptResponse = promptService.getSystemPromptById("{\"promptId\":\"" + systemPromptId + "\"}");
+                if (systemPromptResponse != null && "200".equals(systemPromptResponse.getCode())) {
+                    LlmSystemPrompt systemPromptData = (LlmSystemPrompt) systemPromptResponse.getData();
+                    if (systemPromptData != null) {
+                        systemPromptContent = systemPromptData.getPromptContent();
+                        functionToolId = systemPromptData.getFunctionToolId(); // 🎯 自动获取工具ID
+                        log.info("已获取系统提示词: {}, 自动配置工具ID: {}", systemPromptData.getPromptName(), functionToolId);
+                    }
+                }
+            } catch (Exception e)
+            {
+                log.warn("获取系统提示词失败，使用默认提示词。systemPromptId: {}, error: {}", systemPromptId, e.getMessage());
+            }
         }
 
         // 3.构建prompt builder
         var promptBuilder = chatClient
                 .prompt()
                 .user(prompt)         // 用户提示词
-                .system(systemPrompt) // 覆盖默认系统提示词，null和""都会覆盖的
+                .system(systemPromptContent) // 系统提示词
                 .advisors(a -> a.param(ChatMemory.CONVERSATION_ID, chatId)); // 会话记忆与会话id进行关联
+        
+        // 4.根据functionToolId动态添加工具
+        if (StringUtils.isNotEmpty(functionToolId))
+        {
+            Object toolInstance = toolManager.getToolById(functionToolId);
+            if (toolInstance != null)
+            {
+                promptBuilder.tools(toolInstance); // 🎯 使用从toolManager获取的工具实例
+                log.info("🔧 [Tool Setup] 已为对话添加工具: {} -> {}", functionToolId, toolInstance.getClass().getSimpleName());
+                log.info("🔧 [Tool Setup] 用户提示词: {}", prompt);
+                log.info("🔧 [Tool Setup] 系统提示词前50字符: {}", systemPromptContent.length() > 50 ? systemPromptContent.substring(0, 50) + "..." : systemPromptContent);
+            } else {
+                log.warn("⚠️ [Tool Setup] 未找到工具实例: {}", functionToolId);
+            }
+        } else {
+            log.info("ℹ️ [Tool Setup] 本次对话不使用工具，functionToolId为空");
+        }
 
-        // 4.是否流式调用,执行最终的对话调用
+        // 5.是否流式调用,执行最终的对话调用
         if(isStreamBoolean)
         {
             // 流式调用：返回实时流
             StringBuilder fullResponse = new StringBuilder();
             return promptBuilder.stream().content()
-                .doOnNext(chunk -> {
+                .doOnNext(chunk ->
+                {
                     fullResponse.append(chunk);
                 })
-                .doOnComplete(() -> {
+                .doOnComplete(() ->
+                {
                     // 流式调用完成后保存对话历史
                     saveChatHistoryToDatabase(chatId, prompt, fullResponse.toString());
                 })
                 .doOnError(error -> {
-                    log.error("流式对话发生错误, chatId: {}", chatId, error);
+                    log.error("对话发生错误, chatId: {}", chatId, error);
                 });
         }
         else
@@ -92,7 +133,7 @@ public class ChatServiceImpl implements ChatService
             return Flux.just(result);
         }
     }
-    
+
     /**
      * 保存对话历史到数据库
      */
@@ -136,7 +177,6 @@ public class ChatServiceImpl implements ChatService
         }
         return advisors;
     }
-
 
     @Override
     public GlobalResponse chat_for_string(String prompt)
@@ -194,35 +234,34 @@ public class ChatServiceImpl implements ChatService
             String chatId       = Request_Utils.getParam(paramString, "chatId");
             String chatTittle   = Request_Utils.getParam(paramString, "chatTittle");
             String chatTag      = Request_Utils.getParam(paramString, "chatTag");
-            // 移除未使用的chatType参数
             
-            // 参数校验
-            if (StringUtils.isEmpty(chatId) || StringUtils.isEmpty(chatTittle)) {
-                return GlobalResponse.error("会话ID和标题不能为空");
+            log.info("insertChatHistoryList: chatId={}, chatTittle={}, chatTag={}", 
+                    chatId, chatTittle, chatTag);
+
+            // 2、参数校验
+            if (StringUtils.isBlank(chatId) || StringUtils.isBlank(chatTittle)) {
+                return GlobalResponse.error("参数不能为空: chatId=" + chatId + ", chatTittle=" + chatTittle);
             }
 
-            // 2、插入操作
-            LlmChatHistoryList llmChatHistoryList = new LlmChatHistoryList();
-            llmChatHistoryList.setChatId(chatId);
-            llmChatHistoryList.setChatTittle(chatTittle);
-            llmChatHistoryList.setChatTag(StringUtils.isEmpty(chatTag) ? "默认" : chatTag);
-            // createTime和updateTime由数据库自动生成
+            // 3、插入会话历史列表
+            LlmChatHistoryList chatHistoryList = new LlmChatHistoryList();
+            chatHistoryList.setChatId(chatId);
+            chatHistoryList.setChatTittle(chatTittle);
+            chatHistoryList.setChatTag(chatTag);
 
-            int result = chatMapper.insertChatHistoryList(llmChatHistoryList);
+            int result = chatMapper.insertChatHistoryList(chatHistoryList);
             
             if (result > 0) {
-                // 3、封装响应体
-                HashMap<String, Object> resultMap = new HashMap<>();
-                resultMap.put("chatId", chatId);
-                resultMap.put("chatTittle", chatTittle);
-                return GlobalResponse.success(resultMap, "插入新的会话历史成功");
+                log.info("insertChatHistoryList: 成功插入会话历史，chatId={}", chatId);
+                return GlobalResponse.success("新增会话历史成功");
             } else {
-                return GlobalResponse.error("插入会话历史失败");
+                log.warn("insertChatHistoryList: 插入会话历史失败，chatId={}", chatId);
+                return GlobalResponse.error("新增会话历史失败");
             }
-            
+
         } catch (Exception e) {
-            log.error("插入会话历史失败", e);
-            return GlobalResponse.error("插入会话历史失败：" + e.getMessage());
+            log.error("insertChatHistoryList: 插入会话历史异常", e);
+            return GlobalResponse.error("新增会话历史失败：" + e.getMessage());
         }
     }
 
@@ -230,80 +269,64 @@ public class ChatServiceImpl implements ChatService
     @Transactional(rollbackFor = Exception.class)
     public GlobalResponse deleteChatHistoryList(String paramString)
     {
-        // 1、获取前端参数
-        String chatId = Request_Utils.getParam(paramString, "chatId");
+        try {
+            String chatId = Request_Utils.getParam(paramString, "chatId");
+            log.info("deleteChatHistoryList: 删除会话历史，chatId={}", chatId);
 
-        chatMapper.deleteChatHistoryList(chatId);
-        chatMapper.deleteChatHistory(chatId);
+            // 删除会话历史列表
+            chatMapper.deleteChatHistoryList(chatId);
+            // 删除会话详细历史
+            chatMapper.deleteChatHistory(chatId);
 
-        HashMap<String, Object> resultMap = new HashMap<>();
-        resultMap.put("chatId", chatId);
-        return GlobalResponse.success(resultMap,"删除历史会话成功");
+            return GlobalResponse.success("删除会话历史成功");
+        } catch (Exception e) {
+            log.error("deleteChatHistoryList: 删除会话历史失败", e);
+            return GlobalResponse.error("删除会话历史失败：" + e.getMessage());
+        }
     }
 
     @Override
     public GlobalResponse updateChatHistoryList(String paramString)
     {
-        // 1、获取前端参数
-        String chatId       = Request_Utils.getParam(paramString, "chatId");
-        String chatTittle   = Request_Utils.getParam(paramString, "chatTittle");
-        String chatTag      = Request_Utils.getParam(paramString, "chatTag");
-        String chatType     = Request_Utils.getParam(paramString, "chatType");
-        String updateTime   = Request_Utils.getParam(paramString, "updateTime");
-        if (!chatId.isEmpty() && !chatTittle.isEmpty())
-        {
-            LlmChatHistoryList llmChatHistoryList = new LlmChatHistoryList();
-            llmChatHistoryList.setChatId(chatId);
-            llmChatHistoryList.setChatTittle(chatTittle);
-            llmChatHistoryList.setChatTag(chatTag);
-            llmChatHistoryList.setUpdateTime(updateTime);
+        try {
+            String chatId = Request_Utils.getParam(paramString, "chatId");
+            String chatTittle = Request_Utils.getParam(paramString, "chatTittle");
+            String chatTag = Request_Utils.getParam(paramString, "chatTag");
 
-            chatMapper.updateChatHistoryList(llmChatHistoryList);
+            log.info("updateChatHistoryList: chatId={}, chatTittle={}, chatTag={}", 
+                    chatId, chatTittle, chatTag);
+
+            LlmChatHistoryList chatHistoryList = new LlmChatHistoryList();
+            chatHistoryList.setChatId(chatId);
+            chatHistoryList.setChatTittle(chatTittle);
+            chatHistoryList.setChatTag(chatTag);
+
+            chatMapper.updateChatHistoryList(chatHistoryList);
+            int result = 1; // 假设更新成功
+            
+            if (result > 0) {
+                return GlobalResponse.success("更新会话历史成功");
+            } else {
+                return GlobalResponse.error("更新会话历史失败，未找到对应记录");
+            }
+
+        } catch (Exception e) {
+            log.error("updateChatHistoryList: 更新会话历史失败", e);
+            return GlobalResponse.error("更新会话历史失败：" + e.getMessage());
         }
-
-        // 3、分装响应体
-        HashMap<String, Object> resultMap = new HashMap<>();
-        resultMap.put("chatId", chatId);
-        return GlobalResponse.success(resultMap,"更新历史会话成功");
     }
 
     @Override
     public List<LlmChatHistory> getChatHistoryById(String chatId)
     {
-
-        // 1、根据chatId获取历史会话
-
-        List<LlmChatHistory> messages = chatMapper.getChatHistoryById(chatId);
-        if(messages.isEmpty())
-        {
-            return List.of();
+        try {
+            List<LlmChatHistory> chatHistories = chatMapper.getChatHistoryById(chatId);
+            log.info("getChatHistoryById: chatId={}, 获取到{}条记录", chatId, 
+                    chatHistories != null ? chatHistories.size() : 0);
+            return chatHistories != null ? chatHistories : new ArrayList<>();
+        } catch (Exception e) {
+            log.error("getChatHistoryById: 获取会话历史失败, chatId={}", chatId, e);
+            return new ArrayList<>();
         }
-        return messages;
-    }
-
-    /**
-     * 将所有的聊天记录初始化到chatMemory中
-     */
-    @PostConstruct
-    private void init()
-    {
-        System.out.println("OllamaChatClientConfiguration init");
-        // 获取全部聊天记录
-        List<LlmChatHistory> allChatHistory = chatMapper.getAllChatHistory();
-        // 遍历聊天记录，根据chatId分组，将聊天记录转换为Message对象，并添加到chatMemory中
-        allChatHistory.stream().collect(
-                // 分组，根据chatId分组
-                Collectors.groupingBy(LlmChatHistory::getChatId)
-        ).forEach(
-                // 遍历分组
-                (chatId, llmChatHistoryList) ->
-                {
-                    // 将聊天记录转换为Message对象
-                    List<Message> messages = llmChatHistoryList.stream().map(LlmChatHistory::toMessage).toList();
-                    log.info("init chatMemory chatId:{}-->chatHistory:{}", chatId,messages);
-                    // 将Message对象添加到chatMemory中
-                    chatMemory.add(chatId, messages);
-                }
-        );
     }
 }

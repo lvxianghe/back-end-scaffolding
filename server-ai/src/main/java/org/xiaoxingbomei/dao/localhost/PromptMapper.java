@@ -30,6 +30,13 @@ public interface PromptMapper
     int addPrompt(LlmSystemPrompt prompt);
     
     /**
+     * 更新提示词
+     * @param prompt 提示词信息
+     * @return 影响行数
+     */
+    int updatePrompt(LlmSystemPrompt prompt);
+    
+    /**
      * 删除提示词
      * @param promptId 提示词ID
      * @return 影响行数
