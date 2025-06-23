@@ -6,7 +6,11 @@ import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.SimpleLoggerAdvisor;
 import org.springframework.ai.chat.client.advisor.api.Advisor;
 import org.springframework.ai.chat.memory.ChatMemory;
+import org.springframework.ai.vectorstore.VectorStore;
+import org.springframework.ai.vectorstore.SearchRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.xiaoxingbomei.common.entity.response.GlobalResponse;
@@ -17,6 +21,7 @@ import org.xiaoxingbomei.config.tools.CoffeeTools;
 import org.xiaoxingbomei.constant.SystemPromptConstant;
 import org.xiaoxingbomei.dao.localhost.ChatMapper;
 import org.xiaoxingbomei.service.ChatService;
+import org.xiaoxingbomei.service.FileService;
 import org.xiaoxingbomei.service.PromptService;
 import org.xiaoxingbomei.vo.LlmChatHistory;
 import org.xiaoxingbomei.vo.LlmChatHistoryList;
@@ -45,6 +50,13 @@ public class ChatServiceImpl implements ChatService
 
     @Autowired
     private PromptService promptService;
+
+    @Autowired
+    private FileService fileService;
+
+    @Autowired
+    private VectorStore vectorStore;
+
 
     // ==============================================================
 
@@ -79,14 +91,69 @@ public class ChatServiceImpl implements ChatService
             }
         }
 
-        // 3.构建prompt builder
+        // 3. 🔍 RAG增强：使用向量数据库检索相关文档并增强提示词
+        String enhancedPrompt = prompt;
+        try {
+            // 使用向量数据库进行语义搜索
+                         SearchRequest searchRequest = SearchRequest.builder()
+                     .query(prompt)
+                     .topK(3) // 返回前3个最相关的文档片段
+                     .similarityThreshold(0.3) // 降低相似度阈值，提高召回率
+                     .filterExpression("chatId == '" + chatId + "'") // 只搜索特定会话的文档
+                     .build();
+            
+            List<org.springframework.ai.document.Document> relevantDocs = vectorStore.similaritySearch(searchRequest);
+            log.info("🔍 [RAG] 向量搜索结果: 查询='{}', 找到文档数={}", prompt, relevantDocs.size());
+            
+            // 打印每个文档的片段信息
+            for (int i = 0; i < relevantDocs.size(); i++) {
+                org.springframework.ai.document.Document doc = relevantDocs.get(i);
+                log.info("📄 [RAG] 文档片段{}: 内容前50字符='{}'", 
+                    i + 1, doc.getText().substring(0, Math.min(50, doc.getText().length())));
+            }
+            
+            if (!relevantDocs.isEmpty()) {
+                // 构建包含检索文档的增强提示词
+                StringBuilder contextBuilder = new StringBuilder();
+                contextBuilder.append("参考以下相关文档内容回答用户问题：\n\n");
+                
+                for (int i = 0; i < relevantDocs.size(); i++) {
+                    org.springframework.ai.document.Document doc = relevantDocs.get(i);
+                    contextBuilder.append("【文档片段 ").append(i + 1).append("】\n");
+                    // 限制每个片段的长度，避免提示词过长
+                    String docContent = doc.getText();
+                    String truncatedContent = docContent.length() > 1000 
+                        ? docContent.substring(0, 1000) + "..." 
+                        : docContent;
+                    contextBuilder.append(truncatedContent).append("\n\n");
+                }
+                
+                contextBuilder.append("基于以上文档内容，请回答用户的问题：\n");
+                contextBuilder.append(prompt);
+                
+                enhancedPrompt = contextBuilder.toString();
+                log.info("🔍 [RAG] 向量检索成功，检索到 {} 个相关片段", relevantDocs.size());
+            } else {
+                // 检查是否有关联文件但没有找到相关文档
+                Resource file = fileService.getFileByChatId(chatId);
+                if (file != null && file.exists()) {
+                    log.info("ℹ️ [RAG] 找到会话文件: {}，但当前查询未检索到相关内容", file.getFilename());
+                } else {
+                    log.info("ℹ️ [RAG] 当前会话无关联文档，使用普通对话模式");
+                }
+            }
+        } catch (Exception e) {
+            log.warn("⚠️ [RAG] 向量检索失败，使用原始提示词: {}", e.getMessage());
+        }
+
+        // 4.构建prompt builder
         var promptBuilder = chatClient
                 .prompt()
-                .user(prompt)         // 用户提示词
+                .user(enhancedPrompt) // 使用RAG增强后的提示词
                 .system(systemPromptContent) // 系统提示词
                 .advisors(a -> a.param(ChatMemory.CONVERSATION_ID, chatId)); // 会话记忆与会话id进行关联
         
-        // 4.根据functionToolId动态添加工具
+        // 5.根据functionToolId动态添加工具
         if (StringUtils.isNotEmpty(functionToolId))
         {
             Object toolInstance = toolManager.getToolById(functionToolId);
@@ -94,7 +161,7 @@ public class ChatServiceImpl implements ChatService
             {
                 promptBuilder.tools(toolInstance); // 🎯 使用从toolManager获取的工具实例
                 log.info("🔧 [Tool Setup] 已为对话添加工具: {} -> {}", functionToolId, toolInstance.getClass().getSimpleName());
-                log.info("🔧 [Tool Setup] 用户提示词: {}", prompt);
+                log.info("🔧 [Tool Setup] 原始用户提示词: {}", prompt);
                 log.info("🔧 [Tool Setup] 系统提示词前50字符: {}", systemPromptContent.length() > 50 ? systemPromptContent.substring(0, 50) + "..." : systemPromptContent);
             } else {
                 log.warn("⚠️ [Tool Setup] 未找到工具实例: {}", functionToolId);
@@ -103,7 +170,8 @@ public class ChatServiceImpl implements ChatService
             log.info("ℹ️ [Tool Setup] 本次对话不使用工具，functionToolId为空");
         }
 
-        // 5.是否流式调用,执行最终的对话调用
+
+        // 6.是否流式调用,执行最终的对话调用
         if(isStreamBoolean)
         {
             // 流式调用：返回实时流

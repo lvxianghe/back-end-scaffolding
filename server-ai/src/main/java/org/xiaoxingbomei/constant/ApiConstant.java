@@ -34,6 +34,11 @@ public class ApiConstant
         public static final String getAllModels       = "/ai/model/getAllModels";           // 获取所有模型
     }
 
+    public class File
+    {
+        public static final String uploadFile         = "/ai/file/uploadFile";
+        public static final String downloadFile       = "/ai/file/downloadFile";
+    }
 
 
 }

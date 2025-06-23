@@ -17,10 +17,13 @@ spring:
     chat:
       client:
         enabled: false # false的情况下禁止自动装配，就可以创建多个ChatClient了
-    # 添加占位符，防止Spring AI自动配置报错
+    # OpenAI配置 - 使用text-embedding-3-large嵌入模型
     openai:
-      api-key: "sk-disabled-placeholder" 
-      base-url: "https://disabled-placeholder.com"
+      api-key: sk-YiB76FYEBysWcTUw69FEGVfwqMzf1iKMILvobZg3ALVHFl63
+      base-url: https://chatapi.littlewheat.com
+      embedding:
+        options:
+          model: text-embedding-3-large
     ollama:
       base-url: "http://disabled-placeholder:11434"
 

@@ -1,10 +1,13 @@
 package org.xiaoxingbomei.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.xiaoxingbomei.common.entity.response.GlobalResponse;
 import org.xiaoxingbomei.constant.ApiConstant;
 import org.xiaoxingbomei.service.ChatService;
+import org.xiaoxingbomei.service.FileService;
 import org.xiaoxingbomei.service.LlmModelService;
 import org.xiaoxingbomei.service.PromptService;
 import org.xiaoxingbomei.vo.LlmChatHistory;
@@ -25,6 +28,9 @@ public class ChatController
 
     @Autowired
     private LlmModelService llmModelService;
+
+    @Autowired
+    private FileService fileService;
 
     // =========================================================
 
@@ -189,6 +195,23 @@ public class ChatController
     public GlobalResponse getAllModels()
     {
         GlobalResponse ret = llmModelService.getAllModels();
+
+        return ret;
+    }
+
+
+    @RequestMapping(value = ApiConstant.File.uploadFile, method = RequestMethod.POST)
+    public GlobalResponse uploadFile(@RequestParam("chatId") String chatId, @RequestParam("file") MultipartFile file)
+    {
+        GlobalResponse ret = fileService.uploadFile(chatId,file);
+
+        return ret;
+    }
+
+    @RequestMapping(value = ApiConstant.File.downloadFile, method = RequestMethod.POST)
+    public org.springframework.http.ResponseEntity<Resource> downloadFile(@RequestBody String paramString)
+    {
+        org.springframework.http.ResponseEntity<Resource> ret = fileService.downloadFile(paramString);
 
         return ret;
     }
