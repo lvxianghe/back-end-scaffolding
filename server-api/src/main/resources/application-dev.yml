@@ -1,8 +1,8 @@
 # spring 配置
 server:
-  port: 28927
+  port: 10000
   servlet:
-    context-path: /ai
+    context-path: /api
 spring:
   application:
     name: ai

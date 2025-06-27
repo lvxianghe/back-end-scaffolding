@@ -50,7 +50,7 @@
         <swagger-core.version>2.2.12</swagger-core.version>
         <jakarta.mail-api.version>2.1.0</jakarta.mail-api.version>
         <guava.version>32.0.1-jre</guava.version>
-        <sa-token.version>1.40.0</sa-token.version>
+        <sa-token.version>1.43.0</sa-token.version>
         <fastjson.version>1.2.83</fastjson.version>
         <fastexcel.version>1.0.0</fastexcel.version>
         <minio.version>7.1.0</minio.version>
@@ -66,7 +66,7 @@
     </properties>
 
 
-    <!---->
+    <!-- parent -->
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
@@ -81,7 +81,6 @@
         <module>../server-common</module>
         <module>../server-api</module>
         <module>../server-auth</module>
-        <module>../server-ai</module>
     </modules>
 
     <!-- 依赖 -->
@@ -190,10 +189,10 @@
                 <version>${spring-boot.version}</version>
             </dependency>
 
-            <dependency>
-                <groupId>org.springframework.batch</groupId>
-                <artifactId>spring-batch-core</artifactId>
-            </dependency>
+<!--            <dependency>-->
+<!--                <groupId>org.springframework.batch</groupId>-->
+<!--                <artifactId>spring-batch-core</artifactId>-->
+<!--            </dependency>-->
 
             <dependency>
                 <groupId>org.springframework.boot</groupId>
@@ -433,7 +432,13 @@
 
             <dependency>
                 <groupId>cn.dev33</groupId>
-                <artifactId>sa-token-spring-boot-starter</artifactId>
+                <artifactId>sa-token-spring-boot3-starter</artifactId>
+                <version>${sa-token.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>cn.dev33</groupId>
+                <artifactId>sa-token-reactor-spring-boot3-starter</artifactId>
                 <version>${sa-token.version}</version>
             </dependency>
 
