@@ -10,6 +10,43 @@ spring:
     name: main
   main:
     allow-bean-definition-overriding: true
+    
+  # Redis配置 - 最佳实践版本
+  data:
+    redis:
+      # =================== 基础连接配置 ===================
+      # Redis服务器地址
+      host: localhost
+      # Redis服务器端口
+      port: 6379
+      # Redis密码（生产环境建议设置密码）
+      # password: your_redis_password
+      # 数据库索引（0-15，建议不同业务使用不同库）
+      database: 0
+      # 连接超时时间（建议3-5秒）
+      timeout: 3000ms
+      
+      # =================== Lettuce配置（推荐）===================
+      # Lettuce是Spring Boot 3.x默认的Redis客户端
+      # 优势：基于Netty的NIO，支持异步、连接复用、高性能
+      lettuce:
+        pool:
+          # 连接池最大连接数（生产环境建议根据并发量调整，一般8-20）
+          max-active: 10
+          # 连接池最大阻塞等待时间（-1表示无限等待，生产环境建议设置具体值）
+          max-wait: 3000ms
+          # 连接池中的最大空闲连接（建议与max-active相等或略小）
+          max-idle: 8
+          # 连接池中的最小空闲连接（建议设置为2-4，保持一定的预热连接）
+          min-idle: 2
+        # 关闭超时时间（连接闲置多久后关闭）
+        shutdown-timeout: 100ms
+        
+      # =================== 性能优化配置 ===================
+      # 客户端名称（便于监控和调试）
+      client-name: ${spring.application.name}
+      # 客户端类型（lettuce或jedis，Spring Boot 3.x默认lettuce）
+      client-type: lettuce
 
 # SpringDoc OpenAPI 配置
 springdoc:
