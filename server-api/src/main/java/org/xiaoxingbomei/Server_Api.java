@@ -57,11 +57,12 @@ public class Server_Api
         }
 
         // 打印系统信息
-        log.info("\n----------------------------------------------------------\n\t{}{}{}{}{}",
+        log.info("\n----------------------------------------------------------\n\t{}{}{}{}{}{}",
                 applicationName + " is running, Access URLs:",
                 "\n\t Local    访问网址: \t http://localhost:"  + port + path,
                 "\n\t External 访问网址: \t http://" + ip + ":" + port + path,
-                "\n\t Swagger  访问网址: \t http://" + ip + ":" + port + path + "/swagger-ui/index.html",
+                "\n\t Swagger  UI界面: \t http://" + ip + ":" + port + path + "/swagger-ui/index.html",
+                "\n\t OpenAPI JSON文档: \t http://" + ip + ":" + port + path + "/v3/api-docs",
                 "\n----------------------------------------------------------\n");
         log.info("服务启动成功!>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> 耗时：{} s", (System.currentTimeMillis() - start) / 1000);
 

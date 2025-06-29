@@ -46,7 +46,7 @@
         <spring-kafka.version>2.2.13.RELEASE</spring-kafka.version>
         <rocketmq-client.version>5.3.0</rocketmq-client.version>
         <rocketmq-starter.version>2.2.3</rocketmq-starter.version>
-        <springdoc-openapi-ui.version>1.7.0</springdoc-openapi-ui.version>
+        <springdoc-openapi.version>2.8.9</springdoc-openapi.version>
         <swagger-core.version>2.2.12</swagger-core.version>
         <jakarta.mail-api.version>2.1.0</jakarta.mail-api.version>
         <guava.version>32.0.1-jre</guava.version>
@@ -414,8 +414,8 @@
 
             <dependency>
                 <groupId>org.springdoc</groupId>
-                <artifactId>springdoc-openapi-ui</artifactId>
-                <version>${springdoc-openapi-ui.version}</version>
+                <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+                <version>${springdoc-openapi.version}</version>
             </dependency>
 
             <dependency>

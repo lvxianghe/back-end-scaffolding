@@ -11,6 +11,19 @@ spring:
   main:
     allow-bean-definition-overriding: true
 
+# SpringDoc OpenAPI 配置
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+    tags-sorter: alpha
+    operations-sorter: alpha
+  api-docs:
+    path: /v3/api-docs
+  group-configs:
+    - group: 'default'
+      paths-to-match: '/**'
+      packages-to-scan: org.xiaoxingbomei.controller
+
 # 开启调试模式，查看自动配置报告
 #debug: true
 #logging:
