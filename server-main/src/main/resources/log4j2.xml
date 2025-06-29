@@ -108,10 +108,10 @@
              <AppenderRef ref="RollingMybatisFile"/>
          </logger>
 
-<!--        <Logger name="org.mybatis" level="DEBUG" additivity="false">-->
-<!--            <AppenderRef ref="Console"/>-->
-<!--            <AppenderRef ref="RollingMybatisFile"/>-->
-<!--        </Logger>-->
+        <Logger name="org.mybatis" level="DEBUG" additivity="false">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="RollingMybatisFile"/>
+        </Logger>
 
         <logger name="org.xiaoxingbomei.config.mybatis.MybatisLogInterceptor" level="DEBUG" additivity="false">
             <AppenderRef ref="Console"/>

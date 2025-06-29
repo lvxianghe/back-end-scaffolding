@@ -1,13 +1,43 @@
-# spring 配置
+# tomcat配置
 server:
   port: 10001
   servlet:
     context-path: /main
+
+# spring配置
 spring:
   application:
     name: main
   main:
     allow-bean-definition-overriding: true
 
+# 开启调试模式，查看自动配置报告
+#debug: true
+#logging:
+#  level:
+#    org.springframework.boot.autoconfigure: DEBUG
+#    org.xiaoxingbomei.config.datasource: DEBUG
+  
 
 
+# 统一多数据源配置示例
+multi-datasource:
+  datasources:
+    # 数据源配置
+    local:
+      # 数据库连接信息
+      url: jdbc:mysql://localhost:3306/ysx-app
+      username: root
+      password: root
+      driver-class-name: com.mysql.cj.jdbc.Driver
+
+      # 连接池配置（可选，有默认值）
+      initial-size: 5
+      max-active: 20
+      min-idle: 5
+      max-wait: 60000
+
+      # MyBatis配置
+      mapper-locations: classpath*:org/monitorx/dao/local/*.xml
+      base-packages: org.monitorx.dao.local
+      call-setters-on-nulls: true

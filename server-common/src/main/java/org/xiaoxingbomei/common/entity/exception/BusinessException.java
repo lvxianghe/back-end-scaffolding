@@ -3,7 +3,7 @@ package org.xiaoxingbomei.common.entity.exception;
 import org.xiaoxingbomei.common.entity.ErrorCode;
 
 /**
- * 业务异常
+ * 业务异常（UserException、CollectionException、AuthException）
  */
 public class BusinessException extends RuntimeException
 {
