@@ -133,28 +133,77 @@ public @interface DistributeLock
      */
     public String key() default DistributeLockConstant.NONE_KEY;
 
-    /**
-     * SpEL表达式动态生成锁key
-     * 
-     * <p>当key为NONE_KEY时，使用此表达式动态生成锁key</p>
-     * <p>支持的SpEL语法：</p>
-     * <ul>
-     *   <li>#参数名：获取方法参数值，如 #userId</li>
-     *   <li>#对象.属性：获取对象属性，如 #user.id</li>
-     *   <li>字符串拼接：使用 + 连接，如 #userId + '_' + #type</li>
-     *   <li>条件表达式：#status == 1 ? 'active' : 'inactive'</li>
-     * </ul>
-     * 
-     * <p>示例：</p>
-     * <pre>
-     * #id                           → 直接使用id参数
-     * #user.id                      → 使用user对象的id属性  
-     * #orderId + '_' + #status      → 拼接多个值
-     * #user.type + '_' + #user.id   → 组合对象属性
-     * </pre>
-     *
-     * @return SpEL表达式，默认为NONE_KEY
-     */
+         /**
+      * SpEL表达式动态生成锁key
+      * 
+      * <p>当key为NONE_KEY时，使用此表达式动态生成锁key</p>
+      * 
+      * <h4>🎯 核心规则：#参数名 = 方法参数的值</h4>
+      * <p><b>SpEL表达式中的参数名必须与方法参数名完全一致！</b></p>
+      * 
+      * <h4>📖 基础语法对应关系：</h4>
+      * <pre>
+      * // 方法定义：
+      * public void updateUser(String userId, String name) {
+      *     //                     ↑         ↑
+      *     //              参数名userId   参数名name
+      * }
+      * 
+      * // SpEL表达式使用：
+      * keyExpression = "#userId"           → 获取userId参数的值
+      * keyExpression = "#name"             → 获取name参数的值  
+      * keyExpression = "#userId + '_' + #name"  → 拼接两个参数
+      * </pre>
+      * 
+      * <h4>📋 支持的SpEL语法：</h4>
+      * <ul>
+      *   <li><b>#参数名</b>：获取方法参数值，如 #userId</li>
+      *   <li><b>#对象.属性</b>：获取对象属性，如 #user.id（调用user.getId()）</li>
+      *   <li><b>字符串拼接</b>：使用 + 连接，如 #userId + '_' + #type</li>
+      *   <li><b>条件表达式</b>：三目运算符，如 #status == 1 ? 'active' : 'inactive'</li>
+      *   <li><b>方法调用</b>：调用对象方法，如 #user.getName()</li>
+      * </ul>
+      * 
+      * <h4>🚀 实际代码示例：</h4>
+      * <pre>
+      * // 示例1：单个参数
+      * {@code @DistributeLock(scene = "user", keyExpression = "#userId")}
+      * public void updateUser(String userId, String name) {
+      *     // 锁key = user#userId的值，如：user#user123
+      * }
+      * 
+      * // 示例2：对象属性  
+      * {@code @DistributeLock(scene = "order", keyExpression = "#order.id")}
+      * public void processOrder(Order order, String remarks) {
+      *     // 锁key = order#order.getId()的值，如：order#ORDER123
+      * }
+      * 
+      * // 示例3：多参数拼接
+      * {@code @DistributeLock(scene = "transfer", keyExpression = "#from + '_' + #to")}
+      * public void transferMoney(String from, String to, BigDecimal amount) {
+      *     // 锁key = transfer#from_to，如：transfer#ACC001_ACC002
+      * }
+      * 
+      * // 示例4：复杂组合
+      * {@code @DistributeLock(scene = "stock", keyExpression = "#product.category + '_' + #warehouse")}
+      * public void reduceStock(Product product, String warehouse, int quantity) {
+      *     // 锁key = stock#商品类别_仓库，如：stock#ELECTRONICS_WH_BJ
+      * }
+      * </pre>
+      * 
+      * <h4>⚠️ 常见错误：</h4>
+      * <ul>
+      *   <li><b>参数名不匹配：</b>keyExpression="#id" 但方法参数是userId</li>
+      *   <li><b>缺少#号：</b>keyExpression="userId" 应该是 "#userId"</li>
+      *   <li><b>对象属性不存在：</b>#user.nonExistField 会报错</li>
+      *   <li><b>类型错误：</b>确保拼接的都是字符串类型</li>
+      * </ul>
+      * 
+      * <h4>💡 快速记忆：</h4>
+      * <p><b>方法参数叫什么名字，SpEL表达式就用 #什么名字</b></p>
+      *
+      * @return SpEL表达式，默认为NONE_KEY
+      */
     public String keyExpression() default DistributeLockConstant.NONE_KEY;
 
     /**
