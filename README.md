@@ -1,252 +1,226 @@
-# back-end-scaffolding
-# 概述
+# Back-End Scaffolding
 
-- 工程简介：
+> 🚀 基于Spring Boot 3.x + Spring Cloud 2023.x + Spring Cloud Alibaba 的企业级后端脚手架
 
-|         工程          |         备注          |      默认端口      | 启动方式                                                                                       |
-|:-------------------:|:-------------------:|:--------------:|--------------------------------------------------------------------------------------------|
-|    server-parent    |     父工程，全局依赖管理      |       /        | /                                                                                          |
-|    server-common    |        公共模块         |       /        | /                                                                                          |
-|     server-main     |      主工程，脚手架核心      |     28920      | 非必要常规启动                                                                                    |
-|    server-eureka    |        注册中心         |     28921      | 非必要常规启动                                                                                    |
-|     server-api      |         网关          |     28922      | 非必要常规启动                                                                                    |
-|      server-es      |        搜索服务         |     28923      | 非必要常规启动                                                                                    |
-|      server-mq      |        消息服务         |     28924      | 非必要常规启动                                                                                    |
-|     server-sql      |        sql服务        |     28925      | 非必要常规启动                                                                                    |
-|     server-auth     |        权限服务         |     28927      | 非必要常规启动                                                                                    |
-|      server-ai      |        AI服务         |     28928      | 非必要常规启动                                                                                    |
-|       apollo        |        三个服务         | 8070、8080、8090 | 必要:./demo.sh start/stop                                                                    |
-|        minio        |        对象存储         |      9000      | 非必要:./minio.exe server data                                                                |
-|        redis        |        缓存数据库        |      6379      | 非必要:redis-server.exe                                                                       |
-|        mysql        |         数据库         |      3306      | 必要:跟随系统                                                                                    |
-|       mongodb       |         数据库         |     27017      | 非必要:跟随系统                                                                                   |
-|    elasticsearch    |        搜索引擎         |      9200      | 非必要:.\bin\elasticsearch.bat                                                                |
-|       kibanna       |        es可视化        |      5601      | 非必要:./bin/kibana.bat                                                                       |
-|        kafka        |        消息队列         |      9092      | 非必要：.\bin\windows\kafka-server-start.bat .\config\server.properties                        |
-|      zookeeper      |       管理kafka       |      2181      | 非必要：zkServer (配置过全局变量)                                                                     |
-| rocketmq-nameserver | rocketmq-nameserver |      9876      | 非必要：start mqnamesrv.cmd(启动rocketmq的前置)                                                     |
-|      rockermq       |      rockermq       |     10911      | 非必要：start mqbroker.cmd -n 127.0.0.1:9876 -c E:\environment\rocketmq-all-5.2.0\conf\broker.conf |
+## 📋 项目简介
 
-- 技术简介：
+本项目是一个现代化的微服务后端脚手架，集成了Spring Cloud生态和阿里巴巴微服务组件，提供了完整的企业级开发基础设施。
 
-| 技术                  | 说明      | 官网                                              |
-|:--------------------|---------|:------------------------------------------------|
-| springboot          | web框架   | https://spring.io/projects/spring-boot          |
-| springcloud netflix | 分布式框架   | https://spring.io/projects/spring-cloud-netflix |
-| apollo              | 配置中心    |                                                 |
-| mybatis             | orm框架   | https://blog.mybatis.org/                       |
-| mybatis-plus        | orm框架   | https://baomidou.com/                           |
-| redis               | 缓存      | https://redis.io/                               |
-| mongodb             | 缓存      | https://www.mongodb.com/zh-cn                   |
-| caffeine            | 本地缓存    | https://github.com/ben-manes/caffeine           |
-| jetcache            | 多级缓存框架  |                                                 |
-| kafka               | 消息队列    | https://kafka.apache.org/                       |
-| rocketmq            | 消息队列    | https://rocketmq.apache.org/                    |
-| hutool              | 工具类     | https://hutool.cn/                              |
-| sa-token            | 权限框架    | https://sa-token.cc/doc.html#/                  |
-| oss                 | 对象存储    | https://www.aliyun.com/product/oss              |
-| minio               | 对象存储    | https://min.io/                                 |
-| mysql               | 数据库     | https://www.mysql.com/cn/                       |
-| swagger             | api文档框架 | https://swagger.io/                             |
-| docker              | 容器      | https://www.docker.com/                         |
-| nginx               | 代理服务器   | https://nginx.org/cn/                           |
-| elasticsearch       | 搜索引擎    |                                                 |
-| filebeat            | 采集agent |                                                 |
-| logstash            | 采集agent |                                                 |
-| kibana              | 可视化分析工具 |                                                 |
-| easy-rules          | 规则引擎    |                                                 |
-| camunda             | 流程引擎    |                                                 |
-| sharding-jdbc       | 分库分表    |                                                 |
+### 🏗️ 核心特性
 
+- **🔧 模块化设计**：清晰的模块划分，支持独立开发和部署
+- **☁️ 微服务架构**：基于Spring Cloud Gateway + Nacos + Sentinel的微服务解决方案  
+- **🛡️ 安全可靠**：集成SA-Token权限框架，支持分布式会话管理
+- **📊 可观测性**：统一日志管理、链路追踪、监控告警
+- **🔄 高可用**：分布式锁、熔断限流、事务一致性保障
+- **🤖 AI能力**：集成Spring AI，支持大模型应用开发
 
+## 🏢 工程简介
 
+| 工程模块 | 功能描述 | 默认端口 | 启动方式 |
+|:---------|:---------|:---------|:---------|
+| **server-parent** | 父工程，全局依赖管理 | / | / |
+| **server-common** | 公共模块，通用组件 | / | / |
+| **server-main** | 主工程，脚手架核心 | 28920 | 常规启动 |
+| **server-api** | 网关服务 | 28922 | 常规启动 |
+| **server-auth** | 权限服务 | 28927 | 常规启动 |
+| **server-ai** | AI服务 | 28928 | 常规启动 |
 
-# 架构设计总览
-## 零、基础架构
-1. 全局出入参
-2. 全局响应体
-3. 全局远程调用包装
-4. 全局controller拦截设计
-5. 全局dao拦截设计
-6. 全局响应字段拦截设计
+### 🧰 基础设施
 
-## 一、异常体系架构
-```
-设计目标
- - 分层管理异常（明确区分不同层的异常，避免异常混乱）
- - 统一返回格式（前后端对齐，提高可读性）
- - 可观测性（日志+监控，方便排查）
- - 业务错误码（错误码设计清晰，方便排查问题）
- - 可扩展性（新业务加入时可以方便扩展）
-```
+| 组件 | 描述 | 默认端口 | 启动方式 |
+|:-----|:-----|:---------|:---------|
+| **MySQL** | 关系型数据库 | 3306 | 跟随系统 |
+| **Redis** | 缓存数据库 | 6379 | `redis-server` |
+| **Nacos** | 注册中心+配置中心 | 8848 | Docker或独立部署 |
+| **MinIO** | 对象存储 | 9000 | `./minio server data` |
+| **MongoDB** | 文档数据库 | 27017 | 跟随系统 |
+| **Elasticsearch** | 搜索引擎 | 9200 | `./bin/elasticsearch` |
+| **RocketMQ** | 消息队列 | 9876/10911 | NameServer + Broker |
 
-```
-架构设计：
- - 异常层级划分（业务异常、系统异常、参数异常、外部异常、未知异常）
- - 异常传播与转换（业务异常直接返回、系统异常转换、外部异常兜底）
- - 错误码体系（统一错误码、分模块管理、支持国际化）
- - 监控与告警（记录日志、prometheus监控、异常告警）
- - 异常恢复与降级（缓存兜底、熔断、自动重试、幂等）
- - 分布式异常（feign&RPC统一处理、全链路追踪、事务补偿）
-```
+## 🛠️ 技术栈
 
-## 二、网关架构
+### 核心框架
 
+| 技术组件 | 版本 | 说明 | 官网 |
+|:---------|:-----|:-----|:-----|
+| **Spring Boot** | 3.2.10 | 基础开发框架 | [spring.io](https://spring.io/projects/spring-boot) |
+| **Spring Cloud** | 2023.0.3 | 微服务生态 | [spring.io](https://spring.io/projects/spring-cloud) |
+| **Spring Cloud Alibaba** | 2023.0.1.2 | 阿里巴巴微服务组件 | [github.com](https://github.com/alibaba/spring-cloud-alibaba) |
+| **Spring Cloud Gateway** | 4.1.0 | 响应式网关 | [spring.io](https://spring.io/projects/spring-cloud-gateway) |
 
+### 数据层技术
 
-## 三、权限体系架构
+| 技术组件 | 版本 | 说明 | 官网 |
+|:---------|:-----|:-----|:-----|
+| **MyBatis** | 3.0.4 | ORM框架 | [mybatis.org](https://mybatis.org/) |
+| **Druid** | 1.2.25 | 数据库连接池 | [github.com](https://github.com/alibaba/druid) |
+| **Redis** | - | 缓存中间件 | [redis.io](https://redis.io/) |
+| **Redisson** | 3.38.1 | Redis分布式客户端 | [redisson.org](https://redisson.org/) |
 
-### 1、整体架构
+### 微服务组件
 
-> ```
-> 角色：
->  - 客户端
->  - 网关
->  - 权限服务
->  - 其他服务
->  - 数据库
->  - 缓存中间件
-> ```
->
-> ```
-> 整体架构描述
->  1. api-网关层
->   - 统一鉴权
->   
->  2. auth-权限服务
->   - 认证模块（登录、登出）
->   - RBAC模块（用户管理、角色管理、权限管理）
->   - 权限缓存服务（redis缓存策略、缓存更新监听）
->   
->  3. other-其他业务服务
->   - 仅关注本身业务逻辑
->   
->  4. infra-基础设施
->   - mysql（权限数据持久化）
->   - redis（会话缓存、权限缓存）
->   
-> ```
->
-> 
+| 技术组件 | 版本 | 说明 | 官网 |
+|:---------|:-----|:-----|:-----|
+| **Nacos** | - | 服务注册发现+配置中心 | [nacos.io](https://nacos.io/) |
+| **Sentinel** | - | 流量控制+熔断降级 | [sentinelguard.io](https://sentinelguard.io/) |
+| **Seata** | - | 分布式事务 | [seata.io](https://seata.io/) |
+| **OpenFeign** | 4.1.0 | 声明式HTTP客户端 | [spring.io](https://spring.io/projects/spring-cloud-openfeign) |
 
-### 2、核心组件交互
+### 消息队列
 
+| 技术组件 | 版本 | 说明 | 官网 |
+|:---------|:-----|:-----|:-----|
+| **RocketMQ** | 5.3.0 | 分布式消息队列 | [rocketmq.apache.org](https://rocketmq.apache.org/) |
+| **Kafka** | - | 分布式流处理平台 | [kafka.apache.org](https://kafka.apache.org/) |
 
+### 工具组件
 
+| 技术组件 | 版本 | 说明 | 官网 |
+|:---------|:-----|:-----|:-----|
+| **SA-Token** | 1.43.0 | 权限认证框架 | [sa-token.cc](https://sa-token.cc/) |
+| **Hutool** | 5.8.22 | Java工具类库 | [hutool.cn](https://hutool.cn/) |
+| **FastJSON2** | 2.0.42 | JSON处理框架 | [github.com](https://github.com/alibaba/fastjson2) |
+| **Swagger** | 2.2.12 | API文档框架 | [swagger.io](https://swagger.io/) |
+| **Log4j2** | 2.23.1 | 日志框架 | [logging.apache.org](https://logging.apache.org/log4j/2.x/) |
 
+### AI & 大模型
 
-## 四、日志体系架构
-```
-日志体系架构设计：
-1. 日志分类	应用日志、请求日志、异常日志、审计日志
-2. 日志采集	统一日志格式、日志切面 AOP、链路追踪（Sleuth）
-3. 日志存储	分级存储（本地磁盘、Kafka、Elasticsearch）
-4. 日志查询	Kibana + Elasticsearch，日志聚合分析
-5. 日志分析	统计错误率、响应时间、用户行为
-6. 日志告警	Prometheus + Loki 监控告警
-7. 日志归档	冷热分层存储，长期归档
-```
+| 技术组件 | 版本 | 说明 | 官网 |
+|:---------|:-----|:-----|:-----|
+| **Spring AI** | 1.0.0 | Spring AI框架 | [spring.io](https://spring.io/projects/spring-ai) |
+| **Milvus** | 2.3.4 | 向量数据库 | [milvus.io](https://milvus.io/) |
 
+## 📊 项目依赖关系图
 
+### 架构依赖总览
 
-## 五、并发编程架构
-
-```
-1. 线程管理     线程池（ThreadPoolExecutor）、ForkJoinPool
-2. 线程安全     volatile、synchronized、Lock、ThreadLocal
-3. 线程通信     wait/notify、Condition、BlockingQueue
-4. 并发工具类     CountDownLatch、CyclicBarrier、Semaphore
-5. 任务调度     ScheduledThreadPoolExecutor、定时任务
-6. 并发集合     ConcurrentHashMap、CopyOnWriteArrayList
-7. 原子操作     AtomicInteger、LongAdder、CAS
-8. 无锁并发     Disruptor、StampedLock
-9. 并发设计模式     生产者-消费者、读写锁、线程封闭
-10. 并发优化     任务拆分、锁分离、锁粗化、伪共享优化
-11. 分布式锁     Redis 分布式锁、Zookeeper 分布式锁
-12. 并发问题排查     jstack、jvisualvm、Arthas
+```mermaid
+graph TB
+    subgraph "BOM管理"
+        SpringBoot["Spring Boot 3.2.10<br/>🔷 基础框架"]
+        SpringCloud["Spring Cloud 2023.0.3<br/>☁️ 微服务生态"]
+        AlibabaCloud["Spring Cloud Alibaba 2023.0.1.2<br/>🅰️ 阿里巴巴生态"]
+    end
+    
+    subgraph "Spring Cloud 原生组件"
+        Gateway["Spring Cloud Gateway 4.1.0<br/>🌐 响应式网关"]
+        OpenFeign["OpenFeign 4.1.0<br/>🔗 远程调用"]
+        WebFlux["Spring WebFlux<br/>⚡ 响应式Web"]
+    end
+    
+    subgraph "阿里巴巴 Cloud 组件"
+        Nacos["Nacos<br/>📍 服务注册发现<br/>⚙️ 配置中心"]
+        Sentinel["Sentinel<br/>🛡️ 流量控制"]
+        Seata["Seata<br/>🔄 分布式事务"]
+        RocketMQStream["RocketMQ Stream<br/>📨 消息流"]
+    end
+    
+    subgraph "独立第三方组件"
+        Dubbo["Dubbo 3.2.10<br/>🚀 RPC框架"]
+        RocketMQ["RocketMQ Client 5.3.0<br/>📬 消息队列"]
+        Redisson["Redisson 3.38.1<br/>🔴 Redis客户端"]
+    end
+    
+    subgraph "业务支撑组件"
+        MyBatis["MyBatis 3.0.4<br/>💾 ORM框架"]
+        Druid["Druid 1.2.25<br/>🏊 连接池"]
+        Log4j2["Log4j2 2.23.1<br/>📝 日志框架"]
+        Hutool["Hutool 5.8.22<br/>🔧 工具包"]
+    end
+    
+    SpringCloud --> Gateway
+    SpringCloud --> OpenFeign
+    SpringCloud --> WebFlux
+    
+    AlibabaCloud --> Nacos
+    AlibabaCloud --> Sentinel
+    AlibabaCloud --> Seata
+    AlibabaCloud --> RocketMQStream
+    
+    SpringBoot --> MyBatis
+    SpringBoot --> Druid
+    SpringBoot --> Log4j2
+    
+    Gateway -.->|集成| Nacos
+    Gateway -.->|集成| Sentinel
+    OpenFeign -.->|集成| Nacos
+    
+    style Gateway fill:#e1f5fe
+    style Nacos fill:#f3e5f5
+    style SpringCloud fill:#e8f5e8
+    style AlibabaCloud fill:#fff3e0
 ```
 
+### 📋 版本兼容性说明
 
+| 组件类型 | 版本管理方式 | 说明 |
+|---------|-------------|------|
+| **Spring Cloud** | BOM统一管理 | Gateway、OpenFeign等由Spring Cloud BOM管理 |
+| **Spring Cloud Alibaba** | BOM统一管理 | Nacos、Sentinel、Seata等由阿里BOM管理 |
+| **独立组件** | 手动版本管理 | Dubbo、RocketMQ等需要独立维护版本兼容性 |
+| **Spring Boot** | Parent管理 | 基础组件由spring-boot-starter-parent管理 |
 
-## 六、多级缓存架构
+### 🎯 关键设计决策
 
-```
-多级缓存架构设计：
-1. 缓存分层：L1 本地缓存（Caffeine），L2 分布式缓存（Redis），L3 持久化存储（DB）
-2. 缓存淘汰策略：LRU（最近最少使用）、LFU（最少频率使用）、TTL 过期
-3. 热点数据优化：本地缓存+布隆过滤器、预加载热点数据
-4. 分布式缓存一致性：Cache-Aside、Write-Through、Write-Behind
-5. 缓存穿透：布隆过滤器拦截无效请求
-6. 缓存击穿：互斥锁 + 预热
-7. 缓存雪崩：过期时间分散，限流熔断保护
-```
+1. **网关选择**：采用Spring Cloud Gateway而非自研，与阿里巴巴生态深度集成
+2. **服务发现**：Nacos作为统一的服务注册中心和配置中心
+3. **流量控制**：Sentinel提供熔断、限流、降级能力
+4. **分布式事务**：Seata保证分布式事务一致性
+5. **消息队列**：RocketMQ支持事务消息和顺序消息
 
+## 🚀 快速开始
 
+### 环境要求
 
-## 七、统一调度架构
+- JDK 17+
+- Maven 3.8+
+- MySQL 8.0+
+- Redis 6.0+
 
-```
-1. 任务调度模型：Quartz（单机）、XXL-JOB（分布式）、Kubernetes CronJob
-2. 任务分片：Hash 取模、轮询分片
-3. 任务高可用：任务幂等、任务重试、状态管理
-4. 任务监控：任务执行日志、任务异常告警
-5. 任务执行优化：并行执行、任务批处理、分布式锁
-```
+### 启动步骤
 
+1. **克隆项目**
+   ```bash
+   git clone <repository-url>
+   cd back-end-scaffolding
+   ```
 
+2. **启动基础设施**
+   ```bash
+   # 启动MySQL、Redis、Nacos等基础组件
+   ```
 
-## 八、推荐搜索架构
+3. **编译项目**
+   ```bash
+   mvn clean install
+   ```
 
-```
-1. 推荐算法	协同过滤、矩阵分解、深度学习
-2. 召回策略	用户行为召回、内容召回、协同召回
-3. 排序策略	机器学习排序（LTR）、规则排序
-4. AB 测试	实验组 + 对照组，评估推荐效果
-5. 数据管道	实时计算（Flink）、离线计算（Spark）
-6. 画像构建	标签系统、特征工程、向量化存储
-```
+4. **启动服务**
+   ```bash
+   # 启动主服务
+   cd server-main && mvn spring-boot:run
+   
+   # 启动网关
+   cd server-api && mvn spring-boot:run
+   
+   # 启动权限服务  
+   cd server-auth && mvn spring-boot:run
+   ```
 
+## 📚 文档说明
 
+- 🏗️ [架构设计文档](./wiki/) - 详细的系统架构和设计说明
+- 🔧 [开发指南](./wiki/) - 开发规范和最佳实践
+- 📝 [API文档](http://localhost:28920/swagger-ui.html) - 在线API文档
 
-## 九、消息架构
+## 🤝 贡献指南
 
-```
-1. 消息队列选型	Kafka（高吞吐）、RabbitMQ（低延迟）、RocketMQ（事务支持）
-2. 消息可靠性	ACK 确认、幂等消费、死信队列
-3. 消息顺序	单分区 FIFO、幂等消费
-4. 消息积压处理	消费者限流 + 扩容
-5. 事务消息	半消息 + 二阶段提交
-6. 消息监控	Kafka UI、Prometheus 监控 MQ 状态
-```
+欢迎提交Issue和Pull Request，详细规范请参考贡献指南。
 
+## 📄 许可证
 
-
-## 十、搜索架构
-
-```
-1. 搜索引擎选型：Elasticsearch
-2. 分词优化：IK 分词、搜索分析器
-3. 搜索权重调整：BM25、TF-IDF、自定义权重
-4. 搜索缓存：本地缓存 + Redis 缓存 + ES 预热
-5. 搜索索引优化：分片调整、冷热分层存储
-6. 搜索性能优化：预计算、查询缓存、异步索引更新
-```
-## 十一、大模型应用
-```
-1. 对话机器人
- - 快速入门
- - 会话记忆
- - 多模态
-2. 哄哄模拟器
- - 提示词工程
-3. 智能客服
- - function calling
-4. chatPDF
- - 向量模型 
- - 向量数据库
- - pdf解析
- - rag
-```
+本项目采用 MIT 许可证，详情请查看 [LICENSE](LICENSE) 文件。
 
 
 

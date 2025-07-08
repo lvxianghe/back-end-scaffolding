@@ -87,6 +87,7 @@
             <artifactId>hutool-all</artifactId>
         </dependency>
 
+
 <!--        <dependency>-->
 <!--            <groupId>com.github.pagehelper</groupId>-->
 <!--            <artifactId>pagehelper-spring-boot-starter</artifactId>-->
@@ -127,14 +128,7 @@
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
         </dependency>
-        
-        <!-- Redis相关依赖 - 用于分布式锁功能 -->
-        <!-- 设置为optional，不强制依赖项目必须使用Redis -->
-        <dependency>
-            <groupId>org.redisson</groupId>
-            <artifactId>redisson-spring-boot-starter</artifactId>
-            <optional>true</optional>
-        </dependency>
+
         
         <dependency>
             <groupId>org.springframework</groupId>
@@ -147,11 +141,31 @@
             <artifactId>spring-aspects</artifactId>
             <optional>true</optional>
         </dependency>
+
+
     </dependencies>
 
 
-
-
+    <!-- 构建配置：跳过Spring Boot repackage，因为这是一个工具库模块 -->
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>repackage</id>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                        <configuration>
+                            <skip>true</skip>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 
 
 </project>

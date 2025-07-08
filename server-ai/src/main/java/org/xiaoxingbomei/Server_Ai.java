@@ -5,12 +5,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceTransactionManagerAutoConfiguration;
-import org.springframework.boot.autoconfigure.jdbc.JdbcTemplateAutoConfiguration;
-import com.alibaba.druid.spring.boot3.autoconfigure.DruidDataSourceAutoConfigure;
 import org.springframework.boot.web.servlet.ServletComponentScan;
-import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
-import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.core.env.Environment;
@@ -18,25 +13,19 @@ import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.xiaoxingbomei.common.config.springboot.MyBanner;
 
-
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Arrays;
 
 @SpringBootApplication(exclude = { 
-    DataSourceAutoConfiguration.class,
-    DataSourceTransactionManagerAutoConfiguration.class,
-    JdbcTemplateAutoConfiguration.class,
-    DruidDataSourceAutoConfigure.class
+    DataSourceAutoConfiguration.class
 })
-@EnableDiscoveryClient
-@EnableFeignClients
 @ServletComponentScan
 @EnableAspectJAutoProxy
 @EnableScheduling
 @EnableAsync
 @Slf4j
-public class Server_Main
+public class Server_Ai
 {
     public static void main(String[] args) throws UnknownHostException
     {
@@ -45,7 +34,7 @@ public class Server_Main
         long start = System.currentTimeMillis();
 
         // 创建SpringApplication实例
-        SpringApplication app = new SpringApplication(Server_Main.class);
+        SpringApplication app = new SpringApplication(Server_Ai.class);
 
         // 设置自定义的banner
         app.setBanner(new MyBanner());
@@ -67,13 +56,12 @@ public class Server_Main
         }
 
         // 打印系统信息
-        log.info("\n----------------------------------------------------------\n\t{}{}{}{}{}{}{}",
+        log.info("\n----------------------------------------------------------\n\t{}{}{}{}{}{}",
                 applicationName + " is running, Access URLs:",
                 "\n\t Local    访问网址: \t http://localhost:"  + port + path,
                 "\n\t External 访问网址: \t http://" + ip + ":" + port + path,
                 "\n\t Swagger  UI界面: \t http://" + ip + ":" + port + path + "/swagger-ui/index.html",
                 "\n\t OpenAPI JSON文档: \t http://" + ip + ":" + port + path + "/v3/api-docs",
-                "\n\t Druid    监控页面: \t http://" + ip + ":" + port + path + "/druid/index.html (admin/admin123)",
                 "\n----------------------------------------------------------\n");
         log.info("服务启动成功!>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> 耗时：{} s", (System.currentTimeMillis() - start) / 1000);
 
