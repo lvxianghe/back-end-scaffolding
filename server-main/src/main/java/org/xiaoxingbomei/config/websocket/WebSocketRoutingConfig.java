@@ -12,9 +12,6 @@ import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry
  * WebSocket路由配置管理器
  * 统一管理所有WebSocket端点的注册
  * 支持多个WebSocket接口扩展
- * 
- * @author NodeSk Team
- * @since 2024-01-01
  */
 @Slf4j
 @Configuration

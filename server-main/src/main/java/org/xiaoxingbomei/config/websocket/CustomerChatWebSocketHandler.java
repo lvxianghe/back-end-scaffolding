@@ -15,9 +15,6 @@ import java.util.concurrent.ConcurrentMap;
 /**
  * 客户对话WebSocket处理器
  * 处理客户端WebSocket连接和消息
- * 
- * @author NodeSk Team
- * @since 2024-01-01
  */
 @Slf4j
 @Component
