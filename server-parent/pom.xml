@@ -66,6 +66,11 @@
         <easy-rules.version>4.1.0</easy-rules.version>
         <mysql-binlog-connector-java.version>0.13.0</mysql-binlog-connector-java.version>
 
+        <!-- JPA 相关版本 -->
+        <jakarta-persistence.version>3.1.0</jakarta-persistence.version>
+        <hibernate.version>6.2.13.Final</hibernate.version>
+        <spring-data-bom.version>2023.1.5</spring-data-bom.version>
+
         <!-- 网络通信框架相关 -->
         <netty.version>4.1.112.Final</netty.version>
         <netty-socketio.version>2.0.11</netty-socketio.version>
@@ -214,14 +219,16 @@
                 <version>${spring-boot.version}</version>
             </dependency>
 
-<!--            <dependency>-->
-<!--                <groupId>org.springframework.batch</groupId>-->
-<!--                <artifactId>spring-batch-core</artifactId>-->
-<!--            </dependency>-->
-
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-starter-webflux</artifactId>
+                <version>${spring-boot.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-configuration-processor</artifactId>
+                <version>${spring-boot.version}</version>
             </dependency>
 
             <!--其他依赖-->
@@ -265,6 +272,49 @@
                 <groupId>org.mapstruct</groupId>
                 <artifactId>mapstruct</artifactId>
                 <version>${mapstruct.version}</version>
+            </dependency>
+
+            <!-- Spring Data JPA BOM - 必须放在前面 -->
+            <dependency>
+                <groupId>org.springframework.data</groupId>
+                <artifactId>spring-data-bom</artifactId>
+                <version>${spring-data-bom.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <!-- Spring Boot JPA Starter -->
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-data-jpa</artifactId>
+                <version>${spring-boot.version}</version>
+            </dependency>
+
+            <!-- JPA 相关依赖版本管理 -->
+            <dependency>
+                <groupId>jakarta.persistence</groupId>
+                <artifactId>jakarta.persistence-api</artifactId>
+                <version>${jakarta-persistence.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.hibernate.orm</groupId>
+                <artifactId>hibernate-core</artifactId>
+                <version>${hibernate.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.hibernate.orm</groupId>
+                <artifactId>hibernate-jpamodelgen</artifactId>
+                <version>${hibernate.version}</version>
+                <scope>provided</scope>
+            </dependency>
+
+            <!-- Hibernate Validator -->
+            <dependency>
+                <groupId>org.hibernate.validator</groupId>
+                <artifactId>hibernate-validator</artifactId>
+                <version>8.0.1.Final</version>
             </dependency>
 
             <dependency>
