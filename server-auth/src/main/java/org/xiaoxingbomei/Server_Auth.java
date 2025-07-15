@@ -13,7 +13,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.xiaoxingbomei.common.config.springboot.MyBanner;
-
+import org.springframework.cache.annotation.EnableCaching;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -31,6 +31,7 @@ import java.util.Arrays;
         entityManagerFactoryRef = "primaryEntityManagerFactory",
         transactionManagerRef = "primaryTransactionManager"
 )
+@EnableCaching
 @Slf4j
 public class Server_Auth
 {

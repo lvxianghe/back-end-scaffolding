@@ -17,7 +17,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.xiaoxingbomei.common.config.springboot.MyBanner;
-
+import org.springframework.cache.annotation.EnableCaching;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -30,11 +30,12 @@ import java.util.Arrays;
     DruidDataSourceAutoConfigure.class
 })
 @EnableDiscoveryClient
-@EnableFeignClients
+@EnableFeignClients(basePackages = "org.xiaoxingbomei.feign")
 @ServletComponentScan
 @EnableAspectJAutoProxy
 @EnableScheduling
 @EnableAsync
+@EnableCaching
 @Slf4j
 public class Server_Main
 {
