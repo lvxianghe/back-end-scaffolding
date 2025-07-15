@@ -1,12 +1,14 @@
 package org.xiaoxingbomei.common.utils;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
 @Slf4j
-public class MoneyUtils
+@Component
+public class Money_Utils
 {
 
 
