@@ -6,8 +6,10 @@ import org.springframework.stereotype.Component;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
-@Slf4j
-@Component
+
+/**
+ * 金额工具类
+ */
 public class Money_Utils
 {
 
