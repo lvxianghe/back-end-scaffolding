@@ -11,7 +11,8 @@ import java.util.Map;
  * Auth服务Feign客户端 - 统一接口
  */
 @FeignClient(name = "auth-service", url = "${auth.service.url:http://localhost:10002}")
-public interface AuthFeignClient {
+public interface AuthFeignClient
+{
 
     // ================================ 认证相关接口 ================================
 
