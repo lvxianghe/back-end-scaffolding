@@ -2,10 +2,10 @@
 server:
   port: 10000
   servlet:
-    context-path: /api
+    context-path: /
 spring:
   application:
-    name: ai
+    name: api
   main:
     allow-bean-definition-overriding: true
 

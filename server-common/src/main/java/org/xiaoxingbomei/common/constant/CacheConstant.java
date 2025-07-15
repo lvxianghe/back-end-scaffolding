@@ -1,4 +1,4 @@
-package org.xiaoxingbomei.common;
+package xiaoxingbomei.common.constant;
 
 
 public class CacheConstant

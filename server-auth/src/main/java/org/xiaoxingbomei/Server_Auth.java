@@ -9,6 +9,7 @@ import org.springframework.boot.web.servlet.ServletComponentScan;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.core.env.Environment;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.xiaoxingbomei.common.config.springboot.MyBanner;
@@ -25,6 +26,11 @@ import java.util.Arrays;
 @EnableAspectJAutoProxy
 @EnableScheduling
 @EnableAsync
+@EnableJpaRepositories(
+        basePackages = "org.xiaoxingbomei.repository.auth",
+        entityManagerFactoryRef = "primaryEntityManagerFactory",
+        transactionManagerRef = "primaryTransactionManager"
+)
 @Slf4j
 public class Server_Auth
 {

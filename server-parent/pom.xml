@@ -303,12 +303,7 @@
                 <version>${hibernate.version}</version>
             </dependency>
 
-            <dependency>
-                <groupId>org.hibernate.orm</groupId>
-                <artifactId>hibernate-jpamodelgen</artifactId>
-                <version>${hibernate.version}</version>
-                <scope>provided</scope>
-            </dependency>
+
 
             <!-- Hibernate Validator -->
             <dependency>

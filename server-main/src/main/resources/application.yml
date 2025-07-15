@@ -2,7 +2,7 @@
 server:
   port: 10001
   servlet:
-    context-path: /main
+    context-path: /
 
 # spring配置
 spring:
