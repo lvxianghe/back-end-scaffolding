@@ -1,7 +1,6 @@
 package org.xiaoxingbomei.controller;
 
 
-import cn.dev33.satoken.annotation.SaCheckLogin;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
@@ -9,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.xiaoxingbomei.common.entity.response.GlobalResponse;
+import org.xiaoxingbomei.constant.ApiConstant;
 import org.xiaoxingbomei.feign.AuthFeignClient;
 
 import java.util.Map;
@@ -32,7 +32,7 @@ public class AuthController
     /**
      * 登录接口 - 转发到auth服务
      */
-    @PostMapping("/login")
+    @PostMapping(ApiConstant.Auth.login)
     @Operation(summary = "用户登录", description = "转发到auth服务处理")
     public GlobalResponse<Map<String, Object>> login(@RequestBody Object loginRequest)
     {
@@ -45,8 +45,7 @@ public class AuthController
     /**
      * 获取当前用户信息
      */
-    @GetMapping("/userInfo")
-    @SaCheckLogin
+    @PostMapping(ApiConstant.Auth.getCurrentUserInfo)
     @Operation(summary = "获取当前用户信息")
     public GlobalResponse<Object> getCurrentUserInfo()
     {

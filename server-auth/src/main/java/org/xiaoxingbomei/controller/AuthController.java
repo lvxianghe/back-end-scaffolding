@@ -1,7 +1,5 @@
 package org.xiaoxingbomei.controller;
 
-import cn.dev33.satoken.annotation.SaCheckPermission;
-import cn.dev33.satoken.annotation.SaIgnore;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
@@ -10,6 +8,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.xiaoxingbomei.common.entity.response.GlobalResponse;
 import org.xiaoxingbomei.common.utils.IdGenerate_Utils;
+import org.xiaoxingbomei.constant.ApiConstant;
 import org.xiaoxingbomei.dto.auth.CreateUserRequest;
 import org.xiaoxingbomei.dto.auth.LoginRequest;
 import org.xiaoxingbomei.dto.auth.UserInfoResponse;
@@ -45,20 +44,21 @@ public class AuthController
     /**
      * 用户登录
      */
-    @PostMapping("/login")
-    @SaIgnore
+    @PostMapping(value = ApiConstant.Auth.login)
     @Operation(summary = "用户登录", description = "验证用户名密码并返回Token")
-    public GlobalResponse<Map<String, Object>> login(@Validated @RequestBody LoginRequest request) {
+    public GlobalResponse<Map<String, Object>> login(@Validated @RequestBody LoginRequest request)
+    {
         Map<String, Object> result = authService.login(request);
-        return GlobalResponse.success(result);
+        return GlobalResponse.success(result, "用户登录成功");
     }
 
     /**
      * 用户登出
      */
-    @PostMapping("/logout")
+    @PostMapping(ApiConstant.Auth.logout)
     @Operation(summary = "用户登出", description = "清除用户会话")
-    public GlobalResponse<Void> logout() {
+    public GlobalResponse<Void> logout()
+    {
         authService.logout();
         return GlobalResponse.success("用户登出成功");
     }
@@ -66,8 +66,7 @@ public class AuthController
     /**
      * 检查登录状态
      */
-    @GetMapping("/isLogin")
-    @SaIgnore
+    @PostMapping(ApiConstant.Auth.isLogin)
     @Operation(summary = "检查登录状态")
     public GlobalResponse<Boolean> isLogin() {
         boolean loginStatus = authService.isLogin();
@@ -77,7 +76,7 @@ public class AuthController
     /**
      * 获取当前用户信息
      */
-    @GetMapping("/userInfo")
+    @PostMapping(ApiConstant.Auth.userInfo)
     @Operation(summary = "获取当前用户信息")
     public GlobalResponse<UserInfoResponse> getUserInfo() {
         UserInfoResponse userInfo = authService.getCurrentUserInfo();
@@ -89,10 +88,10 @@ public class AuthController
     /**
      * 根据用户ID获取用户信息 (供其他服务调用)
      */
-    @GetMapping("/user/{userId}")
-    @SaIgnore
+    @PostMapping(ApiConstant.Auth.getUserById)
     @Operation(summary = "根据用户ID获取用户信息", description = "供其他服务调用")
-    public GlobalResponse<UserInfoResponse> getUserById(@PathVariable Long userId) {
+    public GlobalResponse<UserInfoResponse> getUserById(@RequestBody Map<String, Long> request) {
+        Long userId = request.get("userId");
         UserInfoResponse userInfo = authService.getUserInfoById(userId);
         return GlobalResponse.success(userInfo);
     }
@@ -100,10 +99,10 @@ public class AuthController
     /**
      * 获取用户权限列表 (供其他服务调用)
      */
-    @GetMapping("/permissions/{userId}")
-    @SaIgnore
+    @PostMapping(ApiConstant.Auth.getUserPermissions)
     @Operation(summary = "获取用户权限列表", description = "供其他服务调用")
-    public GlobalResponse<List<String>> getUserPermissions(@PathVariable Long userId) {
+    public GlobalResponse<List<String>> getUserPermissions(@RequestBody Map<String, Long> request) {
+        Long userId = request.get("userId");
         List<String> permissions = authService.getUserPermissions(userId);
         return GlobalResponse.success(permissions);
     }
@@ -111,10 +110,10 @@ public class AuthController
     /**
      * 获取用户角色列表 (供其他服务调用)
      */
-    @GetMapping("/roles/{userId}")
-    @SaIgnore
+    @PostMapping(ApiConstant.Auth.getUserRoles)
     @Operation(summary = "获取用户角色列表", description = "供其他服务调用")
-    public GlobalResponse<List<String>> getUserRoles(@PathVariable Long userId) {
+    public GlobalResponse<List<String>> getUserRoles(@RequestBody Map<String, Long> request) {
+        Long userId = request.get("userId");
         List<String> roles = authService.getUserRoles(userId);
         return GlobalResponse.success(roles);
     }
@@ -122,10 +121,11 @@ public class AuthController
     /**
      * 验证用户密码 (供其他服务调用)
      */
-    @PostMapping("/verify")
-    @SaIgnore
+    @PostMapping(ApiConstant.Auth.verifyPassword)
     @Operation(summary = "验证用户密码", description = "供其他服务调用")
-    public GlobalResponse<Boolean> verifyPassword(@RequestParam String username, @RequestParam String password) {
+    public GlobalResponse<Boolean> verifyPassword(@RequestBody Map<String, String> request) {
+        String username = request.get("username");
+        String password = request.get("password");
         boolean valid = authService.verifyPassword(username, password);
         return GlobalResponse.success(valid);
     }
@@ -135,8 +135,7 @@ public class AuthController
     /**
      * 创建用户
      */
-    @PostMapping("/users")
-    @SaCheckPermission("user:create")
+    @PostMapping(ApiConstant.Auth.createUser)
     @Operation(summary = "创建用户")
     public GlobalResponse<SysUser> createUser(@Validated @RequestBody CreateUserRequest request) {
         SysUser user = buildUserFromRequest(request);
@@ -147,8 +146,7 @@ public class AuthController
     /**
      * 获取用户列表
      */
-    @GetMapping("/users")
-    @SaCheckPermission("user:read")
+    @PostMapping(ApiConstant.Auth.listUsers)
     @Operation(summary = "获取用户列表")
     public GlobalResponse<List<SysUser>> listUsers() {
         List<SysUser> users = userService.findAllUsers();
@@ -158,11 +156,11 @@ public class AuthController
     /**
      * 根据ID获取用户详情
      */
-    @GetMapping("/users/{userId}")
-    @SaCheckPermission("user:read")
+    @PostMapping(ApiConstant.Auth.getUserDetailById)
     @Operation(summary = "根据ID获取用户详情")
-    public GlobalResponse<SysUser> getUserDetailById(@PathVariable Long userId)
+    public GlobalResponse<SysUser> getUserDetailById(@RequestBody Map<String, Long> request)
     {
+        Long userId = request.get("userId");
         return userService.findById(userId)
                 .map(GlobalResponse::success)
                 .orElse(GlobalResponse.error("用户不存在"));
@@ -171,10 +169,11 @@ public class AuthController
     /**
      * 更新用户
      */
-    @PutMapping("/users/{userId}")
-    @SaCheckPermission("user:update")
+    @PostMapping(ApiConstant.Auth.updateUser)
     @Operation(summary = "更新用户")
-    public GlobalResponse<SysUser> updateUser(@PathVariable Long userId, @RequestBody SysUser user) {
+    public GlobalResponse<SysUser> updateUser(@RequestBody Map<String, Object> request) {
+        Long userId = ((Number) request.get("userId")).longValue();
+        SysUser user = (SysUser) request.get("user");
         user.setUserId(userId);
         SysUser updated = userService.updateUser(user);
         return GlobalResponse.success(updated);
@@ -183,10 +182,10 @@ public class AuthController
     /**
      * 删除用户
      */
-    @DeleteMapping("/users/{userId}")
-    @SaCheckPermission("user:delete")
+    @PostMapping(ApiConstant.Auth.deleteUser)
     @Operation(summary = "删除用户")
-    public GlobalResponse<Void> deleteUser(@PathVariable Long userId) {
+    public GlobalResponse<Void> deleteUser(@RequestBody Map<String, Long> request) {
+        Long userId = request.get("userId");
         userService.deleteUser(userId);
         return GlobalResponse.success("用户删除成功");
     }
@@ -194,10 +193,11 @@ public class AuthController
     /**
      * 重置用户密码
      */
-    @PutMapping("/users/{userId}/resetPassword")
-    @SaCheckPermission("user:resetPassword")
+    @PostMapping(ApiConstant.Auth.resetPassword)
     @Operation(summary = "重置用户密码")
-    public GlobalResponse<Void> resetPassword(@PathVariable Long userId, @RequestParam String newPassword) {
+    public GlobalResponse<Void> resetPassword(@RequestBody Map<String, Object> request) {
+        Long userId = ((Number) request.get("userId")).longValue();
+        String newPassword = (String) request.get("newPassword");
         boolean success = userService.resetPassword(userId, newPassword);
         return success ? GlobalResponse.success("重置密码成功") : GlobalResponse.error("重置密码失败");
     }

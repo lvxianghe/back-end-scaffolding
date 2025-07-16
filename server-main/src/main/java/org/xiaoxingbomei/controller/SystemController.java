@@ -10,6 +10,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
 import org.xiaoxingbomei.common.entity.SystemEntity;
 import org.xiaoxingbomei.common.entity.response.GlobalResponse;
+import org.xiaoxingbomei.constant.ApiConstant;
 import org.redisson.spring.data.connection.RedissonConnectionFactory;
 
 import java.util.HashMap;
@@ -19,7 +20,6 @@ import java.util.Map;
  * 系统管理控制器
  */
 @RestController
-@RequestMapping("/api/system")
 @Tag(name = "系统管理", description = "系统信息管理相关接口")
 public class SystemController {
 
@@ -29,7 +29,7 @@ public class SystemController {
     @Autowired
     private RedisTemplate<String, Object> redisTemplate;
 
-    @GetMapping("/info")
+    @PostMapping(ApiConstant.System.getSystemInfo)
     @Operation(summary = "获取系统信息", description = "获取当前系统的基本信息")
     public GlobalResponse<SystemEntity> getSystemInfo() {
         SystemEntity system = new SystemEntity();
@@ -43,13 +43,13 @@ public class SystemController {
         return GlobalResponse.success(system);
     }
 
-    @GetMapping("/health")
+    @PostMapping(ApiConstant.System.health)
     @Operation(summary = "健康检查", description = "检查系统健康状态")
     public GlobalResponse<String> health() {
         return GlobalResponse.success("系统运行正常");
     }
 
-    @PostMapping("/update")
+    @PostMapping(ApiConstant.System.updateSystemInfo)
     @Operation(summary = "更新系统信息", description = "更新系统的基本信息")
     public GlobalResponse<String> updateSystemInfo(
             @Parameter(description = "系统信息", required = true)
@@ -58,7 +58,7 @@ public class SystemController {
         return GlobalResponse.success("系统信息更新成功");
     }
     
-    @GetMapping("/redis-info")
+    @PostMapping(ApiConstant.System.getRedisInfo)
     @Operation(summary = "Redis配置信息", description = "获取当前Redis客户端类型和配置信息")
     public GlobalResponse<Map<String, Object>> getRedisInfo() {
         Map<String, Object> redisInfo = new HashMap<>();
@@ -110,7 +110,7 @@ public class SystemController {
         return GlobalResponse.success(redisInfo);
     }
     
-    @GetMapping("/redis-test")
+    @PostMapping(ApiConstant.System.testRedis)
     @Operation(summary = "Redis功能测试", description = "测试Redis基本功能")
     public GlobalResponse<Map<String, Object>> testRedis() {
         Map<String, Object> testResult = new HashMap<>();

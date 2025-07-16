@@ -3,6 +3,7 @@ package org.xiaoxingbomei.feign;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
 import org.xiaoxingbomei.common.entity.response.GlobalResponse;
+import org.xiaoxingbomei.constant.ApiConstant;
 
 import java.util.List;
 import java.util.Map;
@@ -16,43 +17,41 @@ public interface AuthFeignClient
 
     // ================================ 认证相关接口 ================================
 
-    @PostMapping("/auth/login")
+    @PostMapping(ApiConstant.Auth.login)
     GlobalResponse<Map<String, Object>> login(@RequestBody Object loginRequest);
 
-    @PostMapping("/auth/logout")
+    @PostMapping(ApiConstant.Auth.logout)
     GlobalResponse<Void> logout();
 
-    @GetMapping("/auth/userInfo")
+    @PostMapping(ApiConstant.Auth.userInfo)
     GlobalResponse<Object> getCurrentUserInfo();
 
     // ================================ 服务间调用接口 ================================
 
-    @GetMapping("/auth/permissions/{userId}")
-    GlobalResponse<List<String>> getUserPermissions(@PathVariable("userId") Long userId);
+    @PostMapping(ApiConstant.Auth.getUserPermissions)
+    GlobalResponse<List<String>> getUserPermissions(@RequestBody Map<String, Long> request);
 
-    @GetMapping("/auth/roles/{userId}")
-    GlobalResponse<List<String>> getUserRoles(@PathVariable("userId") Long userId);
+    @PostMapping(ApiConstant.Auth.getUserRoles)
+    GlobalResponse<List<String>> getUserRoles(@RequestBody Map<String, Long> request);
 
-    @PostMapping("/auth/verify")
-    GlobalResponse<Boolean> verifyPassword(@RequestParam("username") String username,
-                                           @RequestParam("password") String password);
+    @PostMapping(ApiConstant.Auth.verifyPassword)
+    GlobalResponse<Boolean> verifyPassword(@RequestBody Map<String, String> request);
 
-    @GetMapping("/auth/user/{userId}")
-    GlobalResponse<Object> getUserById(@PathVariable("userId") Long userId);
+    @PostMapping(ApiConstant.Auth.getUserById)
+    GlobalResponse<Object> getUserById(@RequestBody Map<String, Long> request);
 
     // ================================ 用户管理接口 ================================
 
-    @GetMapping("/auth/users")
+    @PostMapping(ApiConstant.Auth.listUsers)
     GlobalResponse<List<Object>> listUsers();
 
-    @PostMapping("/auth/users")
+    @PostMapping(ApiConstant.Auth.createUser)
     GlobalResponse<Object> createUser(@RequestBody Object createUserRequest);
 
-    @PutMapping("/auth/users/{userId}")
-    GlobalResponse<Object> updateUser(@PathVariable("userId") Long userId, @RequestBody Object user);
+    @PostMapping(ApiConstant.Auth.updateUser)
+    GlobalResponse<Object> updateUser(@RequestBody Map<String, Object> request);
 
-    @DeleteMapping("/auth/users/{userId}")
-    GlobalResponse<Void> deleteUser(@PathVariable("userId") Long userId);
-
+    @PostMapping(ApiConstant.Auth.deleteUser)
+    GlobalResponse<Void> deleteUser(@RequestBody Map<String, Long> request);
 
 }

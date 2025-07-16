@@ -1,13 +1,12 @@
 package org.xiaoxingbomei.controller;
 
-import cn.dev33.satoken.annotation.SaCheckPermission;
-import cn.dev33.satoken.annotation.SaIgnore;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.xiaoxingbomei.common.entity.response.GlobalResponse;
+import org.xiaoxingbomei.constant.ApiConstant;
 import org.xiaoxingbomei.service.auth.SsoService;
 import org.xiaoxingbomei.service.auth.TokenService;
 
@@ -21,7 +20,6 @@ import java.util.Map;
  * @date 2024-01-01
  */
 @RestController
-@RequestMapping("/token")
 @Tag(name = "Token管理", description = "Token生命周期和SSO管理")
 @Slf4j
 public class TokenController
@@ -38,10 +36,10 @@ public class TokenController
     /**
      * 刷新Token
      */
-    @PostMapping("/refresh")
-    @SaIgnore
+    @PostMapping(ApiConstant.Token.refreshToken)
     @Operation(summary = "刷新Token")
-    public GlobalResponse<Map<String, Object>> refreshToken(@RequestParam String refreshToken) {
+    public GlobalResponse<Map<String, Object>> refreshToken(@RequestBody Map<String, String> request) {
+        String refreshToken = request.get("refreshToken");
         Map<String, Object> result = tokenService.refreshToken(refreshToken);
         return GlobalResponse.success(result);
     }
@@ -49,10 +47,10 @@ public class TokenController
     /**
      * 验证Token
      */
-    @PostMapping("/validate")
-    @SaIgnore
+    @PostMapping(ApiConstant.Token.validateToken)
     @Operation(summary = "验证Token", description = "供其他服务调用")
-    public GlobalResponse<Boolean> validateToken(@RequestParam String token) {
+    public GlobalResponse<Boolean> validateToken(@RequestBody Map<String, String> request) {
+        String token = request.get("token");
         boolean valid = tokenService.validateToken(token);
         return GlobalResponse.success(valid);
     }
@@ -60,10 +58,10 @@ public class TokenController
     /**
      * 获取Token信息
      */
-    @GetMapping("/info")
-    @SaIgnore
+    @PostMapping(ApiConstant.Token.getTokenInfo)
     @Operation(summary = "获取Token信息", description = "供其他服务调用")
-    public GlobalResponse<Map<String, Object>> getTokenInfo(@RequestParam String token) {
+    public GlobalResponse<Map<String, Object>> getTokenInfo(@RequestBody Map<String, String> request) {
+        String token = request.get("token");
         Map<String, Object> info = tokenService.getTokenInfo(token);
         return GlobalResponse.success(info);
     }
@@ -71,10 +69,10 @@ public class TokenController
     /**
      * 强制用户下线
      */
-    @PostMapping("/kickout/{userId}")
-    @SaCheckPermission("token:kickout")
+    @PostMapping(ApiConstant.Token.kickOut)
     @Operation(summary = "强制用户下线")
-    public GlobalResponse<Boolean> kickOut(@PathVariable Long userId) {
+    public GlobalResponse<Boolean> kickOut(@RequestBody Map<String, Long> request) {
+        Long userId = request.get("userId");
         boolean success = tokenService.kickOut(userId);
         return GlobalResponse.success(success);
     }
@@ -82,10 +80,10 @@ public class TokenController
     /**
      * 批量强制用户下线
      */
-    @PostMapping("/kickout/batch")
-    @SaCheckPermission("token:kickout")
+    @PostMapping(ApiConstant.Token.batchKickOut)
     @Operation(summary = "批量强制用户下线")
-    public GlobalResponse<Boolean> batchKickOut(@RequestBody List<Long> userIds) {
+    public GlobalResponse<Boolean> batchKickOut(@RequestBody Map<String, List<Long>> request) {
+        List<Long> userIds = request.get("userIds");
         boolean success = tokenService.batchKickOut(userIds);
         return GlobalResponse.success(success);
     }
@@ -93,8 +91,7 @@ public class TokenController
     /**
      * 获取在线用户列表
      */
-    @GetMapping("/online")
-    @SaCheckPermission("token:monitor")
+    @PostMapping(ApiConstant.Token.getOnlineUsers)
     @Operation(summary = "获取在线用户列表")
     public GlobalResponse<List<Map<String, Object>>> getOnlineUsers() {
         List<Map<String, Object>> users = tokenService.getOnlineUsers();
@@ -104,10 +101,10 @@ public class TokenController
     /**
      * 将Token加入黑名单
      */
-    @PostMapping("/blacklist")
-    @SaCheckPermission("token:blacklist")
+    @PostMapping(ApiConstant.Token.addToBlacklist)
     @Operation(summary = "将Token加入黑名单")
-    public GlobalResponse<Boolean> addToBlacklist(@RequestParam String token) {
+    public GlobalResponse<Boolean> addToBlacklist(@RequestBody Map<String, String> request) {
+        String token = request.get("token");
         boolean success = tokenService.addToBlacklist(token);
         return GlobalResponse.success(success);
     }
@@ -117,10 +114,11 @@ public class TokenController
     /**
      * SSO登录 - 生成票据
      */
-    @PostMapping("/sso/login")
-    @SaIgnore
+    @PostMapping(ApiConstant.Token.ssoLogin)
     @Operation(summary = "SSO登录", description = "生成SSO票据")
-    public GlobalResponse<String> ssoLogin(@RequestParam Long userId, @RequestParam String service) {
+    public GlobalResponse<String> ssoLogin(@RequestBody Map<String, Object> request) {
+        Long userId = ((Number) request.get("userId")).longValue();
+        String service = (String) request.get("service");
         String ticket = ssoService.ssoLogin(userId, service);
         return GlobalResponse.success(ticket);
     }
@@ -128,10 +126,11 @@ public class TokenController
     /**
      * SSO票据验证
      */
-    @PostMapping("/sso/validate")
-    @SaIgnore
+    @PostMapping(ApiConstant.Token.validateTicket)
     @Operation(summary = "SSO票据验证", description = "验证SSO票据并获取用户信息")
-    public GlobalResponse<Map<String, Object>> validateTicket(@RequestParam String ticket, @RequestParam String service) {
+    public GlobalResponse<Map<String, Object>> validateTicket(@RequestBody Map<String, String> request) {
+        String ticket = request.get("ticket");
+        String service = request.get("service");
         Map<String, Object> result = ssoService.validateTicket(ticket, service);
         return GlobalResponse.success(result);
     }
@@ -139,10 +138,10 @@ public class TokenController
     /**
      * SSO统一登出
      */
-    @PostMapping("/sso/logout")
-    @SaIgnore
+    @PostMapping(ApiConstant.Token.ssoLogout)
     @Operation(summary = "SSO统一登出")
-    public GlobalResponse<Boolean> ssoLogout(@RequestParam String ssoToken) {
+    public GlobalResponse<Boolean> ssoLogout(@RequestBody Map<String, String> request) {
+        String ssoToken = request.get("ssoToken");
         boolean success = ssoService.ssoLogout(ssoToken);
         return GlobalResponse.success(success);
     }
@@ -150,10 +149,10 @@ public class TokenController
     /**
      * 检查SSO登录状态
      */
-    @GetMapping("/sso/status")
-    @SaIgnore
+    @PostMapping(ApiConstant.Token.checkSsoLogin)
     @Operation(summary = "检查SSO登录状态", description = "供其他服务调用")
-    public GlobalResponse<Boolean> checkSsoLogin(@RequestParam String ssoToken) {
+    public GlobalResponse<Boolean> checkSsoLogin(@RequestBody Map<String, String> request) {
+        String ssoToken = request.get("ssoToken");
         boolean loginStatus = ssoService.checkSsoLogin(ssoToken);
         return GlobalResponse.success(loginStatus);
     }
@@ -161,10 +160,10 @@ public class TokenController
     /**
      * 获取SSO用户信息
      */
-    @GetMapping("/sso/userinfo")
-    @SaIgnore
+    @PostMapping(ApiConstant.Token.getSsoUserInfo)
     @Operation(summary = "获取SSO用户信息", description = "供其他服务调用")
-    public GlobalResponse<Map<String, Object>> getSsoUserInfo(@RequestParam String ssoToken) {
+    public GlobalResponse<Map<String, Object>> getSsoUserInfo(@RequestBody Map<String, String> request) {
+        String ssoToken = request.get("ssoToken");
         Map<String, Object> userInfo = ssoService.getSsoUserInfo(ssoToken);
         return GlobalResponse.success(userInfo);
     }
@@ -174,10 +173,11 @@ public class TokenController
     /**
      * 生成服务间Token
      */
-    @PostMapping("/service/generate")
-    @SaIgnore
+    @PostMapping(ApiConstant.Token.generateServiceToken)
     @Operation(summary = "生成服务间Token", description = "供微服务间调用")
-    public GlobalResponse<String> generateServiceToken(@RequestParam String fromService, @RequestParam String toService) {
+    public GlobalResponse<String> generateServiceToken(@RequestBody Map<String, String> request) {
+        String fromService = request.get("fromService");
+        String toService = request.get("toService");
         String serviceToken = ssoService.generateServiceToken(fromService, toService);
         return GlobalResponse.success(serviceToken);
     }
@@ -185,12 +185,12 @@ public class TokenController
     /**
      * 验证服务间Token
      */
-    @PostMapping("/service/validate")
-    @SaIgnore
+    @PostMapping(ApiConstant.Token.validateServiceToken)
     @Operation(summary = "验证服务间Token", description = "供微服务间调用")
-    public GlobalResponse<Boolean> validateServiceToken(@RequestParam String serviceToken,
-                                                        @RequestParam String fromService,
-                                                        @RequestParam String toService) {
+    public GlobalResponse<Boolean> validateServiceToken(@RequestBody Map<String, String> request) {
+        String serviceToken = request.get("serviceToken");
+        String fromService = request.get("fromService");
+        String toService = request.get("toService");
         boolean valid = ssoService.validateServiceToken(serviceToken, fromService, toService);
         return GlobalResponse.success(valid);
     }
