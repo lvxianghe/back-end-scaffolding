@@ -32,4 +32,10 @@ public class ApiConstant
         // AI聊天相关接口（预留）
     }
 
+    public class ThreadPool
+    {
+        public static final String getStatus = "/api/thread-pool/status";
+        public static final String updatePool = "/api/thread-pool/update";
+    }
+
 }
