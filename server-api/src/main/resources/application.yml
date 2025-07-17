@@ -5,9 +5,83 @@ server:
     context-path: /
 spring:
   application:
-    name: api
+    name: api-gateway
   main:
     allow-bean-definition-overriding: true
+  
+  # Spring Cloud Gateway 配置
+  cloud:
+    gateway:
+      routes:
+        # Auth服务路由
+        - id: auth-service
+          uri: http://localhost:10002
+          predicates:
+            - Path=/auth/**,/token/**
+          filters:
+            - StripPrefix=0  # 不去除前缀，保持原路径
+            
+        # Main服务路由
+        - id: main-service
+          uri: http://localhost:10001
+          predicates:
+            - Path=/api/**,/login,/userInfo
+          filters:
+            - StripPrefix=0
+            
+        # AI服务路由
+        - id: ai-service
+          uri: http://localhost:10003
+          predicates:
+            - Path=/ai/**,/chat/**
+          filters:
+            - StripPrefix=0
+
+      # 全局配置
+      default-filters:
+        - DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin
+      
+      # 全局CORS配置
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowedOriginPatterns: "*"
+            allowedMethods: "*"
+            allowedHeaders: "*"
+            allowCredentials: true
+            
+  # Redis配置（用于Sa-Token）
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      database: 0
+      timeout: 10s
+      lettuce:
+        pool:
+          max-active: 200
+          max-wait: -1ms
+          max-idle: 10
+          min-idle: 0
+
+# Sa-Token配置
+sa-token:
+  # token名称 (同时也是cookie名称)
+  token-name: satoken
+  # token有效期，单位s 默认30天, -1代表永不过期
+  timeout: 2592000
+  # token临时有效期 (指定时间内无操作就视为token过期) 单位: 秒
+  activity-timeout: -1
+  # 是否允许同一账号并发登录 (为true时允许一起登录, 为false时新登录挤掉旧登录)
+  is-concurrent: true
+  # 在多人登录同一账号时，是否共用一个token (为true时所有登录共用一个token, 为false时每次登录新建一个token)
+  is-share: true
+  # token风格
+  token-style: uuid
+  # 是否输出操作日志
+  is-log: false
+
+
 
 
 

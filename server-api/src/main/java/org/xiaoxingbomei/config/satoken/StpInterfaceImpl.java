@@ -1,4 +1,4 @@
-package org.xiaoxingbomei.config;
+package org.xiaoxingbomei.config.satoken;
 
 import cn.dev33.satoken.stp.StpInterface;
 import org.springframework.stereotype.Component;
