@@ -77,6 +77,7 @@
 
         <!-- 大模型应用开发相关 -->
         <spring-ai.version>1.0.0</spring-ai.version>
+        <milvus.version>2.5.9</milvus.version>
 
     </properties>
 
@@ -640,10 +641,11 @@
             </dependency>
 
             <dependency>
-                <groupId>io.milvus</groupId>
-                <artifactId>milvus-sdk-java</artifactId>
-                <version>2.3.4</version>
+                <groupId>org.springframework.ai</groupId>
+                <artifactId>spring-ai-starter-vector-store-milvus</artifactId>
+                <version>${spring-ai.version}</version>
             </dependency>
+
 
         </dependencies>
 

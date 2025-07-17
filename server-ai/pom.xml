@@ -49,6 +49,11 @@
             <artifactId>spring-ai-pdf-document-reader</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>org.springframework.ai</groupId>
+            <artifactId>spring-ai-starter-vector-store-milvus</artifactId>
+        </dependency>
+
         <!-- MCP Server 依赖 -->
         <dependency>
             <groupId>org.springframework.ai</groupId>

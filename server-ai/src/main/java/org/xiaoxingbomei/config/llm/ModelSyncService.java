@@ -4,8 +4,8 @@ import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.xiaoxingbomei.service.LlmModelService;
-import org.xiaoxingbomei.vo.LlmModel;
+import org.xiaoxingbomei.entity.vo.LlmModel;
+import org.xiaoxingbomei.service.llm.LlmModelService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +16,8 @@ import java.util.List;
  */
 @Service
 @Slf4j
-public class ModelSyncService {
+public class ModelSyncService
+{
 
     @Autowired
     private AiModelProperties aiModelProperties;
@@ -131,7 +132,8 @@ public class ModelSyncService {
     /**
      * 同步模型到数据库（以配置为准）
      */
-    private void syncModels(List<LlmModel> existingModels, List<LlmModel> configModels) {
+    private void syncModels(List<LlmModel> existingModels, List<LlmModel> configModels)
+    {
         int addedCount = 0;
         int updatedCount = 0;
 
@@ -180,7 +182,8 @@ public class ModelSyncService {
      * 查找已存在的模型
      */
     private LlmModel findExistingModel(List<LlmModel> existingModels, 
-                                       String provider, String name) {
+                                       String provider, String name)
+    {
         return existingModels.stream()
                 .filter(model -> provider.equals(model.getModelProvider()) && 
                                name.equals(model.getModelName()))

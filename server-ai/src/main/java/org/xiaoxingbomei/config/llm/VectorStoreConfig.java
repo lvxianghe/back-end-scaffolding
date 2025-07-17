@@ -17,8 +17,9 @@ public class VectorStoreConfig
 {
 
     @Bean
-    public VectorStore vectorStore(OpenAiEmbeddingModel embeddingModel) {
-        log.info("✅ [VectorStore] 使用Spring AI自动装配的OpenAI EmbeddingModel创建VectorStore");
+    public VectorStore vectorStore(OpenAiEmbeddingModel embeddingModel)
+    {
+        log.info(" [VectorStore] 使用Spring AI自动装配的OpenAI EmbeddingModel创建VectorStore");
         return SimpleVectorStore.builder(embeddingModel).build();
     }
 } 
