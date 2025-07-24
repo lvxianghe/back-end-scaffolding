@@ -1,0 +1,26 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+rule_files:
+  # - "first_rules.yml"
+  # - "second_rules.yml"
+
+scrape_configs:
+  # Prometheus 自身监控
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090']
+
+  # Docker 容器监控（如果启用了）
+  - job_name: 'docker'
+    static_configs:
+      - targets: ['host.docker.internal:9323']
+    scrape_interval: 5s
+    metrics_path: /metrics
+
+  # 应用服务监控（根据需要添加）
+  # - job_name: 'spring-boot-app'
+  #   static_configs:
+  #     - targets: ['host.docker.internal:8080']
+  #   metrics_path: '/actuator/prometheus'

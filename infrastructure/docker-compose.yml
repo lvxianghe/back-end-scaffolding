@@ -1,0 +1,462 @@
+version: '3.8'
+
+services:
+  # ========== MySQL 数据库 ==========
+  mysql:
+    image: mysql:8.0
+    container_name: ${COMPOSE_PROJECT_NAME:-scaffolding}-mysql
+    restart: unless-stopped
+    profiles: ["mysql", "database", "all"]
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-root123456}
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-ysx_dev}
+      MYSQL_USER: ${MYSQL_USER:-root}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-root123456}
+      TZ: Asia/Shanghai
+    ports:
+      - "${MYSQL_PORT:-3306}:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./mysql/init:/docker-entrypoint-initdb.d:ro
+      # 直接挂载整个目录，避免单文件挂载问题
+      - ./mysql/conf:/etc/mysql/conf.d:ro
+      - mysql_logs:/var/log/mysql
+    command: --default-authentication-plugin=mysql_native_password --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    networks:
+      - scaffolding-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${MYSQL_ROOT_PASSWORD:-root123456}"]
+      timeout: 20s
+      retries: 10
+      interval: 30s
+      start_period: 60s
+
+  # ========== Redis 缓存 ==========
+  redis:
+    image: redis:7-alpine
+    container_name: ${COMPOSE_PROJECT_NAME:-scaffolding}-redis
+    restart: unless-stopped
+    profiles: ["redis", "cache", "all"]
+    ports:
+      - "${REDIS_PORT:-6379}:6379"
+    volumes:
+      - redis_data:/data
+      - ./redis/conf/redis.conf:/usr/local/etc/redis/redis.conf:ro
+      - redis_logs:/var/log/redis
+    command: redis-server /usr/local/etc/redis/redis.conf
+    environment:
+      TZ: Asia/Shanghai
+    networks:
+      - scaffolding-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+
+  # ========== Nacos 注册中心 ==========
+  nacos:
+    image: nacos/nacos-server:v2.3.0
+    container_name: ${COMPOSE_PROJECT_NAME:-scaffolding}-nacos
+    restart: unless-stopped
+    profiles: ["nacos", "registry", "all"]
+    platform: linux/amd64  # Nacos 对 ARM64 支持不完善
+    environment:
+      MODE: ${NACOS_MODE:-standalone}
+      PREFER_HOST_MODE: hostname
+      SPRING_DATASOURCE_PLATFORM: mysql
+      MYSQL_SERVICE_HOST: mysql
+      MYSQL_SERVICE_DB_NAME: ${NACOS_DB_NAME:-nacos}
+      MYSQL_SERVICE_USER: ${MYSQL_USER:-root}
+      MYSQL_SERVICE_PASSWORD: ${MYSQL_PASSWORD:-root123456}
+      MYSQL_SERVICE_DB_PARAM: characterEncoding=utf8&connectTimeout=1000&socketTimeout=3000&autoReconnect=true&useUnicode=true&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
+      NACOS_AUTH_ENABLE: true
+      NACOS_AUTH_TOKEN: SecretKey012345678901234567890123456789012345678901234567890123456789
+      NACOS_AUTH_IDENTITY_KEY: nacos
+      NACOS_AUTH_IDENTITY_VALUE: nacos
+      JVM_XMS: 256m
+      JVM_XMX: 256m
+      TZ: Asia/Shanghai
+    ports:
+      - "${NACOS_PORT:-8848}:8848"
+      - "9848:9848"
+    volumes:
+      - nacos_data:/home/nacos/data
+      - nacos_logs:/home/nacos/logs
+      - ./nacos/conf/application.properties:/home/nacos/conf/application.properties:ro
+    networks:
+      - scaffolding-network
+    depends_on:
+      - mysql
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8848/nacos/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 90s
+
+  # ========== MongoDB 文档数据库 ==========
+  mongodb:
+    image: mongo:7.0
+    container_name: ${COMPOSE_PROJECT_NAME:-scaffolding}-mongodb
+    restart: unless-stopped
+    profiles: [ "mongodb", "database", "all" ]
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME:-admin}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD:-mongo123456}
+      MONGO_INITDB_DATABASE: ${MONGO_INITDB_DATABASE:-ysx_mongodb}
+      TZ: Asia/Shanghai
+    ports:
+      - "${MONGODB_PORT:-27017}:27017"
+    volumes:
+      - mongodb_data:/data/db
+      - mongodb_config:/data/configdb
+      - ./mongodb/init:/docker-entrypoint-initdb.d:ro
+      # 挂载到 /etc/mongo/mongod.conf，避免 /etc/mongod.conf 兼容性问题
+      - ./mongodb/conf/mongod.conf:/etc/mongo/mongod.conf:ro
+    command: mongod --config /etc/mongo/mongod.conf
+    networks:
+      - scaffolding-network
+    healthcheck:
+      test: [ "CMD", "mongosh", "--eval", "db.adminCommand('ping')" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+
+  # ========== Elasticsearch + Kibana ==========
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.11.0
+    container_name: ${COMPOSE_PROJECT_NAME:-scaffolding}-elasticsearch
+    restart: unless-stopped
+    profiles: ["elasticsearch", "search", "all"]
+    environment:
+      - node.name=elasticsearch
+      - cluster.name=scaffolding-cluster
+      - discovery.type=single-node
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - xpack.security.enabled=false
+      - xpack.security.enrollment.enabled=false
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    ports:
+      - "${ELASTICSEARCH_PORT:-9200}:9200"
+      - "9300:9300"
+    volumes:
+      - elasticsearch_data:/usr/share/elasticsearch/data
+      - elasticsearch_logs:/usr/share/elasticsearch/logs
+    networks:
+      - scaffolding-network
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:9200/_cluster/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:8.11.0
+    container_name: ${COMPOSE_PROJECT_NAME:-scaffolding}-kibana
+    restart: unless-stopped
+    profiles: ["elasticsearch", "search", "all"]
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+      - SERVER_NAME=kibana
+      - SERVER_HOST=0.0.0.0
+    ports:
+      - "${KIBANA_PORT:-5601}:5601"
+    volumes:
+      - kibana_data:/usr/share/kibana/data
+    depends_on:
+      - elasticsearch
+    networks:
+      - scaffolding-network
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:5601/api/status || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+
+  # ========== Kafka + Zookeeper + UI ==========
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.4.0
+    container_name: ${COMPOSE_PROJECT_NAME:-scaffolding}-zookeeper
+    restart: unless-stopped
+    profiles: ["kafka", "message", "all"]
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    ports:
+      - "${ZOOKEEPER_PORT:-2181}:2181"
+    volumes:
+      - zookeeper_data:/var/lib/zookeeper/data
+      - zookeeper_logs:/var/lib/zookeeper/log
+    networks:
+      - scaffolding-network
+    healthcheck:
+      test: ["CMD", "bash", "-c", "echo 'ruok' | nc localhost 2181"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  kafka:
+    image: confluentinc/cp-kafka:7.4.0
+    container_name: ${COMPOSE_PROJECT_NAME:-scaffolding}-kafka
+    restart: unless-stopped
+    profiles: ["kafka", "message", "all"]
+    depends_on:
+      - zookeeper
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092,PLAINTEXT_INTERNAL://kafka:29092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_INTERNAL:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT_INTERNAL
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: true
+      KAFKA_LOG_RETENTION_HOURS: 168
+      KAFKA_LOG_SEGMENT_BYTES: 1073741824
+    ports:
+      - "${KAFKA_PORT:-9092}:9092"
+    volumes:
+      - kafka_data:/var/lib/kafka/data
+    networks:
+      - scaffolding-network
+    healthcheck:
+      test: ["CMD", "kafka-broker-api-versions", "--bootstrap-server", "localhost:9092"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+
+  kafka-ui:
+    image: provectuslabs/kafka-ui:latest
+    container_name: ${COMPOSE_PROJECT_NAME:-scaffolding}-kafka-ui
+    restart: unless-stopped
+    profiles: ["kafka", "message", "all"]
+    depends_on:
+      - kafka
+    environment:
+      KAFKA_CLUSTERS_0_NAME: local
+      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka:29092
+      KAFKA_CLUSTERS_0_ZOOKEEPER: zookeeper:2181
+    ports:
+      - "${KAFKA_UI_PORT:-8080}:8080"
+    networks:
+      - scaffolding-network
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:8080/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+
+  # ========== Milvus + Etcd + Minio + Attu ==========
+  milvus-etcd:
+    container_name: ${COMPOSE_PROJECT_NAME:-scaffolding}-milvus-etcd
+    image: quay.io/coreos/etcd:v3.5.5
+    profiles: ["milvus", "vector", "all"]
+    platform: linux/amd64  # etcd 在 ARM64 上可能有问题
+    environment:
+      - ETCD_AUTO_COMPACTION_MODE=revision
+      - ETCD_AUTO_COMPACTION_RETENTION=1000
+      - ETCD_QUOTA_BACKEND_BYTES=4294967296
+      - ETCD_SNAPSHOT_COUNT=50000
+    volumes:
+      - etcd_data:/etcd
+    command: etcd -advertise-client-urls=http://127.0.0.1:2379 -listen-client-urls http://0.0.0.0:2379 --data-dir /etcd
+    networks:
+      - scaffolding-network
+    healthcheck:
+      test: ["CMD", "etcdctl", "endpoint", "health"]
+      interval: 30s
+      timeout: 20s
+      retries: 3
+
+  milvus-minio:
+    container_name: ${COMPOSE_PROJECT_NAME:-scaffolding}-milvus-minio
+    image: minio/minio:RELEASE.2023-03-20T20-16-18Z
+    profiles: ["milvus", "vector", "all"]
+    environment:
+      MINIO_ACCESS_KEY: ${MINIO_ACCESS_KEY:-minioadmin}
+      MINIO_SECRET_KEY: ${MINIO_SECRET_KEY:-minioadmin123456}
+    ports:
+      - "${MINIO_CONSOLE_PORT:-9001}:9001"
+      - "${MINIO_PORT:-9000}:9000"
+    volumes:
+      - minio_data:/minio_data
+    command: minio server /minio_data --console-address ":9001"
+    networks:
+      - scaffolding-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      interval: 30s
+      timeout: 20s
+      retries: 3
+
+  milvus:
+    container_name: ${COMPOSE_PROJECT_NAME:-scaffolding}-milvus
+    image: milvusdb/milvus:v2.3.0
+    profiles: ["milvus", "vector", "all"]
+    platform: linux/amd64  # Milvus 对 ARM64 支持不完善
+    command: ["milvus", "run", "standalone"]
+    environment:
+      ETCD_ENDPOINTS: milvus-etcd:2379
+      MINIO_ADDRESS: milvus-minio:9000
+    volumes:
+      - milvus_data:/var/lib/milvus
+      - ./milvus/conf/milvus.yaml:/milvus/configs/milvus.yaml:ro
+    ports:
+      - "${MILVUS_PORT:-19530}:19530"
+      - "9091:9091"
+    depends_on:
+      - "milvus-etcd"
+      - "milvus-minio"
+    networks:
+      - scaffolding-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9091/healthz"]
+      interval: 30s
+      start_period: 90s
+      timeout: 20s
+      retries: 3
+
+  attu:
+    container_name: ${COMPOSE_PROJECT_NAME:-scaffolding}-attu
+    image: zilliz/attu:v2.3.8
+    restart: unless-stopped
+    profiles: ["milvus", "vector", "all"]
+    platform: linux/amd64  # Attu 对 ARM64 支持不完善
+    environment:
+      MILVUS_URL: milvus:19530
+    ports:
+      - "${ATTU_PORT:-8000}:3000"
+    depends_on:
+      - milvus
+    networks:
+      - scaffolding-network
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:3000/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+
+  # ========== Prometheus + Grafana ==========
+  prometheus:
+    image: prom/prometheus:v2.48.0
+    container_name: ${COMPOSE_PROJECT_NAME:-scaffolding}-prometheus
+    restart: unless-stopped
+    profiles: ["monitoring", "metrics", "all"]
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+      - '--storage.tsdb.retention.time=200h'
+      - '--web.enable-lifecycle'
+    ports:
+      - "${PROMETHEUS_PORT:-9090}:9090"
+    volumes:
+      - prometheus_data:/prometheus
+      # 只有当配置文件存在时才挂载
+      - type: bind
+        source: ./monitoring/conf/prometheus.yml
+        target: /etc/prometheus/prometheus.yml
+        read_only: true
+    networks:
+      - scaffolding-network
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:9090/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  grafana:
+    image: grafana/grafana:10.2.0
+    container_name: ${COMPOSE_PROJECT_NAME:-scaffolding}-grafana
+    restart: unless-stopped
+    profiles: ["monitoring", "metrics", "all"]
+    environment:
+      - GF_SECURITY_ADMIN_USER=${GRAFANA_ADMIN_USER:-admin}
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_ADMIN_PASSWORD:-grafana123456}
+      - GF_USERS_ALLOW_SIGN_UP=false
+    ports:
+      - "${GRAFANA_PORT:-3000}:3000"
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - grafana_logs:/var/log/grafana
+      # 只有当配置文件存在时才挂载
+      - type: bind
+        source: ./monitoring/conf/grafana.ini
+        target: /etc/grafana/grafana.ini
+        read_only: true
+      - type: bind
+        source: ./monitoring/datasources
+        target: /etc/grafana/provisioning/datasources
+        read_only: true
+    depends_on:
+      - prometheus
+    networks:
+      - scaffolding-network
+    healthcheck:
+      test: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:3000/login || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+networks:
+  scaffolding-network:
+    name: ${NETWORK_NAME:-scaffolding-network}
+    driver: bridge
+    external: true
+
+volumes:
+  mysql_data:
+    name: ${COMPOSE_PROJECT_NAME:-scaffolding}-mysql-data
+  mysql_logs:
+    name: ${COMPOSE_PROJECT_NAME:-scaffolding}-mysql-logs
+  redis_data:
+    name: ${COMPOSE_PROJECT_NAME:-scaffolding}-redis-data
+  redis_logs:
+    name: ${COMPOSE_PROJECT_NAME:-scaffolding}-redis-logs
+  nacos_data:
+    name: ${COMPOSE_PROJECT_NAME:-scaffolding}-nacos-data
+  nacos_logs:
+    name: ${COMPOSE_PROJECT_NAME:-scaffolding}-nacos-logs
+  mongodb_data:
+    name: ${COMPOSE_PROJECT_NAME:-scaffolding}-mongodb-data
+  mongodb_config:
+    name: ${COMPOSE_PROJECT_NAME:-scaffolding}-mongodb-config
+  elasticsearch_data:
+    name: ${COMPOSE_PROJECT_NAME:-scaffolding}-elasticsearch-data
+  elasticsearch_logs:
+    name: ${COMPOSE_PROJECT_NAME:-scaffolding}-elasticsearch-logs
+  kibana_data:
+    name: ${COMPOSE_PROJECT_NAME:-scaffolding}-kibana-data
+  zookeeper_data:
+    name: ${COMPOSE_PROJECT_NAME:-scaffolding}-zookeeper-data
+  zookeeper_logs:
+    name: ${COMPOSE_PROJECT_NAME:-scaffolding}-zookeeper-logs
+  kafka_data:
+    name: ${COMPOSE_PROJECT_NAME:-scaffolding}-kafka-data
+  etcd_data:
+    name: ${COMPOSE_PROJECT_NAME:-scaffolding}-etcd-data
+  minio_data:
+    name: ${COMPOSE_PROJECT_NAME:-scaffolding}-minio-data
+  milvus_data:
+    name: ${COMPOSE_PROJECT_NAME:-scaffolding}-milvus-data
+  prometheus_data:
+    name: ${COMPOSE_PROJECT_NAME:-scaffolding}-prometheus-data
+  grafana_data:
+    name: ${COMPOSE_PROJECT_NAME:-scaffolding}-grafana-data
+  grafana_logs:
+    name: ${COMPOSE_PROJECT_NAME:-scaffolding}-grafana-logs

@@ -1,0 +1,28 @@
+# Milvus 配置文件
+etcd:
+  endpoints:
+    - milvus-etcd:2379
+
+minio:
+  address: milvus-minio
+  port: 9000
+  accessKeyID: minioadmin
+  secretAccessKey: minioadmin123456
+  useSSL: false
+  bucketName: a-bucket
+
+common:
+  defaultPartitionName: _default
+  defaultIndexName: _default_idx
+  retentionDuration: 432000
+  entityExpiration: -1
+
+quotaAndLimits:
+  enabled: true
+  quotaCenterCollectInterval: 3
+
+log:
+  level: info
+  file:
+    rootPath: ""
+    maxAge: 10
