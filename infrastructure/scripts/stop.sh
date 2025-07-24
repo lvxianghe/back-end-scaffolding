@@ -101,25 +101,73 @@ clean_all() {
     read -p "确认删除所有数据? (输入 'DELETE_ALL' 确认): " confirm
 
     if [ "$confirm" = "DELETE_ALL" ]; then
-        echo "开始清理..."
+        echo "开始强制清理..."
 
         cd "$DOCKER_DIR"
 
-        # 停止并删除所有容器
-        echo "🛑 停止并删除容器..."
-        docker-compose down -v
+        # 第1步：尝试正常停止
+        echo "🛑 尝试正常停止服务..."
+        docker-compose down --timeout 10 2>/dev/null || true
 
-        # 删除数据卷
+        # 第2步：强制停止所有相关容器
+        echo "💥 强制停止所有相关容器..."
+        docker ps -a --filter "name=${COMPOSE_PROJECT_NAME}-" --format "{{.Names}}" | while read container; do
+            if [ -n "$container" ]; then
+                echo "  强制停止: $container"
+                docker stop "$container" --time 5 2>/dev/null || true
+                docker rm -f "$container" 2>/dev/null || true
+            fi
+        done
+
+        # 第3步：确保所有容器都被删除
+        echo "🗑️  确保所有容器都被删除..."
+        docker ps -a --filter "name=${COMPOSE_PROJECT_NAME}-" --format "{{.Names}}" | xargs -r docker rm -f 2>/dev/null || true
+
+        # 第4步：等待一下，确保容器完全停止
+        echo "⏳ 等待容器完全停止..."
+        sleep 5
+
+        # 第5步：删除数据卷
         echo "💾 删除数据卷..."
-        docker volume ls --filter "name=${COMPOSE_PROJECT_NAME}-" --format "{{.Name}}" | xargs -r docker volume rm
+        docker volume ls --filter "name=${COMPOSE_PROJECT_NAME}-" --format "{{.Name}}" | while read volume; do
+            if [ -n "$volume" ]; then
+                echo "  删除卷: $volume"
+                docker volume rm "$volume" 2>/dev/null || echo "    无法删除 $volume (可能仍在使用中)"
+            fi
+        done
 
-        # 删除网络
+        # 第6步：强制删除剩余数据卷
+        echo "💥 强制删除剩余数据卷..."
+        docker volume ls --filter "name=${COMPOSE_PROJECT_NAME}-" --format "{{.Name}}" | xargs -r docker volume rm -f 2>/dev/null || true
+
+        # 第7步：删除网络
         echo "🌐 删除网络..."
         if docker network ls --format "{{.Name}}" | grep -q "^${NETWORK_NAME}$"; then
-            docker network rm "${NETWORK_NAME}"
+            docker network rm "${NETWORK_NAME}" 2>/dev/null || echo "  网络删除失败，可能仍有容器连接"
         fi
 
-        echo -e "${GREEN}✅ 清理完成${NC}"
+        # 第8步：清理孤立的容器和网络
+        echo "🧹 清理孤立资源..."
+        docker container prune -f 2>/dev/null || true
+        docker network prune -f 2>/dev/null || true
+
+        # 第9步：询问是否删除镜像
+        read -p "是否删除相关镜像? (y/n): " delete_images
+        if [ "$delete_images" = "y" ]; then
+            echo "🗑️  删除镜像..."
+            # 删除项目相关镜像
+            docker images --format "{{.Repository}}:{{.Tag}}" | grep -E "(mysql|redis|nacos|mongo|elastic|kafka|milvus|prometheus|grafana)" | xargs -r docker rmi -f 2>/dev/null || true
+            # 清理未使用的镜像
+            docker image prune -f 2>/dev/null || true
+        fi
+
+        echo ""
+        echo -e "${GREEN}✅ 强制清理完成${NC}"
+        echo ""
+        echo "📊 清理后状态："
+        echo "容器数量: $(docker ps -a --filter "name=${COMPOSE_PROJECT_NAME}-" --format "{{.Names}}" | wc -l)"
+        echo "数据卷数量: $(docker volume ls --filter "name=${COMPOSE_PROJECT_NAME}-" --format "{{.Name}}" | wc -l)"
+        echo "网络状态: $(docker network ls --filter "name=${NETWORK_NAME}" --format "{{.Name}}" | wc -l)"
 
     else
         echo "❌ 清理操作已取消"
