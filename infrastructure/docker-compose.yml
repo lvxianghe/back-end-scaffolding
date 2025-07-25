@@ -4,7 +4,7 @@ services:
     image: mysql:8.0
     container_name: ${COMPOSE_PROJECT_NAME:-scaffolding}-mysql
     restart: unless-stopped
-    profiles: ["mysql", "database", "all"]
+    profiles: [ "mysql", "database", "all" ]
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-root123456}
       MYSQL_DATABASE: ${MYSQL_DATABASE:-ysx_dev}
@@ -14,14 +14,15 @@ services:
     volumes:
       - mysql_data:/var/lib/mysql
       - mysql_logs:/var/log/mysql
+      - ./mysql/init:/docker-entrypoint-initdb.d:ro
     command: --default-authentication-plugin=mysql_native_password --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
     networks:
       - scaffolding-network
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${MYSQL_ROOT_PASSWORD:-root123456}"]
-      timeout: 20s
-      retries: 10
+      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${MYSQL_ROOT_PASSWORD:-root123456}" ]
       interval: 30s
+      timeout: 10s
+      retries: 5
       start_period: 60s
 
   # ========== Redis 缓存 ==========
@@ -78,13 +79,14 @@ services:
     networks:
       - scaffolding-network
     depends_on:
-      - mysql
+      mysql:
+        condition: service_healthy
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8848/nacos/actuator/health"]
       interval: 30s
       timeout: 10s
       retries: 5
-      start_period: 90s
+      start_period: 120s  # 增加启动等待时间
 
   # ========== MongoDB 文档数据库 ==========
   mongodb:

@@ -21,6 +21,20 @@ print_header() {
     echo -e "${BLUE}================================${NC}"
 }
 
+show_help() {
+    echo "用法: $0 [命令]"
+    echo ""
+    echo "可用命令:"
+    echo "  start     启动基础设施服务 (默认)"
+    echo "  status    查看服务状态"
+    echo "  help      显示帮助信息"
+    echo ""
+    echo "示例:"
+    echo "  $0              # 启动服务"
+    echo "  $0 start        # 启动服务"
+    echo "  $0 status       # 查看状态"
+}
+
 setup_network() {
     echo "🌐 设置Docker网络: $NETWORK_NAME"
     if docker network ls --format "{{.Name}}" | grep -q "^${NETWORK_NAME}$"; then
@@ -244,15 +258,42 @@ start_services() {
 }
 
 show_status() {
+    cd "$DOCKER_DIR"
+
     echo ""
     echo "📊 服务状态："
     echo "================================"
 
-    cd "$DOCKER_DIR"
-
     # 显示容器状态
     echo "🐳 容器状态:"
-    docker-compose ps
+
+    # 获取所有相关容器
+    containers=$(docker ps -a --filter "name=${COMPOSE_PROJECT_NAME}-" --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}" | head -n 1)
+
+    if [ -n "$containers" ]; then
+        docker ps -a --filter "name=${COMPOSE_PROJECT_NAME}-" --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}"
+
+        echo ""
+        echo "📈 运行状态统计:"
+        running=$(docker ps --filter "name=${COMPOSE_PROJECT_NAME}-" --filter "status=running" | wc -l)
+        stopped=$(docker ps -a --filter "name=${COMPOSE_PROJECT_NAME}-" --filter "status=exited" | wc -l)
+        total=$(docker ps -a --filter "name=${COMPOSE_PROJECT_NAME}-" | wc -l)
+
+        # 减去表头行
+        running=$((running - 1))
+        stopped=$((stopped - 1))
+        total=$((total - 1))
+
+        echo -e "  ${GREEN}✅ 运行中: $running${NC}"
+        echo -e "  ${RED}❌ 已停止: $stopped${NC}"
+        echo -e "  📊 总计: $total"
+    else
+        echo -e "${YELLOW}⚠️  没有发现运行的容器${NC}"
+        echo ""
+        echo "💡 提示: 使用以下命令启动服务"
+        echo "  ./scripts/start.sh"
+        return
+    fi
 
     echo ""
     echo "🔗 服务访问地址："
@@ -273,13 +314,13 @@ show_status() {
     echo ""
     echo "📝 常用命令："
     echo "  查看日志:   ./scripts/stop.sh logs [service]"
-    echo "  查看状态:   ./scripts/stop.sh status"
+    echo "  查看状态:   ./scripts/start.sh status"
     echo "  停止服务:   ./scripts/stop.sh"
     echo "  清理数据:   ./scripts/stop.sh clean"
 }
 
-# 主函数
-main() {
+# 启动主流程函数
+start_main() {
     print_header
 
     # 设置网络
@@ -303,6 +344,34 @@ main() {
 
     echo ""
     echo "🎉 启动完成！"
+}
+
+# 仅显示状态函数
+status_main() {
+    print_header
+    show_status
+}
+
+# 主函数 - 处理命令行参数
+main() {
+    case "${1:-start}" in
+        "start")
+            start_main
+            ;;
+        "status")
+            status_main
+            ;;
+        "help"|"-h"|"--help")
+            print_header
+            show_help
+            ;;
+        *)
+            echo -e "${RED}❌ 未知命令: $1${NC}"
+            echo ""
+            show_help
+            exit 1
+            ;;
+    esac
 }
 
 # 运行主函数
