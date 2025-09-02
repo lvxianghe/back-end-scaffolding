@@ -67,7 +67,7 @@ public class MultipleDataSourceProperties extends HashMap<String, MultipleDataSo
     {
         return this.entrySet().stream()
                 .filter(entry -> entry.getValue().isPrimary())
-                .map(Map.Entry::getKey)
+                .map(Entry::getKey)
                 .findFirst()
                 .orElseThrow(() -> new IllegalStateException("No primary datasource found"));
     }

@@ -5,7 +5,7 @@ server:
     context-path: /
 spring:
   application:
-    name: api-gateway
+    name: api
   main:
     allow-bean-definition-overriding: true
   
@@ -63,6 +63,19 @@ spring:
           max-wait: -1ms
           max-idle: 10
           min-idle: 0
+
+# SpringDoc OpenAPI 配置
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+    tags-sorter: alpha
+    operations-sorter: alpha
+  api-docs:
+    path: /v3/api-docs
+  group-configs:
+    - group: 'default'
+      paths-to-match: '/**'
+      packages-to-scan: org.xiaoxingbomei.controller
 
 # Sa-Token配置
 sa-token:

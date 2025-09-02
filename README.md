@@ -2,7 +2,21 @@
 
 
 
+
 ## 部署
+### 环境要求
+
+### 端口说明
+
+server
+├── api     10000
+├── main    10001
+├── auth    10002
+├── xxx     10003
+├── ai      10004
+└── xxx     10005
+
+
 ### infra
 infrastructure/
 ├── docker-compose.yml          # 主compose文件，包含所有服务

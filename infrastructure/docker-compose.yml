@@ -7,7 +7,7 @@ services:
     profiles: [ "mysql", "database", "all" ]
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-root123456}
-      MYSQL_DATABASE: ${MYSQL_DATABASE:-ysx_dev}
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-ysx}
       TZ: Asia/Shanghai
     ports:
       - "${MYSQL_PORT:-3306}:3306"

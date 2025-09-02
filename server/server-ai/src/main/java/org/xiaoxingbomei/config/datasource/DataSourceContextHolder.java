@@ -1,12 +1,12 @@
 package org.xiaoxingbomei.config.datasource;
 
+import jakarta.persistence.EntityManagerFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.PlatformTransactionManager;
 
 import javax.sql.DataSource;
-import jakarta.persistence.EntityManagerFactory;
-import org.springframework.transaction.PlatformTransactionManager;
 import java.util.Set;
 
 /**

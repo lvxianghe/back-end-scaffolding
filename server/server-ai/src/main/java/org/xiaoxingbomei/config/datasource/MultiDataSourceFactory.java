@@ -2,6 +2,8 @@ package org.xiaoxingbomei.config.datasource;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
+import jakarta.annotation.PostConstruct;
+import jakarta.persistence.EntityManagerFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -16,8 +18,6 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.util.StringUtils;
 
 import javax.sql.DataSource;
-import jakarta.persistence.EntityManagerFactory;
-import jakarta.annotation.PostConstruct;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
@@ -49,11 +49,13 @@ public class MultiDataSourceFactory
         
         // 调试信息：打印配置
         log.info("配置的数据源数量: {}", properties.getDataSources().size());
-        properties.getDataSources().forEach((name, config) -> {
+        properties.getDataSources().forEach((name, config) ->
+        {
             log.info("数据源名称: {}, 是否为主数据源: {}", name, config.isPrimary());
         });
 
-        if (properties.getDataSources().isEmpty()) {
+        if (properties.getDataSources().isEmpty())
+        {
             throw new IllegalStateException("No datasource configured in application.yml");
         }
 
@@ -89,7 +91,8 @@ public class MultiDataSourceFactory
     /**
      * 查找主数据源名称
      */
-    private String findPrimaryDataSourceName() {
+    private String findPrimaryDataSourceName()
+    {
         // 方法1：查找标记为primary的数据源
         String primaryName = properties.getDataSources().entrySet().stream()
                 .filter(entry -> entry.getValue().isPrimary())

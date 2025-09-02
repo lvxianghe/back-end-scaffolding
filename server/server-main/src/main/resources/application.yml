@@ -10,7 +10,44 @@ spring:
     name: main
   main:
     allow-bean-definition-overriding: true
-    
+
+  # 🔥 Dynamic DataSource配置
+  datasource:
+    dynamic:
+      primary: master
+      strict: false
+      datasource:
+        master:
+          url: jdbc:mysql://localhost:3306/ysx?useUnicode=true&characterEncoding=utf8&serverTimezone=GMT%2B8&useSSL=false&allowPublicKeyRetrieval=true
+          username: root
+          password: root
+          driver-class-name: com.mysql.cj.jdbc.Driver
+          type: com.alibaba.druid.pool.DruidDataSource  # 指定使用Druid
+      # 🔥 Druid配置（通过Dynamic DataSource）
+      druid:
+        initial-size: 5
+        min-idle: 5
+        max-active: 20
+        max-wait: 60000
+        time-between-eviction-runs-millis: 60000
+        min-evictable-idle-time-millis: 300000
+        validation-query: SELECT 1
+        test-while-idle: true
+        test-on-borrow: false
+        test-on-return: false
+        filters: stat,wall
+        # 🔥 监控配置（Dynamic DataSource方式）
+        stat-view-servlet:
+          enabled: true
+          url-pattern: /druid/*
+          login-username: admin
+          login-password: admin123
+        web-stat-filter:
+          enabled: true
+          url-pattern: /*
+          exclusions: "*.js,*.gif,*.jpg,*.png,*.css,*.ico,/druid/*,/swagger-ui/*"
+
+
   # Redis配置 - 最佳实践版本
   data:
     redis:
@@ -61,33 +98,45 @@ springdoc:
       paths-to-match: '/**'
       packages-to-scan: org.xiaoxingbomei.controller
 
-# 开启调试模式，查看自动配置报告
-#debug: true
-#logging:
-#  level:
-#    org.springframework.boot.autoconfigure: DEBUG
-#    org.xiaoxingbomei.config.datasource: DEBUG
-  
+# 🔥 MyBatis-Plus配置
+mybatis-plus:
+  # 映射文件位置
+  mapper-locations: classpath*:mapper/**/*Mapper.xml
+  # 实体类包路径
+  type-aliases-package: org.xiaoxingbomei.entity
+  configuration:
+    # 开启驼峰命名转换
+    map-underscore-to-camel-case: true
+    # 开启SQL日志打印
+    log-impl: org.apache.ibatis.logging.nologging.NoLoggingImpl
 
+    # 开启二级缓存
+    cache-enabled: true
+    # 开启延迟加载
+    lazy-loading-enabled: true
+    # 按需加载属性
+    aggressive-lazy-loading: false
+  global-config:
+    db-config:
+      # 主键类型（AUTO-自增，ASSIGN_ID-雪花算法）
+      id-type: AUTO
+      # 逻辑删除字段
+      logic-delete-field: deleted
+      logic-delete-value: 1
+      logic-not-delete-value: 0
+      # 表名前缀
+      table-prefix: ""
+    # 是否开启Banner
+    banner: true
 
-# 统一多数据源配置示例
-multi-datasource:
-  datasources:
-    # 数据源配置
-    local:
-      # 数据库连接信息
-      url: jdbc:mysql://localhost:3306/ysx
-      username: root
-      password: root
-      driver-class-name: com.mysql.cj.jdbc.Driver
-
-      # 连接池配置（可选，有默认值）
-      initial-size: 5
-      max-active: 20
-      min-idle: 5
-      max-wait: 60000
-
-      # MyBatis配置
-      mapper-locations: classpath*:org/monitorx/dao/local/*.xml
-      base-packages: org.monitorx.dao.local
-      call-setters-on-nulls: true
+# 日志配置
+logging:
+  level:
+    # SQL监控相关日志
+    org.xiaoxingbomei.config.datasource: info
+    # 数据源切换日志
+    com.baomidou.dynamic.datasource: debug
+    # MyBatis SQL日志（可以关闭，因为我们有自定义监控）
+    org.xiaoxingbomei.mapper: warn
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n"

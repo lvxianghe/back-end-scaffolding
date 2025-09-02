@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.xiaoxingbomei.common.entity.response.GlobalResponse;
 import org.xiaoxingbomei.common.utils.Request_Utils;
-import org.xiaoxingbomei.dao.localhost.ModelMapper;
+import org.xiaoxingbomei.dao.local.ModelMapper;
 import org.xiaoxingbomei.entity.vo.LlmModel;
 import org.xiaoxingbomei.service.llm.LlmModelService;
 

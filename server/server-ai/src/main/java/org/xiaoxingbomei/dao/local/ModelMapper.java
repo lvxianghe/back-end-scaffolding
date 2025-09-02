@@ -1,4 +1,4 @@
-package org.xiaoxingbomei.dao.localhost;
+package org.xiaoxingbomei.dao.local;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;

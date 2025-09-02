@@ -2,6 +2,7 @@ package org.xiaoxingbomei;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
@@ -31,6 +32,7 @@ import java.util.Arrays;
 })
 @EnableDiscoveryClient
 @EnableFeignClients(basePackages = "org.xiaoxingbomei.feign")
+@MapperScan("org.xiaoxingbomei.mapper")
 @ServletComponentScan
 @EnableAspectJAutoProxy
 @EnableScheduling
@@ -79,7 +81,7 @@ public class Server_Main
         log.info("服务启动成功!>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> 耗时：{} s", (System.currentTimeMillis() - start) / 1000);
 
         // 打印自定义注册的Bean信息
-        printCustomBeans(application);
+        // printCustomBeans(application);
 
     }
 

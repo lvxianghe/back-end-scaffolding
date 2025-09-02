@@ -4,7 +4,6 @@ import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.xiaoxingbomei.config.tools.CoffeeTools;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -18,9 +17,6 @@ import java.util.Map;
 public class FunctionToolManager
 {
     
-    @Autowired
-    private CoffeeTools coffeeTools;
-    
     // 工具注册表：toolId -> 工具实例
     private final Map<String, Object> toolRegistry = new HashMap<>();
     
@@ -31,7 +27,7 @@ public class FunctionToolManager
     public void initTools()
     {
         // 注册咖啡客服工具
-        toolRegistry.put("coffee_tools", coffeeTools);
+//        toolRegistry.put("coffee_tools", coffeeTools);
         
         // 未来可以在这里注册更多工具
         // toolRegistry.put("ecommerce_tools", ecommerceTools);

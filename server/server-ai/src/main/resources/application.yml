@@ -89,20 +89,18 @@ ai:
       modelDescription: "DeepSeek-R1轻量版，适合资源受限环境下的推理任务"
       modelTag: "轻量,推理,数学,编程"
 
+# SpringDoc OpenAPI 配置
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+    tags-sorter: alpha
+    operations-sorter: alpha
+  api-docs:
+    path: /v3/api-docs
+  group-configs:
+    - group: 'default'
+      paths-to-match: '/**'
+      packages-to-scan: org.xiaoxingbomei.controller
 
-datasource:
-  localhost:
-    jdbc-url: jdbc:mysql://localhost:3306/ysx-app?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
-    username: root
-    password: root
-    driver-class-name: com.mysql.cj.jdbc.Driver
-logging:
-  level:
-    org:
-      springframework:
-        ai: debug
-      xiaoxingbomei: debug
-    root: info
-  pattern:
-    console:
+
 

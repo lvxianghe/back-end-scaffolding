@@ -29,7 +29,7 @@ public class LlmChatClientConfiguration
     {
         return ChatClient
                 .builder(model)
-                .defaultSystem(SystemPromptConstant.XIAOXINGBOMEI_SYSTEM_PROMPT) // 设置默认系统提示词
+                .defaultSystem(SystemPromptConstant.DEFAULT_SYSTEM_PROMPT) // 设置默认系统提示词
                 .defaultAdvisors(new SimpleLoggerAdvisor())
                 .build();
     }
@@ -42,7 +42,7 @@ public class LlmChatClientConfiguration
     {
         return ChatClient
                 .builder(model)
-                .defaultSystem(SystemPromptConstant.XIAOXINGBOMEI_SYSTEM_PROMPT) // 设置默认系统提示词
+                .defaultSystem(SystemPromptConstant.DEFAULT_SYSTEM_PROMPT) // 设置默认系统提示词
                 .defaultAdvisors(new SimpleLoggerAdvisor())
                 .build();
     }

@@ -1,5 +1,6 @@
 package org.xiaoxingbomei;
 
+import com.alibaba.druid.spring.boot3.autoconfigure.DruidDataSourceAutoConfigure;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.boot.SpringApplication;
@@ -9,7 +10,6 @@ import org.springframework.boot.web.servlet.ServletComponentScan;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.core.env.Environment;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.xiaoxingbomei.common.config.springboot.MyBanner;
@@ -20,17 +20,13 @@ import java.net.UnknownHostException;
 import java.util.Arrays;
 
 @SpringBootApplication(exclude = { 
-    DataSourceAutoConfiguration.class
-})
+    DataSourceAutoConfiguration.class,
+    DruidDataSourceAutoConfigure.class
+                      })
 @ServletComponentScan
 @EnableAspectJAutoProxy
 @EnableScheduling
 @EnableAsync
-@EnableJpaRepositories(
-        basePackages = "org.xiaoxingbomei.repository.auth",
-        entityManagerFactoryRef = "primaryEntityManagerFactory",
-        transactionManagerRef = "primaryTransactionManager"
-)
 @EnableCaching
 @Slf4j
 public class Server_Auth
